@@ -9,7 +9,7 @@
 	Hello world!  
 </h1>
 
-		<form action="Budgetbeat/form" method="GET">
+		<form action="form" method="GET">
 			First name : <input type="text" name = "firstName" ><br>
 			Last name : <input type="text" name = "lastName" ><br>
 			E-mail : <input type="email" name = "email" ><br>

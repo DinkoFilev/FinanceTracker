@@ -43,8 +43,6 @@ public class HomeController {
 		ApplicationContext context = new FileSystemXmlApplicationContext
 	            ("src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
 		
-		//UserManager um = context.getBean(UserManager.class);
-	//	um.maikaTi();
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		Date date = new Date();
