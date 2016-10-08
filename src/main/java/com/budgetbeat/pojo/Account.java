@@ -1,8 +1,8 @@
 package com.budgetbeat.pojo;
 
 public class Account {
-	private Integer account_id;
-	private Integer fk_user_id;
+	private Integer accountId;
+	private Integer fk_userId;
 	private String name;
 	private Double balance;
 	private String institution;
@@ -11,8 +11,8 @@ public class Account {
 	public Account(Integer account_id, Integer fk_user_id, String name, Double balance, String institution,
 			Boolean status) {
 
-		this.account_id = account_id;
-		this.fk_user_id = fk_user_id;
+		this.accountId = account_id;
+		this.fk_userId = fk_user_id;
 		this.name = name;
 		this.balance = balance;
 		this.institution = institution;
@@ -20,6 +20,15 @@ public class Account {
 	}
 
 	public Account() {
+	}
+	
+	
+	
+
+
+
+	public void setInstitution(String institution) {
+		this.institution = institution;
 	}
 
 	public String getName() {
@@ -46,12 +55,23 @@ public class Account {
 		this.status = status;
 	}
 
-	public Integer getAccount_id() {
-		return account_id;
+
+
+
+	public Integer getAccountId() {
+		return accountId;
 	}
 
-	public Integer getFk_user_id() {
-		return fk_user_id;
+	public void setAccountId(Integer accountId) {
+		this.accountId = accountId;
+	}
+
+	public Integer getFk_userId() {
+		return fk_userId;
+	}
+
+	public void setFk_userId(Integer fk_userId) {
+		this.fk_userId = fk_userId;
 	}
 
 	public String getInstitution() {

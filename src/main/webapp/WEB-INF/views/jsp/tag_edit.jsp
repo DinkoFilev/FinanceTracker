@@ -43,7 +43,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">
-					<msg:message code="tags.manager" />
+					<msg:message code="tags" />
 				</h1>
 			</div>
 		</div>
@@ -54,41 +54,18 @@
 		<div class="row">
 			<div class="col-lg-6">
 				<div class="panel panel-default">
+					<div class="panel-heading">
+						<msg:message code="tags.manager" />
+					</div>
 					<div class="panel-body">
 						<sf:form commandName="tag" role="form">
 							<div class="form-group">
 								<label><msg:message code="tag.name" /></label>
 								<sf:input path="name" class="form-control" />
-								<input type="submit" value="<msg:message code="add" />">
+								<input type="submit" value="<msg:message code="save" />">
+								<input type="reset" value="<msg:message code="reset" />">
 							</div>
 						</sf:form>
-
-						<c:if test="${not empty tags}">
-							<table id="datatable" class="table table-striped table-bordered">
-								<thead>
-									<tr>
-										<th data-field="name" data-sortable="true"><msg:message
-												code="tag.name" /></th>
-										<th data-field="parenrId" data-sortable="true"><msg:message
-												code="parent.tag" /></th>
-										<th><msg:message code="actions" /></th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach items="${tags}" var="current_tag">
-										<tr>
-											<td><c:out value="${current_tag.name}" /></td>
-											<td><c:out value="${current_tag.parentId}" /></td>
-											<td><a
-												href="tags/edit/<c:out	value="${current_tag.tagId}" />">Edit</a>
-											</td>
-										</tr>
-									</c:forEach>
-								</tbody>
-
-							</table>
-						</c:if>
-					
 					</div>
 				</div>
 			</div>

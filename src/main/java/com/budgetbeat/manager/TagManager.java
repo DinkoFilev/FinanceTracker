@@ -11,7 +11,7 @@ import com.budgetbeat.dao.ITagDAO;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.TagMapper;
 
-public class TagManager implements ITagDAO{
+public class TagManager implements ITagDAO {
 
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplateObject;
@@ -25,7 +25,7 @@ public class TagManager implements ITagDAO{
 	@Override
 	public void create(String name, Integer userId, Integer parentId) {
 		String SQL = "insert into tags (name, fk_user_id, fk_parent_id) values (?, ?, ?)";
-System.out.println("Will Create Tag Name = " + name + " ParentID = " + parentId + " UserID = " + userId);
+		System.out.println("Will Create Tag Name = " + name + " ParentID = " + parentId + " UserID = " + userId);
 		jdbcTemplateObject.update(SQL, name, userId, parentId);
 		System.out.println("Created Tag Name = " + name + " ParentID = " + parentId + " UserID = " + userId);
 		return;

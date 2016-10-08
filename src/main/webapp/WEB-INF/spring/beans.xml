@@ -2,58 +2,58 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
-		
-	<bean id="AccountDAO" name="AccountDAO"
-		class="com.budgetbeat.dao.AccountDAO" scope="singleton">
+
+	<bean id="AccountDAO" name="AccountDAO" class="com.budgetbeat.dao.AccountDAO"
+		scope="singleton">
 	</bean>
-	<bean id="TagDAO" name="TagDAO"
-		class="com.budgetbeat.dao.TagDAO" scope="singleton">
+	<bean id="TagDAO" name="TagDAO" class="com.budgetbeat.dao.TagDAO"
+		scope="singleton">
 	</bean>
-	<bean id="TransactionDAO" name="TransactionDAO"
-		class="com.budgetbeat.dao.TransactionDAO" scope="singleton">
+	<bean id="TransactionDAO" name="TransactionDAO" class="com.budgetbeat.dao.TransactionDAO"
+		scope="singleton">
 	</bean>
-	<bean id="UserDAO" name="UserDAO"
-		class="com.budgetbeat.dao.UserDAO" scope="singleton">
+	<bean id="UserDAO" name="UserDAO" class="com.budgetbeat.dao.UserDAO"
+		scope="singleton">
 	</bean>
-	
-	
+
+
 	<!-- DATABASE CONNECTION -->
-	  <bean id="dataSource" 
-      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-      <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-      <property name="url" value="jdbc:mysql://localhost:3306/finance_tracker"/>
-      <property name="username" value="root"/>
-      <property name="password" value="root"/>
-   </bean>
-   
-   
-  <!-- USER MANAGER JDBC TEMPLATE -->
-   
-   <bean id="UserManager" name="UserManager" 
-      class="com.budgetbeat.manager.UserManager" scope="singleton">
-      <property name="dataSource"  ref="dataSource" />    
-   </bean>
-   <!-- ACCOUNT MANAGER JDBC TEMPLATE -->
-   
-   <bean id="AccountManager" name="AccountManager" 
-      class="com.budgetbeat.manager.AccountManager" scope="singleton">
-     <!--   <property name="dataSource"  ref="dataSource" />      -->  
-   </bean>
-    <!-- TAG MANAGER JDBC TEMPLATE -->
-   
-   <bean id="TagManager" name="TagManager" 
-      class="com.budgetbeat.manager.TagManager" scope="singleton">
-      <!--   <property name="dataSource"  ref="dataSource" />      -->
-   </bean>
-    <!-- TRANSACTIONS JDBC TEMPLATE -->
-   
-   <bean id="TransactionManager" name="TransactionManager"
-      class="com.budgetbeat.manager.TransactionManager" scope="singleton">
-   
-   </bean>
-   
-    
-  
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/finance_tracker" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+
+	<!-- USER MANAGER JDBC TEMPLATE -->
+
+	<bean id="UserManager" name="UserManager" class="com.budgetbeat.manager.UserManager"
+		scope="singleton">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- ACCOUNT MANAGER JDBC TEMPLATE -->
+
+	<bean id="AccountManager" name="AccountManager"
+		class="com.budgetbeat.manager.AccountManager" scope="singleton">
+		 <property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- TAG MANAGER JDBC TEMPLATE -->
+
+	<bean id="TagManager" name="TagManager" class="com.budgetbeat.manager.TagManager"
+		scope="singleton">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- TRANSACTIONS JDBC TEMPLATE -->
+
+	<bean id="TransactionManager" name="TransactionManager"
+		class="com.budgetbeat.manager.TransactionManager" scope="singleton">
+
+	</bean>
+
+
+
 </beans>
