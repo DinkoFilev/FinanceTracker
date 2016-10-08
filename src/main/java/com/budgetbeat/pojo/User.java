@@ -13,10 +13,12 @@ public class User {
 //			this.email = email;
 //			this.password = password;
 		}
-		int getUserID() {
+		
+		// Трябват ми публични за тестове
+		public int getUserID() {
 			return userID;
 		}
-		void setUserID(Integer id) {
+		public void setUserID(Integer id) {
 			this.userID = id;
 		}
 		

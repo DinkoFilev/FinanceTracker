@@ -18,5 +18,7 @@
 			<input type="submit" value="SUBMIT">
 		
 		</form>
+		
+		<a href="tags">Tags</a>
 </body>
 </html>

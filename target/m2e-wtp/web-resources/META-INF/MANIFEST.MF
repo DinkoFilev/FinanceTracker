@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: Budgetbeat
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: CaveMan
+Built-By: tancho.mihov
 Implementation-Vendor-Id: com.budgetbeat
-Build-Jdk: 1.8.0_73
+Build-Jdk: 1.8.0_101
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.
 
