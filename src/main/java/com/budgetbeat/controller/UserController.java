@@ -18,14 +18,29 @@ import com.budgetbeat.manager.UserManager;
 @Controller
 
 public class UserController {
+	@RequestMapping(value = "/*", method = RequestMethod.GET)
+	public String index(Locale locale, Model model, HttpServletRequest request) {
+		
+		model.addAttribute("model","login.jsp");
+		return "index";
+		
+		
+	}
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public String indexPOST(Locale locale, Model model, HttpServletRequest request) {
+		
+		model.addAttribute("model","login.jsp");
+		return "index";
+		
+		
+	}
 	
-
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(Locale locale, Model model, HttpServletRequest request) {
 		
 		
-		return "home";
-		
+		model.addAttribute("model","register.jsp");
+		return "index";
 		
 	}
 	
@@ -62,8 +77,9 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Locale locale, Model model, HttpServletRequest request) {
 		
+		model.addAttribute("model","login.jsp");
+		return "index";
 		
-		return "login";
 		
 		
 	}
@@ -79,8 +95,10 @@ public class UserController {
 			return "home2";
 		}
 		
+		model.addAttribute("model","login.jsp");
 		model.addAttribute("status",status);
-		return "login";
+		
+		return "index";
 		
 		
 	}

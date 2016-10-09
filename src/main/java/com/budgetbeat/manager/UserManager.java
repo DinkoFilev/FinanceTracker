@@ -128,7 +128,7 @@ public class UserManager implements IUserDAO {
 		}
 		if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
 			System.out.println("NE MATCHVA emaila");
-			return "email";
+			return "Email doesn't match the requirements";
 		}
 
 		if (!password.matches("^[a-zA-Z0-9._-]{3,30}$")) {
@@ -136,7 +136,7 @@ public class UserManager implements IUserDAO {
 			return "password";
 		}
 		if (registerredUsers.containsKey(email)) {
-			return "FUCK YOU";
+			return "Email is already used";
 
 		}
 
