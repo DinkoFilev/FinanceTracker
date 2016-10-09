@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.manager.AccountManager;
 import com.budgetbeat.manager.TagManager;
 import com.budgetbeat.manager.UserManager;
@@ -48,8 +50,6 @@ public class HomeController {
 
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	public String home(Locale locale, Model model, HttpServletRequest request) {
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
 
 		logger.info("Welcome home! The client locale is {}.", locale);
 
@@ -59,7 +59,7 @@ public class HomeController {
 		String formattedDate = dateFormat.format(date);
 
 		model.addAttribute("serverTime", formattedDate);
-		UserManager usermanager = (UserManager) context.getBean("UserManager");
+		UserManager usermanager = (UserManager) SpringWebConfig.context.getBean("UserManager");
 
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
@@ -76,8 +76,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home2(Locale locale, Model model, HttpSession session) {
-		// ApplicationContext context = new FileSystemXmlApplicationContext
-		// ("src\\main\\webapp\\WEB-INF\\spring\\root-context.xml");
+
 		logger.info("Welcome home! The client locale is {}.", locale);
 		session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
 
@@ -90,10 +89,8 @@ public class HomeController {
 				"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
 		response.addHeader("Pragma", "no-cache");
 		response.addDateHeader("Expires", 0);
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
 
-		TagManager tagManager = (TagManager) context.getBean("TagManager");
+		TagManager tagManager = (TagManager) SpringWebConfig.context.getBean("TagManager");
 
 		model.addAttribute("user", (User) session.getAttribute("user"));
 		List<Tag> tags = tagManager.listTgs(((User) session.getAttribute("user")).getUserID());
@@ -110,10 +107,8 @@ public class HomeController {
 		response.addHeader("Pragma", "no-cache");
 		response.addDateHeader("Expires", 0);
 		System.out.println(tag);
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
 
-		TagManager tagManager = (TagManager) context.getBean("TagManager");
+		TagManager tagManager = (TagManager) SpringWebConfig.context.getBean("TagManager");
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
 		tagManager.create(tag.getName(), userId, null);
 
@@ -124,26 +119,25 @@ public class HomeController {
 		return "tag";
 	}
 
-	@RequestMapping(value = "/tags/edit/{tag_id}", method = RequestMethod.GET)
-	public String editTag(Locale locale, Model model, @PathVariable("tag_id") Integer tagId) {
+	@RequestMapping(value = "/edit_tag", method = RequestMethod.POST)
+	public ModelAndView editTag(Locale locale, Model model, HttpServletRequest request) {
+		System.out.println("=====================================");
+		System.out.println("Will edit tag");
+		System.out.println("================= ====================");
 
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
-
-		TagManager tagManager = (TagManager) context.getBean("TagManager");
+		Integer tagId = (Integer) request.getAttribute("tagId");
+		TagManager tagManager = (TagManager) SpringWebConfig.context.getBean("TagManager");
 		Tag tag = tagManager.getTag(tagId);
 		model.addAttribute("tag", tag);
-		return "tag_edit";
+
+		return new ModelAndView("redirect:/tag_edit");
 	}
 
 	@RequestMapping(value = "/tags/edit/{tag_id}", method = RequestMethod.POST)
 	public String modifyTag(Locale locale, Model model, @ModelAttribute Tag tag, HttpServletResponse response,
 			HttpSession session) {
 
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
-
-		TagManager tagManager = (TagManager) context.getBean("TagManager");
+		TagManager tagManager = (TagManager) SpringWebConfig.context.getBean("TagManager");
 		tagManager.update(tag.getTagId(), tag.getName());
 
 		response.addHeader("Cache-Control",
@@ -164,20 +158,17 @@ public class HomeController {
 				"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
 		response.addHeader("Pragma", "no-cache");
 		response.addDateHeader("Expires", 0);
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
 
-		AccountManager accountManager = (AccountManager) context.getBean("AccountManager");
+		AccountManager accountManager = (AccountManager) SpringWebConfig.context.getBean("AccountManager");
 
 		model.addAttribute("user", (User) session.getAttribute("user"));
-		
+
 		List<Account> accounts = accountManager.listAccounts(((User) session.getAttribute("user")).getUserID());
 		model.addAttribute("accounts", accounts);
 		model.addAttribute("account", new Account());
 		return "accounts";
 	}
-	
-	
+
 	@RequestMapping(value = "/account", method = RequestMethod.POST)
 	public String addReadAccount(Locale locale, @ModelAttribute Account account, Model model, HttpSession session,
 			HttpServletResponse response) {
@@ -186,12 +177,11 @@ public class HomeController {
 		response.addHeader("Pragma", "no-cache");
 		response.addDateHeader("Expires", 0);
 		System.out.println(account);
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
 
-		AccountManager accountManager = (AccountManager) context.getBean("AccountManager");
+		AccountManager accountManager = (AccountManager) SpringWebConfig.context.getBean("AccountManager");
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
-		accountManager.create(userId, account.getName(), account.getBalance(), account.getInstitution(), account.getStatus());
+		accountManager.create(userId, account.getName(), account.getBalance(), account.getInstitution(),
+				account.getStatus());
 
 		model.addAttribute("user", (User) session.getAttribute("user"));
 		List<Account> accounts = accountManager.listAccounts(userId);

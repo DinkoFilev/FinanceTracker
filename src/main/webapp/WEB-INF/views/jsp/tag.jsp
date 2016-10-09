@@ -79,16 +79,18 @@
 										<tr>
 											<td><c:out value="${current_tag.name}" /></td>
 											<td><c:out value="${current_tag.parentId}" /></td>
-											<td><a
-												href="tags/edit/<c:out	value="${current_tag.tagId}" />">Edit</a>
-											</td>
+											<td><form action="edit_tag" method="post">
+													<input type="hidden" name="tagId"
+														value="<c:out value="${current_tag.tagId}" />"> <input
+														type="submit" value="Edit">
+												</form></td>
 										</tr>
 									</c:forEach>
 								</tbody>
 
 							</table>
 						</c:if>
-					
+
 					</div>
 				</div>
 			</div>

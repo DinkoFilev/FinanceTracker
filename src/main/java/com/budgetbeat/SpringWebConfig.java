@@ -2,10 +2,12 @@ package com.budgetbeat;
 
 import java.util.Locale;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -21,6 +23,8 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan("com.budgetbeat")
 public class SpringWebConfig extends WebMvcConfigurerAdapter {
+	public static ApplicationContext context = new FileSystemXmlApplicationContext(
+			"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
