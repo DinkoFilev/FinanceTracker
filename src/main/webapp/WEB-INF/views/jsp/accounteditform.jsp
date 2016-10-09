@@ -61,7 +61,7 @@
 							<table>
 								<tr>
 									<td></td>
-									<td><form:hidden path="tagId" /></td>
+									<td><form:hidden path="accountId" /></td>
 								</tr>
 								<tr>
 									<td>Name :</td>

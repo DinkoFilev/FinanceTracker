@@ -69,7 +69,7 @@
 							</div>
 							<div class="form-group">
 								<label><msg:message code="status" /></label>
-								<form:input path="status" class="form-control" />
+								<form:checkbox path="status" class="form-control" />
 							</div>
 
 

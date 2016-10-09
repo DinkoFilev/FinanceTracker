@@ -59,19 +59,23 @@
 						<form:form method="post" action="savetag">
 
 							<div class="form-group">
-								<label>Tag name</label>
-								<form:input path="name" class="form-control"
-									placeholder="Tag name" />
+								<label><msg:message code="tag.name" /></label>
+								<form:input path="name" class="form-control" />
 							</div>
 
-
-							<button type="submit" class="btn btn-primary">Save
-								Button</button>
-
-							<a href="viewtag"><button type="submit"
-									class="btn btn-primary">
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary">
+									<msg:message code="save" />
+								</button>
+																<button type="reset" class="btn btn-primary">
 									<msg:message code="reset" />
-								</button> </a>
+								</button>
+
+								<a href="viewtag"><button type="submit"
+										class="btn btn-primary">
+										<msg:message code="reset" />
+									</button> </a>
+							</div>
 						</form:form>
 					</div>
 				</div>

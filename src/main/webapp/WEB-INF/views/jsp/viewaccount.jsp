@@ -71,8 +71,10 @@
 							<thead>
 								<tr>
 									<th data-sortable="true">Id</th>
-									<th data-sortable="true">Name</th>
-									<th>Action</th>
+									<th data-sortable="true"><msg:message code="name" /></th>
+									<th data-sortable="true"><msg:message code="balance" /></th>
+									<th data-sortable="true"><msg:message code="status" /></th>
+									<th><msg:message code="actions" /></th>
 								</tr>
 							</thead>
 							<tbody>
