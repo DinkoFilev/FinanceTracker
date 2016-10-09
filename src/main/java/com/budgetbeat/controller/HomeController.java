@@ -101,7 +101,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/tags", method = RequestMethod.POST)
 	public String addReadyTags(Locale locale, @ModelAttribute Tag tag, Model model, HttpSession session,
-			HttpServletResponse response) {
+			HttpServletResponse response, HttpServletRequest request) {
 		response.addHeader("Cache-Control",
 				"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
 		response.addHeader("Pragma", "no-cache");
@@ -120,17 +120,28 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/edit_tag", method = RequestMethod.POST)
-	public ModelAndView editTag(Locale locale, Model model, HttpServletRequest request) {
+	public String editTag(Locale locale, Model model, @ModelAttribute Tag tag, HttpServletRequest request) {
 		System.out.println("=====================================");
 		System.out.println("Will edit tag");
 		System.out.println("================= ====================");
-
-		Integer tagId = (Integer) request.getAttribute("tagId");
+		System.out.println(request.getParameter("editTagId"));
+		
+		Integer tagId = Integer.parseInt(request.getParameter("editTagId"));
 		TagManager tagManager = (TagManager) SpringWebConfig.context.getBean("TagManager");
-		Tag tag = tagManager.getTag(tagId);
+		
+		
+		if(request.getParameter("action").equals("update")){
+			tagManager.update(tag.getTagId(), tag.getName());
+			return "tag";
+		}
+		
+
+
+	tag = tagManager.getTag(tagId);
+
 		model.addAttribute("tag", tag);
 
-		return new ModelAndView("redirect:/tag_edit");
+		return "tag_edit";
 	}
 
 	@RequestMapping(value = "/tags/edit/{tag_id}", method = RequestMethod.POST)

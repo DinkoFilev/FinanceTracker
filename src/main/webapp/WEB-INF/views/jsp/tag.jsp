@@ -79,8 +79,8 @@
 										<tr>
 											<td><c:out value="${current_tag.name}" /></td>
 											<td><c:out value="${current_tag.parentId}" /></td>
-											<td><form action="edit_tag" method="post">
-													<input type="hidden" name="tagId"
+											<td><form action="/Budgetbeat/edit_tag" method="post">
+													<input type="hidden" name="editTagId"
 														value="<c:out value="${current_tag.tagId}" />"> <input
 														type="submit" value="Edit">
 												</form></td>

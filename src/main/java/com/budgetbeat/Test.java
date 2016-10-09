@@ -18,15 +18,18 @@ public class Test {
 		ApplicationContext context = new FileSystemXmlApplicationContext(
 				"src\\main\\webapp\\WEB-INF\\spring\\beans.xml");
 
-		AccountManager accountManager = (AccountManager) context.getBean("AccountManager");
+		//AccountManager accountManager = (AccountManager) context.getBean("AccountManager");
 //		accountManager.create(4, "Чекова", 100.55, "Western union", true);
 //		accountManager.create(4, "Лихва", 300.55, "Western union", true);
 //		accountManager.create(4, "Друга", 322.55, "Western union", true);
 		//accountManager.update(1, "Спестовна", 1000.0, "Western union", false);
+		Integer asd = 17;
+		TagManager tagMan = (TagManager) context.getBean("TagManager");
+		tagMan.getTag(asd);
 		
-	List<Account> accounts = 	accountManager.listAccounts(4);
+	//List<Account> accounts = 	accountManager.listAccounts(4);
 	System.out.println("===========================================");
-	System.out.println(Arrays.toString(accounts.toArray()));
+	System.out.println(tagMan.getTag(17).getName());
 	}
 
 }

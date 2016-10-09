@@ -1,13 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <%@include file="head_stuff.html"%>
-<title>BudgetBeat - <msg:message code="tags" /></title>
+<title>BudgetBeat - ${title}</title>
 
 </head>
 
@@ -32,18 +34,17 @@
 			<ol class="breadcrumb">
 				<li><a href="index.jsp"><svg class="glyph stroked home">
 							<use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active"><msg:message code="tags" /></li>
+				<li class="active">${title}</li>
 			</ol>
 		</div>
 		<!--/.row-->
 		<!--Your position on site-->
 
-
 		<!--Title in the page-->
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">
-					<msg:message code="tags" />
+					<msg:message code="tags.manager" />
 				</h1>
 			</div>
 		</div>
@@ -54,24 +55,28 @@
 		<div class="row">
 			<div class="col-lg-6">
 				<div class="panel panel-default">
-					<div class="panel-heading">
-						<msg:message code="tags.manager" />
-					</div>
 					<div class="panel-body">
-						<sf:form commandName="tag" role="form">
+						<form:form method="post" action="savetag">
+
 							<div class="form-group">
-								<label><msg:message code="tag.name" /></label>
-								<sf:input path="name" class="form-control" />
-								<input type="hidden" name="action" value="update" />">
-								<input type="submit" value="<msg:message code="save" />">
-								<input type="reset" value="<msg:message code="reset" />">
+								<label>Tag name</label>
+								<form:input path="name" class="form-control"
+									placeholder="Tag name" />
 							</div>
-						</sf:form>
+
+
+							<button type="submit" class="btn btn-primary">Save
+								Button</button>
+
+							<a href="viewtag"><button type="submit"
+									class="btn btn-primary">
+									<msg:message code="reset" />
+								</button> </a>
+						</form:form>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!--/.row-->
 
 		<!--/content-->
 	</div>

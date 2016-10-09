@@ -23,5 +23,8 @@
 		<h1>${status}</h1>
 		
 		<a href="tags">Tags</a>
+		
+		<a href="tagform">Add Employee</a>
+<a href="viewtag">View Employees</a>
 </body>
 </html>
