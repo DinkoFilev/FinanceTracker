@@ -70,23 +70,26 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<form:form method="POST" action="/Budgetbeat/editsavetag">
-						
-						
-							<table>
-								<tr>
-									<td></td>
-									<td><form:hidden path="tagId" /></td>
-								</tr>
-								<tr>
-									<td>Name :</td>
-									<td><form:input path="name" /></td>
-								</tr>
-								<tr>
-									<td></td>
-									<td><input type="submit" value="Edit Save" /></td>
-								</tr>
-							</table>
+							<form:hidden path="tagId" />
+							<div class="form-group">
+								<label><msg:message code="tag.name" /></label>
+								<form:input path="name" class="form-control" />
+							</div>
+
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary">
+									<msg:message code="save" />
+								</button>
+								<a href="../viewtag">
+									<button class="btn btn-primary">
+										<msg:message code="reset" />
+									</button>
+								</a>
+							</div>
 						</form:form>
+
+
+
 					</div>
 				</div>
 			</div>
@@ -96,31 +99,36 @@
 	</div>
 	<!--/.main-->
 
-<script src="../js/jquery-1.11.1.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/chart.min.js"></script>
-<script src="../js/chart-data.js"></script>
-<script src="../js/easypiechart.js"></script>
-<script src="../js/easypiechart-data.js"></script>
-<script src="../js/bootstrap-datepicker.js"></script>
-<script src="../js/bootstrap-table.js"></script>
-<script>
-	!function($) {
-		$(document).on("click", "ul.nav li.parent > a > span.icon", function() {
-			$(this).find('em:first').toggleClass("glyphicon-minus");
-		});
-		$(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
-	}(window.jQuery);
+	<script src="../js/jquery-1.11.1.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/chart.min.js"></script>
+	<script src="../js/chart-data.js"></script>
+	<script src="../js/easypiechart.js"></script>
+	<script src="../js/easypiechart-data.js"></script>
+	<script src="../js/bootstrap-datepicker.js"></script>
+	<script src="../js/bootstrap-table.js"></script>
+	<script>
+		!function($) {
+			$(document)
+					.on(
+							"click",
+							"ul.nav li.parent > a > span.icon",
+							function() {
+								$(this).find('em:first').toggleClass(
+										"glyphicon-minus");
+							});
+			$(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
 
-	$(window).on('resize', function() {
-		if ($(window).width() > 768)
-			$('#sidebar-collapse').collapse('show')
-	})
-	$(window).on('resize', function() {
-		if ($(window).width() <= 767)
-			$('#sidebar-collapse').collapse('hide')
-	})
-</script>
+		$(window).on('resize', function() {
+			if ($(window).width() > 768)
+				$('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function() {
+			if ($(window).width() <= 767)
+				$('#sidebar-collapse').collapse('hide')
+		})
+	</script>
 </body>
 
 </html>

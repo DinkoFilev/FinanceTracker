@@ -67,14 +67,6 @@
 								<button type="submit" class="btn btn-primary">
 									<msg:message code="save" />
 								</button>
-																<button type="reset" class="btn btn-primary">
-									<msg:message code="reset" />
-								</button>
-
-								<a href="viewtag"><button type="submit"
-										class="btn btn-primary">
-										<msg:message code="reset" />
-									</button> </a>
 							</div>
 						</form:form>
 					</div>

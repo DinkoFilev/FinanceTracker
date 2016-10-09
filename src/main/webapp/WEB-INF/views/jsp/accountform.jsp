@@ -64,22 +64,24 @@
 							</div>
 
 							<div class="form-group">
+								<label><msg:message code="institution" /></label>
+								<form:input path="institution" class="form-control" />
+							</div>
+
+							<div class="form-group">
 								<label><msg:message code="balance" /></label>
-								<form:input path="balance" class="form-control" />
+								<form:input path="balance" class="form-control" type="number"  min="0" max="99999999"/>
 							</div>
 							<div class="form-group">
 								<label><msg:message code="status" /></label>
 								<form:checkbox path="status" class="form-control" />
 							</div>
 
-
-							<button type="submit" class="btn btn-primary">Save
-								Button</button>
-
-							<a href="viewaccount"><button type="submit"
-									class="btn btn-primary">
-									<msg:message code="reset" />
-								</button> </a>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary">
+									<msg:message code="save" />
+								</button>
+							</div>
 						</form:form>
 					</div>
 				</div>

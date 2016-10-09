@@ -57,11 +57,11 @@
 
 		<!--content-->
 		<div class="row">
-			<div class="col-lg-6">
+			<div class="col-lg-8">
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<a href="accountform"><button type="submit"
-									class="btn btn-primary">
+								class="btn btn-primary">
 								<msg:message code="add.new.account" />
 							</button> </a>
 						<table data-toggle="table" data-show-toggle="true"
@@ -70,8 +70,9 @@
 							data-sort-name="name" data-sort-order="desc">
 							<thead>
 								<tr>
-									<th data-sortable="true">Id</th>
+
 									<th data-sortable="true"><msg:message code="name" /></th>
+									<th data-sortable="true"><msg:message code="institution" /></th>
 									<th data-sortable="true"><msg:message code="balance" /></th>
 									<th data-sortable="true"><msg:message code="status" /></th>
 									<th><msg:message code="actions" /></th>
@@ -80,20 +81,23 @@
 							<tbody>
 								<c:forEach var="account" items="${list}">
 									<tr>
-										<td>${account.accountId}</td>
+
 										<td>${account.name}</td>
+										<td>${account.institution}</td>
 										<td>${account.balance}</td>
-										<td>${account.status}</td>
-										<td><a href="editaccount/${account.accountId}"><button 
-									class="btn btn-primary">Edit</button></a>
-											<a href="deleteaccount/${account.accountId}"><button type="submit"
-									class="btn btn-primary">Delete</button></a></td>
+										<td><input type="checkbox" class="form-control" onclick="return false" onkeydown="return false"
+											<c:if test="${account.status}">checked="checked"</c:if> />
+										</td>
+										<td><a href="editaccount/${account.accountId}"><button
+													class="btn btn-primary">Edit</button></a> <a
+											href="deleteaccount/${account.accountId}"><button
+													type="submit" class="btn btn-primary">Delete</button></a></td>
 									</tr>
 								</c:forEach>
 							</tbody>
 						</table>
 						<a href="accountform"><button type="submit"
-									class="btn btn-primary">
+								class="btn btn-primary">
 								<msg:message code="add.new.account" />
 							</button> </a>
 						<script>
