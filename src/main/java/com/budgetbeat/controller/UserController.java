@@ -2,8 +2,13 @@ package com.budgetbeat.controller;
 
 import java.util.Locale;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.boot.autoconfigure.web.ServerProperties.Session;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -14,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.manager.UserManager;
+import com.budgetbeat.pojo.User;
 
 @Controller
 
@@ -85,6 +91,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
+
+	
 	public String signIn(Locale locale, Model model, HttpServletRequest request) {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
@@ -99,6 +107,48 @@ public class UserController {
 		model.addAttribute("status",status);
 		
 		return "index";
+		
+		
+	}
+	
+	@RequestMapping(value = "/TESTOVO", method = RequestMethod.GET)
+	public String test(Locale locale, Model model, HttpServletRequest request) {
+		
+		model.addAttribute("model","dashboard.jsp");
+		return "TESTOVO";
+		
+		
+	}
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	public String dashboard(Locale locale, Model model, HttpServletRequest request) {
+		
+		model.addAttribute("model","dashboard.jsp");
+		return "TESTOVO";
+		
+		
+	}
+	
+	@RequestMapping(value = "/reports", method = RequestMethod.GET)
+	public String reports(Locale locale, Model model, HttpServletRequest request) {
+		
+		model.addAttribute("model","reports.jsp");
+		return "TESTOVO";
+		
+		
+	}
+	@RequestMapping(value = "/accounts", method = RequestMethod.GET)
+	public String accounts(Locale locale, Model model, HttpServletRequest request ,HttpSession session) {
+		 session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
+		model.addAttribute("model","accounts.jsp");
+		return "TESTOVO";
+		
+		
+	}
+	@RequestMapping(value = "/tags", method = RequestMethod.GET)
+	public String tags(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
+		 session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
+		model.addAttribute("model","viewtag.jsp");
+		return "TESTOVO";
 		
 		
 	}

@@ -22,21 +22,13 @@ import com.budgetbeat.pojo.UserMapper;
 
 public class UserManager implements IUserDAO {
 
-	private ConcurrentHashMap<String, String> registerredUsers = new ConcurrentHashMap<>(); // email
-																							// ,
-																							// password
-																							// cache
-																							// for
-																							// users
-	private ConcurrentHashMap<String, User> loggedUsers = new ConcurrentHashMap<>(); // Logged
-																						// users
-																						// :
-																						// email
-																						// ,
-																						// UserObject
+	private ConcurrentHashMap<String, String> registerredUsers = new ConcurrentHashMap<>(); // email ,  password cache for users
+																																													
+	private ConcurrentHashMap<String, User> loggedUsers = new ConcurrentHashMap<>(); // Logged users : email , UserObject
+																						
 	private DataSource dataSource;
 
-	public void updateRegisterredUsers() {
+	public void updateRegisterredUsers() { // bean init method
 		if (registerredUsers.size() == 0) {
 			System.out.println("EGO Q");
 			String sql = "SELECT email,password from users";

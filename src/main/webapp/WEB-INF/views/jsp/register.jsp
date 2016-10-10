@@ -34,9 +34,9 @@
 							</div>
 							
 						</fieldset>
-							<input type="submit" value="REGISTER">
+							<input class="btn btn-primary" type="submit" value="REGISTER">
 							<a href="login">
-   						<input type="button" value="LOGIN" />
+   						<input class="btn btn-primary" type="button" value="LOGIN" />
 						</a>
 							<h1>${status}</h1>
 					</sform:form>
