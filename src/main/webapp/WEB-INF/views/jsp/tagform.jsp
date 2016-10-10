@@ -60,7 +60,7 @@
 
 							<div class="form-group">
 								<label><msg:message code="tag.name" /></label>
-								<form:input path="name" class="form-control" />
+								<form:input path="name" class="form-control" maxlength="44"/>
 							</div>
 
 							<div class="form-group">
@@ -77,7 +77,6 @@
 		<!--/content-->
 	</div>
 	<!--/.main-->
-
 	<%@include file="end_scripts.html"%>
 </body>
 

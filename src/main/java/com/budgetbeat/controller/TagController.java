@@ -1,12 +1,16 @@
 package com.budgetbeat.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.budgetbeat.manager.TagManager;
+import com.budgetbeat.manager.UserManager;
+import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.Tag;
+import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
 
 @Controller
@@ -58,23 +65,85 @@ public class TagController {
 	 * It displays object data into form for the given id. The @PathVariable
 	 * puts URL data into variable.
 	 */
-	@RequestMapping(value = "/edittag/{id}")
-	public ModelAndView editTag(@PathVariable int id) {
-		Tag tag = tagManager.getTag(id);
-		return new ModelAndView("tageditform", "command", tag);
+	// @RequestMapping(value = "/edittag/{id}")
+	// public ModelAndView editTag(@PathVariable int id) {
+	// Tag tag = tagManager.getTag(id);
+	// return new ModelAndView("tageditform", "command", tag);
+	// }
+
+	// test as post
+	@RequestMapping(value = "/edittag", method = RequestMethod.POST)
+	public ModelAndView editTagPost(@ModelAttribute("action") String action, @ModelAttribute("tagId") Integer tagId,
+			HttpSession session) {
+		if (action.equals("edit")) {
+			Tag tag = tagManager.getTag(tagId);
+			return new ModelAndView("tageditform", "command", tag);
+		}
+		return new ModelAndView("redirect:/viewtag");
+	}
+
+	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
+	public ModelAndView showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model) {
+
+		Tag tag = tagManager.getTag(tagId);
+		Integer userId = ((User) session.getAttribute("user")).getUserID();
+
+		// TODO
+		// List<Transaction> transactions =
+		// userManager.listReansactionsByTagId(tagId);
+
+		List<Transaction> transactions = new ArrayList<Transaction>();
+
+		for (int i = 0; i < 100; i++) {
+			Transaction tran = new Transaction();
+			tran.setAmount(new Random().nextInt(1000) * 1.0 - 500);
+			tran.setDescription("Transaction " + new Random().nextInt(1000));
+			tran.setFk_tag_id(tagId);
+			tran.setFk_user_id(userId);
+			tran.setFt_account_id(new Random().nextInt(50));
+			Calendar calendar = new GregorianCalendar(2016, new Random().nextInt(12), new Random().nextInt(28));
+			tran.setDate(calendar);
+			transactions.add(tran);
+		}
+
+		Double income = 0.0;
+		Double expence = 0.0;
+		for (Transaction element : transactions) {
+			if (element.getAmount() < 0) {
+				expence += element.getAmount();
+			} else {
+				income += element.getAmount();
+			}
+		}
+
+		model.addAttribute("income", String.format("%.2f", income));
+		model.addAttribute("expence", String.format("%.2f", expence));
+		model.addAttribute("tagName", tag.getName());
+
+		return new ModelAndView("view_transaction_by_tag", "transactions", transactions);
 	}
 
 	/* It updates model object. */
 	@RequestMapping(value = "/editsavetag", method = RequestMethod.POST)
 	public ModelAndView editSaveTag(@ModelAttribute("tag") Tag tag) {
-		tagManager.update(tag.getTagId(), tag.getName());
+			tagManager.update(tag.getTagId(), tag.getName());
 		return new ModelAndView("redirect:/viewtag");
 	}
 
 	/* It deletes record for the given id in URL and redirects to /viewemp */
-	@RequestMapping(value = "/deletetag/{id}", method = RequestMethod.GET)
-	public ModelAndView deleteTag(@PathVariable int id) {
-		tagManager.delete(id);
+	// @RequestMapping(value = "/deletetag/{id}", method = RequestMethod.GET)
+	// public ModelAndView deleteTag(@PathVariable int id) {
+	// tagManager.delete(id);
+	// return new ModelAndView("redirect:/viewtag");
+	// }
+
+	// test as post
+	@RequestMapping(value = "/deletetag", method = RequestMethod.POST)
+	public ModelAndView deleteTagPost(@ModelAttribute("action") String action, @ModelAttribute("tagId") Integer tagId,
+			HttpSession session) {
+		if (action.equals("delete")) {
+			tagManager.delete(tagId);
+		}
 		return new ModelAndView("redirect:/viewtag");
 	}
 

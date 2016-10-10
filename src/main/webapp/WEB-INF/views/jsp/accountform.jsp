@@ -60,17 +60,17 @@
 
 							<div class="form-group">
 								<label><msg:message code="account.name" /></label>
-								<form:input path="name" class="form-control" />
+								<form:input path="name" class="form-control required" required="required" maxlength="44" />
 							</div>
 
 							<div class="form-group">
 								<label><msg:message code="institution" /></label>
-								<form:input path="institution" class="form-control" />
+								<form:input path="institution" class="form-control required" required="required" maxlength="49" />
 							</div>
 
 							<div class="form-group">
 								<label><msg:message code="balance" /></label>
-								<form:input path="balance" class="form-control" type="number"  min="0" max="99999999"/>
+								<form:input path="balance" class="form-control required" required="required" type="number"  min="0" max="99999999" />
 							</div>
 							<div class="form-group">
 								<label><msg:message code="status" /></label>

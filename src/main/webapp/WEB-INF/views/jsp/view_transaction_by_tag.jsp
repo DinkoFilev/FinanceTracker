@@ -5,6 +5,7 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,30 +45,31 @@
 		<!--Title in the page-->
 		<div class="row">
 			<div class="col-lg-12">
+
 				<h1 class="page-header">
-					<msg:message code="accounts.manager" />
+					<msg:message code="transactions.by" />
+					${tagName}
 				</h1>
+
 			</div>
 		</div>
 		<!--/.row-->
 		<!--/Title in the page-->
-
-
-
-
 		<!--content-->
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
-
-
-						<a href="accountform"><button type="submit"
-								class="btn btn-primary">
-								<msg:message code="add.new.account" />
+						<a href="#"><button type="submit" class="btn btn-primary">
+								<msg:message code="add.new.transaction" />
 							</button> </a>
 						<h4>
-							<c:if test="${total != null}">TOTAL: ${total}</c:if>
+							<c:if test="${income != null}">
+								<msg:message code="INCOME" />: ${income}</c:if>
+						</h4>
+						<h4>
+							<c:if test="${expence != null}">
+								<msg:message code="EXPENSE" />: ${expence}</c:if>
 						</h4>
 						<table data-toggle="table" data-show-toggle="true"
 							data-show-columns="true" data-search="true"
@@ -75,51 +77,31 @@
 							data-sort-name="name" data-sort-order="desc">
 							<thead>
 								<tr>
-
-									<th data-sortable="true"><msg:message code="name" /></th>
-									<th data-sortable="true"><msg:message code="institution" /></th>
-									<th data-sortable="true"><msg:message code="balance" /></th>
-									<th data-sortable="true"><msg:message code="status" /></th>
-									<th></th>
-									<th></th>
+									<th data-sortable="true">Description</th>
+									<th data-sortable="true">Amount</th>
+									<th data-sortable="true">Account</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="account" items="${list}">
+								<c:forEach var="transaction" items="${transactions}">
 									<tr>
-										<td>${account.name}</td>
-										<td>${account.institution}</td>
-										<td>${account.balance}</td>
-										<td><input type="checkbox" class="form-control"
-											onclick="return false" onkeydown="return false"
-											<c:if test="${account.status}">checked="checked"</c:if> /></td>
-										<td class="col-md-1">
-											<form action="editaccount" method="post">
-												<input type="hidden" name="action" value="edit"> <input
-													type="hidden" name="accountId" value="${account.accountId}">
-												<button class="btn btn-default btn-block btn-default"
-													title="<msg:message code="edit" />">
-													<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-												</button>
-											</form>
+										<td>
+											<button type="button" class="btn btn-default btn-block btn-default">${transaction.description}</button>
 										</td>
-										<td class="col-md-1">
-											<form action="deleteaccount" method="post">
-												<input type="hidden" name="action" value="delete"> <input
-													type="hidden" name="accountId" value="${account.accountId}">
-												<button class="btn btn-default btn-block btn-default"
-													title="<msg:message code="delete" />">
-													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-												</button>
-											</form>
+
+										<td>
+											<button type="button" class="btn btn-default btn-block btn-default">${transaction.amount}</button>
+										</td>
+
+										<td>
+											<button type="button" class="btn btn-default btn-block btn-default">${transaction.ft_account_id}</button>
 										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
 						</table>
-						<a href="accountform"><button type="submit"
-								class="btn btn-primary">
-								<msg:message code="add.new.account" />
+						<a href="#"><button type="submit" class="btn btn-primary">
+								<msg:message code="add.new.transaction" />
 							</button> </a>
 						<script>
 							$(function() {

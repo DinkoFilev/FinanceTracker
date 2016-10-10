@@ -57,11 +57,11 @@
 
 		<!--content-->
 		<div class="row">
-			<div class="col-lg-6">
+			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<a href="tagform"><button type="submit"
-									class="btn btn-primary">
+								class="btn btn-primary">
 								<msg:message code="add.new.tag" />
 							</button> </a>
 						<table data-toggle="table" data-show-toggle="true"
@@ -70,26 +70,46 @@
 							data-sort-name="name" data-sort-order="desc">
 							<thead>
 								<tr>
-									<th data-sortable="true">Id</th>
-									<th data-sortable="true">Name</th>
-									<th>Action</th>
+									<th data-sortable="true"><msg:message code="tag.name"/></th>
+									<th></th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
 								<c:forEach var="tag" items="${list}">
 									<tr>
-										<td>${tag.tagId}</td>
-										<td>${tag.name}</td>
-										<td><a href="edittag/${tag.tagId}"><button 
-									class="btn btn-primary">Edit</button></a>
-											<a href="deletetag/${tag.tagId}"><button type="submit"
-									class="btn btn-primary">Delete</button></a></td>
+										<td>
+											<form action="transactions_by_tag" method="post">
+												<input type="hidden" name="tagId" value="${tag.tagId}">
+												<button class="btn btn-default btn-block btn-default">
+																			${tag.name}
+												</button>
+											</form>
+										</td>
+										<td class="col-md-1">
+											<form action="edittag" method="post">
+												<input type="hidden" name="action" value="edit"> <input
+													type="hidden" name="tagId" value="${tag.tagId}">
+												<button class="btn btn-default btn-block btn-default" title="<msg:message code="edit" />">
+													<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+												</button>
+											</form>
+										</td>
+										<td class="col-md-1">
+											<form action="deletetag" method="post">
+												<input type="hidden" name="action" value="delete"> <input
+													type="hidden" name="tagId" value="${tag.tagId}">
+												<button class="btn btn-default btn-block btn-default" title="<msg:message code="delete" />">
+													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+												</button>
+											</form>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
 						</table>
 						<a href="tagform"><button type="submit"
-									class="btn btn-primary">
+								class="btn btn-primary">
 								<msg:message code="add.new.tag" />
 							</button> </a>
 						<script>

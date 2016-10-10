@@ -23,12 +23,15 @@ public class AccountManager implements IAccountDAO {
 
 	@Override
 	public void delete(Integer accountId) {
-		String SQL = "DELETE FROM `accounts` WHERE `account_id`=?;";
+		String SQL = "DELETE FROM transactions WHERE ft_account_id=?;";
+		jdbcTemplateObject.update(SQL, accountId);
+		SQL = "DELETE FROM accounts_log WHERE fk_account_id=?;";
+		jdbcTemplateObject.update(SQL, accountId);
+		SQL = "DELETE FROM accounts WHERE account_id=?; ";
 		jdbcTemplateObject.update(SQL, accountId);
 		System.out.println("Deleted Account with ID = " + accountId);
 		return;
 	}
-
 
 	@Override
 	public void create(Integer fk_user_id, String name, Double balance, String institution, Boolean status) {
@@ -55,6 +58,6 @@ public class AccountManager implements IAccountDAO {
 	@Override
 	public void update(Integer accountId, String name, Double balance, String institution, Boolean status) {
 		String SQL = "UPDATE accounts SET name=?, balance=?, institution=?, status=? WHERE account_id=?";
-		jdbcTemplateObject.update(SQL, name,  balance,  institution,  status, accountId);
+		jdbcTemplateObject.update(SQL, name, balance, institution, status, accountId);
 	}
 }

@@ -31,6 +31,9 @@ public class Transaction {
 		this.repeat = repeat;
 	}
 
+	public Transaction() {
+	}
+
 	public Integer getTransaction_id() {
 		return transaction_id;
 	}
