@@ -60,4 +60,26 @@ public class AccountManager implements IAccountDAO {
 		String SQL = "UPDATE accounts SET name=?, balance=?, institution=?, status=? WHERE account_id=?";
 		jdbcTemplateObject.update(SQL, name, balance, institution, status, accountId);
 	}
+	
+	public String accountValidation(Integer fk_user_id, String name, Double balance, String institution, Boolean status, List<Account> accountList) {
+
+		if (!name.matches("^[a-zA-Z0-9]{2,45}$")) {
+			System.out.println("NE MATCHVA faccountName");
+			return "name";
+		}
+		
+		if (!institution.matches("^[a-zA-Z0-9]{2,45}$")) {
+			System.out.println("NE MATCHVA institution");
+			return "institution";
+		}
+			
+		if (accountList.contains(name)) {
+			return "Account name is already used";
+		}
+
+		System.out.println(this);
+
+		return "register";
+
+	}
 }

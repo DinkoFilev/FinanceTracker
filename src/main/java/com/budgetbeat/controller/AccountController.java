@@ -26,12 +26,20 @@ public class AccountController {
 	@Autowired
 	AccountManager accountManager;// will inject dao from xml file
 
+
+	
+
 	/*
 	 * It displays a form to input data, here "command" is a reserved request
 	 * attribute which is used to display object data into form
 	 */
 	@RequestMapping("/accountform")
-	public String showAccountForm(Model model) {
+	public String showAccountForm(Model model, HttpSession session) {
+		// Check user
+		if(session.getAttribute("user") == null){
+			model.addAttribute("model","login.jsp");
+			return "index";
+		}//End
 		model.addAttribute("command", new Account());
 		model.addAttribute("model" ,"accountform.jsp");
 		return"logged";
@@ -44,7 +52,11 @@ public class AccountController {
 	 */
 	@RequestMapping(value = "/saveaccount", method = RequestMethod.POST)
 	public ModelAndView saveAccount(@ModelAttribute("account") Account account, HttpSession session,Model model) {
-
+		// Check user
+		if(session.getAttribute("user") == null){
+			model.addAttribute("model","login.jsp");
+			return new ModelAndView("redirect:/index");
+		}//End
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
 		accountManager.create(userId, account.getName(), account.getBalance(), account.getInstitution(),
 				account.getStatus());
@@ -58,6 +70,12 @@ public class AccountController {
 	/* It provides list of employees in model object */
 	@RequestMapping("/viewaccount")
 	public String viewAccounts(HttpSession session, Model model) {
+		// Check user
+		if(session.getAttribute("user") == null){
+			model.addAttribute("model","login.jsp");
+			return "index";
+		}//End
+		
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
 		List<Account> list = accountManager.listAccounts(userId);
 		Double total = 0.0;
@@ -77,6 +95,12 @@ public class AccountController {
 	public String editAccountPost(@ModelAttribute("action") String action, @ModelAttribute("accountId") Integer accountId,
 			HttpSession session,Model model) {
 		
+		// Check user
+		if(session.getAttribute("user") == null){
+			model.addAttribute("model","login.jsp");
+			return "index";
+		}//End
+		
 		if (action.equals("edit")) {
 			Account account = accountManager.getAccount(accountId);
 			model.addAttribute("command",account);
@@ -91,7 +115,13 @@ public class AccountController {
 
 	/* It updates model object. */
 	@RequestMapping(value = "/editsaveaccount", method = RequestMethod.POST)
-	public ModelAndView editSaveAccount(@ModelAttribute("account") Account account) {
+	public ModelAndView editSaveAccount(@ModelAttribute("account") Account account, HttpSession session, Model model) {
+		// Check user
+		if(session.getAttribute("user") == null){
+			model.addAttribute("model","login.jsp");
+			return new ModelAndView("redirect:/index");
+		}//End
+		
 		accountManager.update(account.getAccountId(), account.getName(), account.getBalance(), account.getInstitution(),
 				account.getStatus());
 		return new ModelAndView("redirect:/viewaccount");
@@ -100,7 +130,13 @@ public class AccountController {
 	/* It deletes record for the given id in URL and redirects to /viewemp */
 	@RequestMapping(value = "/deleteaccount", method = RequestMethod.POST)
 	public ModelAndView deleteAccountPost(@ModelAttribute("action") String action,
-			@ModelAttribute("accountId") Integer accountId, HttpSession session) {
+			@ModelAttribute("accountId") Integer accountId, HttpSession session, Model model) {
+		// Check user
+		if(session.getAttribute("user") == null){
+			model.addAttribute("model","login.jsp");
+			return new ModelAndView("redirect:/index");
+		}//End
+		
 		if (action.equals("delete")) {
 			accountManager.delete(accountId);
 		}
