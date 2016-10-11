@@ -1,6 +1,7 @@
 package com.budgetbeat.manager;
 
 import java.util.Calendar;
+import java.sql.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,6 +20,8 @@ public class TransactionManager implements ITransactionDAO{
 	private ConcurrentHashMap<Integer, Transaction> userTransactions = new ConcurrentHashMap<>();
 	private JdbcTemplate jdbcTemplateObject;
 	private DataSource dataSource;
+	
+	
 	@Override
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -28,13 +31,11 @@ public class TransactionManager implements ITransactionDAO{
 
 	@Override
 	public void create(Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id, String description, Double amount,
-			Calendar date, String file, Boolean status, Long step, Boolean repeat) {
-		String SQL = "INSERT INTO transactions (fk_user_id,ft_account_id,fk_tag_id,description,"
-				+ "amount,date,file,status,step,repeat) values (?,?,?,?,?,?,?,?,?,?)";
+			Date date, String file, Boolean status, Long step, Boolean repeat) {
+		String SQL = "INSERT INTO transactions (fk_user_id,ft_account_id,fk_tag_id,description,amount,date,file,status,step,transaction_repeat) values (?,?,?,?,?,?,?,?,?,?)";
 			
-		jdbcTemplateObject.update(SQL,  fk_user_id,  ft_account_id,  fk_tag_id,  description, amount,
-				 date, file, status, step, repeat);
-		System.out.println("Created Record Transacton : FK USER = " + fk_user_id + "FT ACCOUNT = " + ft_account_id + " FK TAG = " + fk_tag_id
+		jdbcTemplateObject.update(SQL,fk_user_id,ft_account_id,fk_tag_id,description,amount,date,file,status,step,repeat);
+		System.out.println("Created Record Transacton : FK USER = " + fk_user_id + " FT ACCOUNT = " + ft_account_id + " FK TAG = " + fk_tag_id
 				+ "  Description, = " +  description +" Amount : "+ amount + " Date "+date+" file "+file+" status "+status+" step "+step+" repeat "+repeat);
 		
 		return;

@@ -1,6 +1,6 @@
 package com.budgetbeat.pojo;
 
-import java.util.Calendar;
+import java.sql.Date;
 
 public class Transaction {
 	private Integer transaction_id;
@@ -9,14 +9,14 @@ public class Transaction {
 	private Integer fk_tag_id;
 	private String description;
 	private Double amount;
-	private Calendar date;
+	private Date date;
 	private String file;
 	private Boolean status;
 	private Long step;
 	private Boolean repeat;
 
 	public Transaction(Integer transaction_id, Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id,
-			String description, Double amount, Calendar date, String file, Boolean status, Long step, Boolean repeat) {
+			String description, Double amount, Date date, String file, Boolean status, Long step, Boolean repeat) {
 
 		this.transaction_id = transaction_id;
 		this.fk_user_id = fk_user_id;
@@ -82,11 +82,11 @@ public class Transaction {
 		this.amount = amount;
 	}
 
-	public Calendar getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Calendar date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

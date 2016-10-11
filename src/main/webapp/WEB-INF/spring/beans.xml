@@ -5,18 +5,7 @@
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
 
-	<bean id="AccountDAO" name="AccountDAO" class="com.budgetbeat.dao.AccountDAO"
-		scope="singleton">
-	</bean>
-	<bean id="TagDAO" name="TagDAO" class="com.budgetbeat.dao.TagDAO"
-		scope="singleton">
-	</bean>
-	<bean id="TransactionDAO" name="TransactionDAO" class="com.budgetbeat.dao.TransactionDAO"
-		scope="singleton">
-	</bean>
-	<bean id="UserDAO" name="UserDAO" class="com.budgetbeat.dao.UserDAO"
-		scope="singleton">
-	</bean>
+	
 
 
 	<!-- DATABASE CONNECTION -->

@@ -29,9 +29,8 @@ public class UserController {
 		if(session.getAttribute("user") != null){
 			model.addAttribute("model","dashboard.jsp");
 			return "logged";
-			
 		}
-		
+		System.out.println(session.getId());
 		model.addAttribute("model","login.jsp");
 		return "index";
 		
@@ -56,7 +55,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public  ModelAndView registered(Locale locale, Model model, HttpServletRequest request) {
+	public  String registered(Locale locale, Model model, HttpServletRequest request) {
 
 		UserManager usermanager = (UserManager) SpringWebConfig.context.getBean("UserManager");
 		
@@ -70,16 +69,18 @@ public class UserController {
 			try {
 				usermanager.create(firstName, lastName, email, password);
 			} catch (Exception e) {
-				return new ModelAndView("errorpage");
+				return "errorpage";
 				
 			}
+			model.addAttribute("model","login.jsp");
+			return "index";
 			
-			return new ModelAndView("redirect:/login");
-			
-		}else{
-		 model.addAttribute("status",status);
-		 return new ModelAndView("home");
 		}
+		
+		model.addAttribute("model","register.jsp");
+		model.addAttribute("status",status);
+		 return "index";
+		
 		
 	}
 	
@@ -104,11 +105,10 @@ public class UserController {
 		System.out.println(status);
 		if(status.equals("success")){
 			session.setAttribute("user", usermanager.addUserToSession(email));
-			model.addAttribute("pagename","Dashboard");
-			model.addAttribute("model","dashboard.jsp");
-			return "logged";
+			
+			return "redirect:/dashboard";
 		}
-		
+		System.out.println("testovo stava");
 		model.addAttribute("model","login.jsp");
 		model.addAttribute("status",status);
 		
@@ -119,8 +119,11 @@ public class UserController {
 	
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	public String dashboard(Locale locale, Model model, HttpServletRequest request) {
-		
+	public String dashboard(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
+		if(session.getAttribute("user") == null){
+			model.addAttribute("model","login.jsp");
+			return "index";
+		}
 		model.addAttribute("pagename","Dashboard");
 		model.addAttribute("model","dashboard.jsp");
 		return "logged";
@@ -129,8 +132,12 @@ public class UserController {
 	}
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
-		
-	
+		if(session.getAttribute("user") == null){
+			model.addAttribute("model","login.jsp");
+			return "index";
+		}
+		System.out.println(session.getId());
+		session.invalidate();
 		
 		model.addAttribute("model","login.jsp");
 		return "index";
@@ -138,29 +145,6 @@ public class UserController {
 		
 	}
 	
-//	@RequestMapping(value = "/reports", method = RequestMethod.GET)
-//	public String reports(Locale locale, Model model, HttpServletRequest request) {
-//		
-//		model.addAttribute("model","reports.jsp");
-//		return "TESTOVO";
-//		
-//		
-//	}
-//	@RequestMapping(value = "/accounts", method = RequestMethod.GET)
-//	public String accounts(Locale locale, Model model, HttpServletRequest request ,HttpSession session) {
-//		 session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
-//		model.addAttribute("model","accounts.jsp");
-//		return "TESTOVO";
-//		
-//		
-//	}
-//	@RequestMapping(value = "/tags", method = RequestMethod.GET)
-//	public String tags(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
-//		 session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
-//		model.addAttribute("model","viewtag.jsp");
-//		return "TESTOVO";
-//		
-//		
-//	}
+
 	
 }
