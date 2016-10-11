@@ -25,7 +25,12 @@ import com.budgetbeat.pojo.User;
 
 public class UserController {
 	@RequestMapping(value = "/*", method = RequestMethod.GET)
-	public String index(Locale locale, Model model, HttpServletRequest request) {
+	public String index(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
+		if(session.getAttribute("user") != null){
+			model.addAttribute("model","dashboard.jsp");
+			return "logged";
+			
+		}
 		
 		model.addAttribute("model","login.jsp");
 		return "index";
@@ -52,8 +57,6 @@ public class UserController {
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public  ModelAndView registered(Locale locale, Model model, HttpServletRequest request) {
-		
-		
 
 		UserManager usermanager = (UserManager) SpringWebConfig.context.getBean("UserManager");
 		
@@ -93,14 +96,17 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 
 	
-	public String signIn(Locale locale, Model model, HttpServletRequest request) {
+	public String signIn(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		UserManager usermanager = (UserManager) SpringWebConfig.context.getBean("UserManager");
 		String status = usermanager.loginValidation(email, password);
 		System.out.println(status);
 		if(status.equals("success")){
-			return "home2";
+			session.setAttribute("user", usermanager.addUserToSession(email));
+			model.addAttribute("pagename","Dashboard");
+			model.addAttribute("model","dashboard.jsp");
+			return "logged";
 		}
 		
 		model.addAttribute("model","login.jsp");
@@ -111,46 +117,50 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping(value = "/TESTOVO", method = RequestMethod.GET)
-	public String test(Locale locale, Model model, HttpServletRequest request) {
-		
-		model.addAttribute("model","dashboard.jsp");
-		return "TESTOVO";
-		
-		
-	}
+
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public String dashboard(Locale locale, Model model, HttpServletRequest request) {
 		
+		model.addAttribute("pagename","Dashboard");
 		model.addAttribute("model","dashboard.jsp");
-		return "TESTOVO";
+		return "logged";
+		
+		
+	}
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
+		
+	
+		
+		model.addAttribute("model","login.jsp");
+		return "index";
 		
 		
 	}
 	
-	@RequestMapping(value = "/reports", method = RequestMethod.GET)
-	public String reports(Locale locale, Model model, HttpServletRequest request) {
-		
-		model.addAttribute("model","reports.jsp");
-		return "TESTOVO";
-		
-		
-	}
-	@RequestMapping(value = "/accounts", method = RequestMethod.GET)
-	public String accounts(Locale locale, Model model, HttpServletRequest request ,HttpSession session) {
-		 session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
-		model.addAttribute("model","accounts.jsp");
-		return "TESTOVO";
-		
-		
-	}
-	@RequestMapping(value = "/tags", method = RequestMethod.GET)
-	public String tags(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
-		 session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
-		model.addAttribute("model","viewtag.jsp");
-		return "TESTOVO";
-		
-		
-	}
+//	@RequestMapping(value = "/reports", method = RequestMethod.GET)
+//	public String reports(Locale locale, Model model, HttpServletRequest request) {
+//		
+//		model.addAttribute("model","reports.jsp");
+//		return "TESTOVO";
+//		
+//		
+//	}
+//	@RequestMapping(value = "/accounts", method = RequestMethod.GET)
+//	public String accounts(Locale locale, Model model, HttpServletRequest request ,HttpSession session) {
+//		 session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
+//		model.addAttribute("model","accounts.jsp");
+//		return "TESTOVO";
+//		
+//		
+//	}
+//	@RequestMapping(value = "/tags", method = RequestMethod.GET)
+//	public String tags(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
+//		 session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
+//		model.addAttribute("model","viewtag.jsp");
+//		return "TESTOVO";
+//		
+//		
+//	}
 	
 }

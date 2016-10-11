@@ -17,6 +17,9 @@ import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.budgetbeat.dao.IUserDAO;
+import com.budgetbeat.pojo.Account;
+import com.budgetbeat.pojo.Tag;
+import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
 import com.budgetbeat.pojo.UserMapper;
 
@@ -138,6 +141,9 @@ public class UserManager implements IUserDAO {
 		return "register";
 
 	}
+	
+	
+	
 
 	public String loginValidation(String email, String password) {
 
@@ -164,6 +170,14 @@ public class UserManager implements IUserDAO {
 		System.out.println(loggedUsers.get(email).getFirstName());
 		
 	}
+	public User addUserToSession(String email) {
+
+		
+		
+		return getUserbyEmail(email);
+	}
+	
+	
 
 	private StringBuffer MD5Convert(String password) {
 		MessageDigest md;

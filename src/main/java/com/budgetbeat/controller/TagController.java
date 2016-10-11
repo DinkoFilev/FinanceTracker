@@ -23,6 +23,7 @@ import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
+import com.sun.media.sound.ModelDestination;
 
 @Controller
 public class TagController {
@@ -35,8 +36,11 @@ public class TagController {
 	 * attribute which is used to display object data into form
 	 */
 	@RequestMapping("/tagform")
-	public ModelAndView showTagForm() {
-		return new ModelAndView("tagform", "command", new Tag());
+	public String showTagForm(Model model) {
+		model.addAttribute("title","TAGOVETE");
+		model.addAttribute("model","tagform.jsp");
+		model.addAttribute("command", new Tag());
+		return "logged";
 	}
 
 	/*
@@ -49,16 +53,22 @@ public class TagController {
 
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
 		tagManager.create(tag.getName(), userId, tag.getParentId());
+		ModelAndView view = new ModelAndView();
+		
 		return new ModelAndView("redirect:/viewtag");// will redirect to viewemp
 														// request mapping
 	}
 
 	/* It provides list of employees in model object */
 	@RequestMapping("/viewtag")
-	public ModelAndView viewTags(HttpSession session) {
+	public String viewTags(HttpSession session,Model model) {
+		// session.setAttribute("user", new User(4, "Tancho", "Mihov", "tahcho@mihov@abv.bg", "password"));
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
 		List<Tag> list = tagManager.listTgs(userId);
-		return new ModelAndView("viewtag", "list", list);
+		model.addAttribute("title","TAGOVETE");
+		model.addAttribute("model","viewtag.jsp");
+		model.addAttribute("list",list);
+		return "logged";
 	}
 
 	/*
@@ -73,17 +83,19 @@ public class TagController {
 
 	// test as post
 	@RequestMapping(value = "/edittag", method = RequestMethod.POST)
-	public ModelAndView editTagPost(@ModelAttribute("action") String action, @ModelAttribute("tagId") Integer tagId,
-			HttpSession session) {
+	public String editTagPost(@ModelAttribute("action") String action, @ModelAttribute("tagId") Integer tagId,
+			HttpSession session,Model model) {
 		if (action.equals("edit")) {
 			Tag tag = tagManager.getTag(tagId);
-			return new ModelAndView("tageditform", "command", tag);
+			model.addAttribute("command", tag);
+			model.addAttribute("model","tageditform.jsp");
+			return ("logged");
 		}
-		return new ModelAndView("redirect:/viewtag");
+		return"redirect:/viewtag";
 	}
 
 	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
-	public ModelAndView showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model) {
+	public String showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model) {
 
 		Tag tag = tagManager.getTag(tagId);
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
@@ -119,8 +131,10 @@ public class TagController {
 		model.addAttribute("income", String.format("%.2f", income));
 		model.addAttribute("expence", String.format("%.2f", expence));
 		model.addAttribute("tagName", tag.getName());
+		model.addAttribute("transactions",transactions);
+		model.addAttribute("model","view_transaction_by_tag.jsp");
 
-		return new ModelAndView("view_transaction_by_tag", "transactions", transactions);
+		return "logged";
 	}
 
 	/* It updates model object. */

@@ -1,5 +1,9 @@
 package com.budgetbeat.pojo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class User {
 
 	private Integer userID;
@@ -7,6 +11,9 @@ public class User {
 	private String lastName;
 	private String email;
 	private String password;
+	private ArrayList<Account> accounts = new ArrayList<>();
+	private ArrayList<Tag> tags = new ArrayList<>();
+	private ArrayList<Transaction> transactions = new ArrayList<>();
 
 	public User(Integer userID, String firstName, String lastName, String email, String password) {
 		this.userID = userID;
@@ -58,6 +65,30 @@ public class User {
 
 	void setPassword(String password) {
 		this.password = password;
+	}
+
+	List<Account> getAccounts() {
+		return Collections.unmodifiableList(accounts);
+	}
+
+	void setAccounts(ArrayList<Account> accounts) {
+		this.accounts = accounts;
+	}
+
+	List<Tag> getTags() {
+		return Collections.unmodifiableList(tags);
+	}
+
+	void setTags(ArrayList<Tag> tags) {
+		this.tags = tags;
+	}
+
+	List<Transaction> getTransactions() {
+		return Collections.unmodifiableList(transactions);
+	}
+
+	void setTransactions(ArrayList<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 
 }

@@ -51,7 +51,7 @@
 
 	<bean id="TransactionManager" name="TransactionManager"
 		class="com.budgetbeat.manager.TransactionManager" scope="singleton">
-
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 
 

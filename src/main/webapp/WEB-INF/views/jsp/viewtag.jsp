@@ -11,28 +11,16 @@
 <%@include file="head_stuff.html"%>
 <title>BudgetBeat - ${title}</title>
 
+
 </head>
 
 <body>
-	<!--Top right navigation-->
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<%@include file="top_nav.html"%>
-	</nav>
-	<!--/Top right navigation-->
-
-
-	<!--Left navigation-->
-	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
-		<%@include file="navigation.html"%>
-	</div>
-	<!--/Left navigation-->
-
-
-	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+	<div>
+	
 		<!--Your position on site-->
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="index.jsp"><svg class="glyph stroked home">
+				<li><a href="logged"><svg class="glyph stroked home">
 							<use xlink:href="#stroked-home"></use></svg></a></li>
 				<li class="active">${title}</li>
 			</ol>
@@ -60,6 +48,7 @@
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
+					
 						<a href="tagform"><button type="submit"
 								class="btn btn-primary">
 								<msg:message code="add.new.tag" />
@@ -70,7 +59,7 @@
 							data-sort-name="name" data-sort-order="desc">
 							<thead>
 								<tr>
-									<th data-sortable="true"><msg:message code="tag.name"/></th>
+									<th data-sortable="true"><msg:message code="tag.name" /></th>
 									<th></th>
 									<th></th>
 								</tr>
@@ -82,15 +71,15 @@
 											<form action="transactions_by_tag" method="post">
 												<input type="hidden" name="tagId" value="${tag.tagId}">
 												<button class="btn btn-default btn-block btn-default">
-																			${tag.name}
-												</button>
+													${tag.name}</button>
 											</form>
 										</td>
 										<td class="col-md-1">
 											<form action="edittag" method="post">
 												<input type="hidden" name="action" value="edit"> <input
 													type="hidden" name="tagId" value="${tag.tagId}">
-												<button class="btn btn-default btn-block btn-default" title="<msg:message code="edit" />">
+												<button class="btn btn-default btn-block btn-default"
+													title="<msg:message code="edit" />">
 													<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 												</button>
 											</form>
@@ -99,7 +88,8 @@
 											<form action="deletetag" method="post">
 												<input type="hidden" name="action" value="delete"> <input
 													type="hidden" name="tagId" value="${tag.tagId}">
-												<button class="btn btn-default btn-block btn-default" title="<msg:message code="delete" />">
+												<button class="btn btn-default btn-block btn-default"
+													title="<msg:message code="delete" />">
 													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 												</button>
 											</form>

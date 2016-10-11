@@ -34,7 +34,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><span>Budget</span>beat</a>
+				<a class="navbar-brand" href="#"><span>Budget</span>Beat</a>
 				<ul class="user-menu">
 					<li class="dropdown pull-right">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> User <span class="caret"></span></a>
@@ -44,6 +44,9 @@
 						</ul>
 					</li>
 				</ul>
+		<a class="navbar-brand pull-right" href="?language=en"><img alt="" src="https://www.easterisland.travel/images/misc/flag-england-30x20.png"> </a>
+		<a class="navbar-brand pull-right" href="?language=bg"><img alt="" src="http://www.rudi-2010.com/en/images/stories/rudi/flag_bulgaria_sm.gif"> </a>
+				
 			</div>
 							
 		</div><!-- /.container-fluid -->

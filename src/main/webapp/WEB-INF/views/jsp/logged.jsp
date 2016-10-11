@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lumino - Dashboard</title>
+<title>Budgetbeat - ${pagename}</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/datepicker3.css" rel="stylesheet">
@@ -27,32 +27,35 @@
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#sidebar-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#"><span>Lumino</span>Admin</a>
-				<ul class="user-menu">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed"
+			data-toggle="collapse" data-target="#sidebar-collapse">
+			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+			<span class="icon-bar"></span> <span class="icon-bar"></span>
+			
+		</button>
+		<a class="navbar-brand" href="#"><span>Budget</span>Beat</a>
+		<ul class="user-menu">
 					<li class="dropdown pull-right"><a href="#"
-						class="dropdown-toggle" data-toggle="dropdown"><svg
-								class="glyph stroked male-user">
-								<use xlink:href="#stroked-male-user"></use></svg> User <span
-							class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#"><svg class="glyph stroked male-user">
+				class="dropdown-toggle" data-toggle="dropdown"><svg
+						class="glyph stroked male-user">
+								<use xlink:href="#stroked-male-user"></use></svg>${user.firstName} ${user.lastName}<span
+					class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="profile"><svg class="glyph stroked male-user">
 										<use xlink:href="#stroked-male-user"></use></svg> Profile</a></li>
-							<li><a href="#"><svg class="glyph stroked gear">
+					<li><a href="settings"><svg class="glyph stroked gear">
 										<use xlink:href="#stroked-gear"></use></svg> Settings</a></li>
-							<li><a href="#"><svg class="glyph stroked cancel">
+					<li><a href="logout"><svg class="glyph stroked cancel">
 										<use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
-						</ul></li>
-				</ul>
-			</div>
-
-		</div>
+				</ul></li>
+				
+		</ul>	
+		<a class="navbar-brand pull-right" href="?language=en"><img alt="" src="https://www.easterisland.travel/images/misc/flag-england-30x20.png"> </a>
+		<a class="navbar-brand pull-right" href="?language=bg"><img alt="" src="http://www.rudi-2010.com/en/images/stories/rudi/flag_bulgaria_sm.gif"> </a>
+			
+	</div>
+</div>
 		<!-- /.container-fluid -->
 	</nav>
 
@@ -66,9 +69,9 @@
 						class="glyph stroked line-graph">
 				<use xlink:href="#stroked-line-graph"></use></svg> Reports</a></li>
 			<li role="presentation" class="divider"></li>
-			<li><a href="accounts"><svg class="glyph stroked chain">
+			<li><a href="viewaccount"><svg class="glyph stroked chain">
 				<use xlink:href="#stroked-chain" /></svg> Accounts</a></li>
-			<li><a href="tags"><svg class="glyph stroked tag">
+			<li><a href="viewtag"><svg class="glyph stroked tag">
 				<use xlink:href="#stroked-tag" /></svg> Tags</a></li>
 			<li><a href="transactions"><svg class="glyph stroked star">
 				<use xlink:href="#stroked-star" /></svg> Transactions</a></li>
@@ -82,13 +85,6 @@
 		</div>
 	<!--/.main-->
 
-	<script src="js/jquery-1.11.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/chart.min.js"></script>
-	<script src="js/chart-data.js"></script>
-	<script src="js/easypiechart.js"></script>
-	<script src="js/easypiechart-data.js"></script>
-	<script src="js/bootstrap-datepicker.js"></script>
 	<script>
 		$('#calendar').datepicker({});
 

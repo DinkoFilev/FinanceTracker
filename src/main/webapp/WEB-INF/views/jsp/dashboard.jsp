@@ -5,9 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@include file="head_stuff.html"%>
-<title>BudgetBeat - ${title}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/datepicker3.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
 
+<!--Icons-->
+<script src="js/lumino.glyphs.js"></script>
 </head>
 
 <body>
@@ -17,7 +22,7 @@
 			<ol class="breadcrumb">
 				<li><a href="index.jsp"><svg class="glyph stroked home">
 							<use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active"><msg:message code="dashboard" /></li>
+				<li class="active">${pagename}</li>
 			</ol>
 		</div>
 		<!--/.row-->

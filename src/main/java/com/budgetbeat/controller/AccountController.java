@@ -18,6 +18,7 @@ import com.budgetbeat.manager.AccountManager;
 import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.User;
+import com.sun.scenario.effect.Blend.Mode;
 
 @Controller
 public class AccountController {
@@ -30,8 +31,10 @@ public class AccountController {
 	 * attribute which is used to display object data into form
 	 */
 	@RequestMapping("/accountform")
-	public ModelAndView showAccountForm() {
-		return new ModelAndView("accountform", "command", new Account());
+	public String showAccountForm(Model model) {
+		model.addAttribute("command", new Account());
+		model.addAttribute("model" ,"accountform.jsp");
+		return"logged";
 	}
 
 	/*
@@ -40,11 +43,13 @@ public class AccountController {
 	 * default request is GET
 	 */
 	@RequestMapping(value = "/saveaccount", method = RequestMethod.POST)
-	public ModelAndView saveAccount(@ModelAttribute("account") Account account, HttpSession session) {
+	public ModelAndView saveAccount(@ModelAttribute("account") Account account, HttpSession session,Model model) {
 
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
 		accountManager.create(userId, account.getName(), account.getBalance(), account.getInstitution(),
 				account.getStatus());
+		
+	
 		return new ModelAndView("redirect:/viewaccount");// will redirect to
 															// viewemp
 															// request mapping
@@ -52,38 +57,34 @@ public class AccountController {
 
 	/* It provides list of employees in model object */
 	@RequestMapping("/viewaccount")
-	public ModelAndView viewAccounts(HttpSession session, Model model) {
+	public String viewAccounts(HttpSession session, Model model) {
 		Integer userId = ((User) session.getAttribute("user")).getUserID();
 		List<Account> list = accountManager.listAccounts(userId);
 		Double total = 0.0;
 		for (Account element : list) {
 			total += element.getBalance();
 		}
-
+		model.addAttribute("model","viewaccount.jsp");
 		model.addAttribute("total", String.format("%.2f", total));
-		return new ModelAndView("viewaccount", "list", list);
+		model.addAttribute("list",list);
+		return "logged";
+		
+		
 	}
 
-	/*
-	 * It displays object data into form for the given id. The @PathVariable
-	 * puts URL data into variable.
-	 */
-//	@RequestMapping(value = "/editaccount/{id}")
-//	public ModelAndView editAccount(@PathVariable int id) {
-//		Account account = accountManager.getAccount(id);
-//		return new ModelAndView("accounteditform", "command", account);
-//	}
 	
 	@RequestMapping(value = "/editaccount", method = RequestMethod.POST)
-	public ModelAndView editAccountPost(@ModelAttribute("action") String action, @ModelAttribute("accountId") Integer accountId,
-			HttpSession session) {
+	public String editAccountPost(@ModelAttribute("action") String action, @ModelAttribute("accountId") Integer accountId,
+			HttpSession session,Model model) {
 		
 		if (action.equals("edit")) {
 			Account account = accountManager.getAccount(accountId);
-			
-			return new ModelAndView("accounteditform", "command", account);
+			model.addAttribute("command",account);
+			model.addAttribute("model","accounteditform.jsp");
+			return "logged";
 		}
-		return new ModelAndView("redirect:/viewaccount");
+		model.addAttribute("model","viewaccount.jsp");
+		return "redirect:/logged";
 	}
 	
 	
