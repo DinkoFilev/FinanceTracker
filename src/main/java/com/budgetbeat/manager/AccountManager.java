@@ -20,6 +20,12 @@ public class AccountManager implements IAccountDAO {
 		this.dataSource = dataSource;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
+	
+	public void setInitialAccount(Integer fk_user_id){
+		String SQL = "INSERT INTO `finance_tracker`.`accounts` (`fk_user_id`, `name`, `balance`, `institution`, `status`) VALUES (?,?,?,?,?);";
+		jdbcTemplateObject.update(SQL, fk_user_id, "No Account", 0.00, "Empty", true);
+		return;
+	}
 
 	@Override
 	public void delete(Integer accountId) {

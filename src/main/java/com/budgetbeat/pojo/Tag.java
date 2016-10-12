@@ -48,4 +48,9 @@ public class Tag {
 		this.tagId = tagId;
 	}
 
+	@Override
+	public String toString() {
+		return "Tag [tagId=" + tagId + ", name=" + name + ", userId=" + userId + ", parentId=" + parentId + "]";
+	}
+
 }

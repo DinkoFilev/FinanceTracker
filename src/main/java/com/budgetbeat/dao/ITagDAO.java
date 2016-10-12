@@ -10,7 +10,7 @@ public interface ITagDAO {
 
 	public void setDataSource(DataSource ds);
 
-	public void create(String name, Integer userId, Integer parentId);
+	public Tag create(Tag tag);
 
 	public Tag getTag(Integer tagId);
 

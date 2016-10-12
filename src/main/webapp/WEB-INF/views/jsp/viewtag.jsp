@@ -71,19 +71,19 @@ response.addDateHeader ("Expires", 0);
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="tag" items="${list}">
+								<c:forEach var="tag" items="${user.getTags()}">
 									<tr>
 										<td>
 											<form action="transactions_by_tag" method="post">
-												<input type="hidden" name="tagId" value="${tag.tagId}">
+												<input type="hidden" name="tagId" value="${tag.value.tagId}">
 												<button class="btn btn-default btn-block btn-default">
-													${tag.name}</button>
+													${tag.value.name}</button>
 											</form>
 										</td>
 										<td class="col-md-1">
 											<form action="edittag" method="post">
 												<input type="hidden" name="action" value="edit"> <input
-													type="hidden" name="tagId" value="${tag.tagId}">
+													type="hidden" name="tagId" value="${tag.value.tagId}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="edit" />">
 													<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -93,7 +93,7 @@ response.addDateHeader ("Expires", 0);
 										<td class="col-md-1">
 											<form action="deletetag" method="post">
 												<input type="hidden" name="action" value="delete"> <input
-													type="hidden" name="tagId" value="${tag.tagId}">
+													type="hidden" name="tagId" value="${tag.value.tagId}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="delete" />">
 													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

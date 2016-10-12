@@ -1,11 +1,17 @@
 package com.budgetbeat.manager;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.budgetbeat.dao.ITagDAO;
 import com.budgetbeat.pojo.Tag;
@@ -23,11 +29,37 @@ public class TagManager implements ITagDAO {
 	}
 
 	@Override
-	public void create(String name, Integer userId, Integer parentId) {
+	public Tag create(Tag tag) {
 		String SQL = "insert into tags (name, fk_user_id, fk_parent_id) values (?, ?, ?)";
-		System.out.println("Will Create Tag Name = " + name + " ParentID = " + parentId + " UserID = " + userId);
-		jdbcTemplateObject.update(SQL, name, userId, parentId);
-		System.out.println("Created Tag Name = " + name + " ParentID = " + parentId + " UserID = " + userId);
+		
+		System.out.println("===============================");
+		System.out.println(tag);
+		System.out.println("===============================");
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplateObject.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(SQL, new String[] { "tag_id" });
+				ps.setString(1, tag.getName());
+				ps.setInt(2, tag.getUserId());
+				ps.setInt(3, tag.getParentId());
+				return ps;
+			}
+		}, keyHolder);
+		tag.setTagId(keyHolder.getKey().intValue());
+
+		return tag;
+
+	}
+
+	public void setInitialTags(Integer fk_user_id) {
+		// Adds No tag
+		String SQL = "insert into tags (name, fk_user_id) values (?, ?)";
+		jdbcTemplateObject.update(SQL, "No tag", fk_user_id);
+
+		// Adds top X tags
+		SQL = "INSERT INTO tags (name, fk_user_id) select name, ? from (SELECT count(name) as count, tag_id, name, fk_parent_id, fk_user_id  FROM finance_tracker.tags group by tag_id, name, fk_parent_id, fk_user_id order by count desc limit ?) as t";
+		jdbcTemplateObject.update(SQL, fk_user_id, 3);
 		return;
 	}
 
@@ -62,7 +94,12 @@ public class TagManager implements ITagDAO {
 
 	@Override
 	public void delete(Integer tagId) {
+		// Change all accounts to default tag
+
 		String SQL = "delete from tags where tag_id = ?";
+		jdbcTemplateObject.update(SQL, tagId);
+
+		SQL = "delete from tags where tag_id = ?";
 		jdbcTemplateObject.update(SQL, tagId);
 		System.out.println("Deleted Tag with ID = " + tagId);
 		return;

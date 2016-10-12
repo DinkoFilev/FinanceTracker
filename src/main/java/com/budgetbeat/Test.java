@@ -37,9 +37,14 @@ public class Test {
 //	System.out.println("===========================================");
 //	System.out.println(tagMan.getTag(17).getName());
 //	}
-		UserManager asd = (UserManager) SpringWebConfig.context.getBean("UserManager");
-		User user = asd.addUserToSession("kondio@savov.com");
-		System.out.println(user.getEmail());
+//		UserManager asd = (UserManager) SpringWebConfig.context.getBean("UserManager");
+//		User user = asd.addUserToSession("kondio@savov.com");
+//		System.out.println(user.getEmail());
+		
+		TagManager am = (TagManager) SpringWebConfig.context.getBean("TagManager");
+		
+		
+		am.setInitialTags(3);
 		
 	}
 }

@@ -1,5 +1,6 @@
 package com.budgetbeat.pojo;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -11,9 +12,9 @@ public class User {
 	private String lastName;
 	private String email;
 	private String password;
-	private TreeMap<Integer,Account> accounts = new TreeMap<Integer,Account>(); // ID --> Account
-	private TreeMap<Integer,Tag> tags = new TreeMap<Integer,Tag>(); // ID --> Tag
-	private TreeMap<Integer,Transaction> transactions = new TreeMap<Integer,Transaction>(); // ID --> Transaction
+	private TreeMap<Integer,Account> accounts = new TreeMap<Integer,Account>(Collections.reverseOrder()); // ID --> Account
+	private TreeMap<Integer,Tag> tags = new TreeMap<Integer,Tag>(Collections.reverseOrder()); // ID --> Tag
+	private TreeMap<Integer,Transaction> transactions = new TreeMap<Integer,Transaction>(Collections.reverseOrder()); // ID --> Transaction
 
 	
 	public User(Integer userID, String firstName, String lastName, String email, String password) {

@@ -37,14 +37,17 @@ public class TagController {
 	 */
 	@RequestMapping("/tagform")
 	public String showTagForm(Model model, HttpSession session) {
+		User user = ((User) session.getAttribute("user"));
 		// Check user
-		if(session.getAttribute("user") == null){
-			model.addAttribute("model","login.jsp");
+		if (user == null) {
+			model.addAttribute("model", "login.jsp");
 			return "index";
-		}//End
-		model.addAttribute("title","Tag manager");
-		model.addAttribute("model","tagform.jsp");
-		model.addAttribute("command", new Tag());
+		} // End
+		model.addAttribute("title", "Tag manager");
+		model.addAttribute("model", "tagform.jsp");
+		Tag tag = new Tag();
+
+		model.addAttribute("command", tag);
 		return "logged";
 	}
 
@@ -55,33 +58,37 @@ public class TagController {
 	 */
 	@RequestMapping(value = "/savetag", method = RequestMethod.POST)
 	public ModelAndView saveTag(@ModelAttribute("tag") Tag tag, HttpSession session, Model model) {
-		if(session.getAttribute("user") == null){
-			model.addAttribute("model","login.jsp");
-			return new ModelAndView("redirect:/index");
-		}//End
+		User user = ((User) session.getAttribute("user"));
 
-		Integer userId = ((User) session.getAttribute("user")).getUserID();
-		tagManager.create(tag.getName(), userId, tag.getParentId());
-		ModelAndView view = new ModelAndView();
-		
+		if (user == null) {
+			model.addAttribute("model", "login.jsp");
+			return new ModelAndView("redirect:/index");
+		} // End
+		tag.setUserId(user.getUserID());
+		tag.setParentId(3);
+
+		user.addTag(tagManager.create(tag));
+
 		return new ModelAndView("redirect:/viewtag");// will redirect to viewemp
 														// request mapping
 	}
 
 	/* It provides list of employees in model object */
 	@RequestMapping("/viewtag")
-	public String viewTags(HttpSession session,Model model) {
-		
+	public String viewTags(HttpSession session, Model model) {
+		User user = ((User) session.getAttribute("user"));
 		// Check user
-		if(session.getAttribute("user") == null){
-			model.addAttribute("model","login.jsp");
+		if (user == null) {
+			model.addAttribute("model", "login.jsp");
 			return "index";
-		}//End
-		Integer userId = ((User) session.getAttribute("user")).getUserID();
-		List<Tag> list = tagManager.listTgs(userId);
-		model.addAttribute("title","TAGOVETE");
-		model.addAttribute("model","viewtag.jsp");
-		model.addAttribute("list",list);
+		} // End
+			// Integer userId = ((User)
+			// session.getAttribute("user")).getUserID();
+
+		// List<Tag> list = tagManager.listTgs(userId);
+		model.addAttribute("title", "TAGOVETE");
+		model.addAttribute("model", "viewtag.jsp");
+		// model.addAttribute("list",list);
 		return "logged";
 	}
 
@@ -98,76 +105,74 @@ public class TagController {
 	// test as post
 	@RequestMapping(value = "/edittag", method = RequestMethod.POST)
 	public String editTagPost(@ModelAttribute("action") String action, @ModelAttribute("tagId") Integer tagId,
-			HttpSession session,Model model) {
+			HttpSession session, Model model) {
+		User user = ((User) session.getAttribute("user"));
 		// Check user
-		if(session.getAttribute("user") == null){
-			model.addAttribute("model","login.jsp");
+		if (user == null) {
+			model.addAttribute("model", "login.jsp");
 			return "index";
-		}//End
+		} // End
 		if (action.equals("edit")) {
-			Tag tag = tagManager.getTag(tagId);
-			model.addAttribute("command", tag);
-			model.addAttribute("model","tageditform.jsp");
+			model.addAttribute("command", user.getTag(tagId));
+			model.addAttribute("model", "tageditform.jsp");
 			return ("logged");
 		}
-		return"redirect:/viewtag";
+		return "redirect:/viewtag";
 	}
 
-//	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
-//	public String showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model) {
-//		// Check user
-//		if(session.getAttribute("user") == null){
-//			model.addAttribute("model","login.jsp");
-//			return "index";
-//		}//End
-//		Tag tag = tagManager.getTag(tagId);
-//		Integer userId = ((User) session.getAttribute("user")).getUserID();
-//
-//		// TODO
-//		// List<Transaction> transactions =
-//		// userManager.listReansactionsByTagId(tagId);
-//
-//		List<Transaction> transactions = new ArrayList<Transaction>();
-//
-//		for (int i = 0; i < 100; i++) {
-//			Transaction tran = new Transaction();
-//			tran.setAmount(new Random().nextInt(1000) * 1.0 - 500);
-//			tran.setDescription("Transaction " + new Random().nextInt(1000));
-//			tran.setFk_tag_id(tagId);
-//			tran.setFk_user_id(userId);
-//			tran.setFt_account_id(new Random().nextInt(50));
-//			Calendar calendar = new GregorianCalendar(2016, new Random().nextInt(12), new Random().nextInt(28));
-//			tran.setDate(calendar);
-//			transactions.add(tran);
-//		}
-//
-//		Double income = 0.0;
-//		Double expence = 0.0;
-//		for (Transaction element : transactions) {
-//			if (element.getAmount() < 0) {
-//				expence += element.getAmount();
-//			} else {
-//				income += element.getAmount();
-//			}
-//		}
-//
-//		model.addAttribute("income", String.format("%.2f", income));
-//		model.addAttribute("expence", String.format("%.2f", expence));
-//		model.addAttribute("tagName", tag.getName());
-//		model.addAttribute("transactions",transactions);
-//		model.addAttribute("model","view_transaction_by_tag.jsp");
-//
-//		return "logged";
-//	}
+	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
+	public String showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model) {
+		User user = ((User) session.getAttribute("user"));
+		
+		// Check user
+		if (user == null) {
+			model.addAttribute("model", "login.jsp");
+			return "index";
+		} // End
+		
+		
+		
+		
+		Tag tag = tagManager.getTag(tagId);
+		
+
+		// TODO
+		// List<Transaction> transactions =
+		// userManager.listReansactionsByTagId(tagId);
+
+		List<Transaction> transactions = new ArrayList<Transaction>();
+
+		Double income = 0.0;
+		Double expence = 0.0;
+		for (Transaction element : transactions) {
+			if (element.getAmount() < 0) {
+				expence += element.getAmount();
+			} else {
+				income += element.getAmount();
+			}
+		}
+
+		model.addAttribute("income", String.format("%.2f", income));
+		model.addAttribute("expence", String.format("%.2f", expence));
+		model.addAttribute("tagName", tag.getName());
+		model.addAttribute("transactions", transactions);
+		model.addAttribute("model", "view_transaction_by_tag.jsp");
+
+		return "logged";
+	}
 
 	/* It updates model object. */
 	@RequestMapping(value = "/editsavetag", method = RequestMethod.POST)
 	public ModelAndView editSaveTag(@ModelAttribute("tag") Tag tag, HttpSession session, Model model) {
-		if(session.getAttribute("user") == null){
-			model.addAttribute("model","login.jsp");
+		User user = ((User) session.getAttribute("user"));
+
+		if (user == null) {
+			model.addAttribute("model", "login.jsp");
 			return new ModelAndView("redirect:/index");
-		}//End
-			tagManager.update(tag.getTagId(), tag.getName());
+		} // End
+
+		tagManager.update(tag.getTagId(), tag.getName());
+
 		return new ModelAndView("redirect:/viewtag");
 	}
 
@@ -180,13 +185,15 @@ public class TagController {
 
 	// test as post
 	@RequestMapping(value = "/deletetag", method = RequestMethod.POST)
-	public ModelAndView deleteTagPost(@ModelAttribute("action") String action, Model model, @ModelAttribute("tagId") Integer tagId,
-			HttpSession session) {
-		if(session.getAttribute("user") == null){
-			model.addAttribute("model","login.jsp");
+	public ModelAndView deleteTagPost(@ModelAttribute("action") String action, Model model,
+			@ModelAttribute("tagId") Integer tagId, HttpSession session) {
+		User user = ((User) session.getAttribute("user"));
+		if (user == null) {
+			model.addAttribute("model", "login.jsp");
 			return new ModelAndView("redirect:/index");
-		}//End
+		} // End
 		if (action.equals("delete")) {
+			// user.deleteTag(tagId)
 			tagManager.delete(tagId);
 		}
 		return new ModelAndView("redirect:/viewtag");

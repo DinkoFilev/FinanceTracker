@@ -7,9 +7,10 @@
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
 
 <%
-response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
-response.addHeader("Pragma", "no-cache"); 
-response.addDateHeader ("Expires", 0);
+	response.addHeader("Cache-Control",
+			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
+	response.addHeader("Pragma", "no-cache");
+	response.addDateHeader("Expires", 0);
 %>
 <!DOCTYPE html>
 <html>
@@ -20,7 +21,7 @@ response.addDateHeader ("Expires", 0);
 </head>
 
 <body>
-	
+
 
 
 	<div>
@@ -61,8 +62,11 @@ response.addDateHeader ("Expires", 0);
 								class="btn btn-primary">
 								<msg:message code="add.new.account" />
 							</button> </a>
+						<c:set var="total1" scope="page" value="0" />
+						<c:out value='${total1}' />
 						<h4>
-							<c:if test="${total != null}">TOTAL: ${total}</c:if>
+							<msg:message code="Total" />
+							:<label id="total"></label>
 						</h4>
 						<table data-toggle="table" data-show-toggle="true"
 							data-show-columns="true" data-search="true"
@@ -80,18 +84,18 @@ response.addDateHeader ("Expires", 0);
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="account" items="${list}">
+								<c:forEach var="account" items="${user.getAccounts()}">
 									<tr>
-										<td>${account.name}</td>
-										<td>${account.institution}</td>
-										<td>${account.balance}</td>
+										<td>${account.value.name}</td>
+										<td>${account.value.institution}</td>
+										<td>${account.value.balance}</td>
 										<td><input type="checkbox" class="form-control"
 											onclick="return false" onkeydown="return false"
-											<c:if test="${account.status}">checked="checked"</c:if> /></td>
+											<c:if test="${account.value.status}">checked="checked"</c:if> /></td>
 										<td class="col-md-1">
 											<form action="editaccount" method="post">
 												<input type="hidden" name="action" value="edit"> <input
-													type="hidden" name="accountId" value="${account.accountId}">
+													type="hidden" name="accountId" value="${account.key}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="edit" />">
 													<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -101,7 +105,7 @@ response.addDateHeader ("Expires", 0);
 										<td class="col-md-1">
 											<form action="deleteaccount" method="post">
 												<input type="hidden" name="action" value="delete"> <input
-													type="hidden" name="accountId" value="${account.accountId}">
+													type="hidden" name="accountId" value="${account.key}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="delete" />">
 													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
