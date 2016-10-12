@@ -113,52 +113,52 @@ public class TagController {
 		return"redirect:/viewtag";
 	}
 
-	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
-	public String showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model) {
-		// Check user
-		if(session.getAttribute("user") == null){
-			model.addAttribute("model","login.jsp");
-			return "index";
-		}//End
-		Tag tag = tagManager.getTag(tagId);
-		Integer userId = ((User) session.getAttribute("user")).getUserID();
-
-		// TODO
-		// List<Transaction> transactions =
-		// userManager.listReansactionsByTagId(tagId);
-
-		List<Transaction> transactions = new ArrayList<Transaction>();
-
-		for (int i = 0; i < 100; i++) {
-			Transaction tran = new Transaction();
-			tran.setAmount(new Random().nextInt(1000) * 1.0 - 500);
-			tran.setDescription("Transaction " + new Random().nextInt(1000));
-			tran.setFk_tag_id(tagId);
-			tran.setFk_user_id(userId);
-			tran.setFt_account_id(new Random().nextInt(50));
-			Calendar calendar = new GregorianCalendar(2016, new Random().nextInt(12), new Random().nextInt(28));
-			tran.setDate(calendar);
-			transactions.add(tran);
-		}
-
-		Double income = 0.0;
-		Double expence = 0.0;
-		for (Transaction element : transactions) {
-			if (element.getAmount() < 0) {
-				expence += element.getAmount();
-			} else {
-				income += element.getAmount();
-			}
-		}
-
-		model.addAttribute("income", String.format("%.2f", income));
-		model.addAttribute("expence", String.format("%.2f", expence));
-		model.addAttribute("tagName", tag.getName());
-		model.addAttribute("transactions",transactions);
-		model.addAttribute("model","view_transaction_by_tag.jsp");
-
-		return "logged";
-	}
+//	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
+//	public String showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model) {
+//		// Check user
+//		if(session.getAttribute("user") == null){
+//			model.addAttribute("model","login.jsp");
+//			return "index";
+//		}//End
+//		Tag tag = tagManager.getTag(tagId);
+//		Integer userId = ((User) session.getAttribute("user")).getUserID();
+//
+//		// TODO
+//		// List<Transaction> transactions =
+//		// userManager.listReansactionsByTagId(tagId);
+//
+//		List<Transaction> transactions = new ArrayList<Transaction>();
+//
+//		for (int i = 0; i < 100; i++) {
+//			Transaction tran = new Transaction();
+//			tran.setAmount(new Random().nextInt(1000) * 1.0 - 500);
+//			tran.setDescription("Transaction " + new Random().nextInt(1000));
+//			tran.setFk_tag_id(tagId);
+//			tran.setFk_user_id(userId);
+//			tran.setFt_account_id(new Random().nextInt(50));
+//			Calendar calendar = new GregorianCalendar(2016, new Random().nextInt(12), new Random().nextInt(28));
+//			tran.setDate(calendar);
+//			transactions.add(tran);
+//		}
+//
+//		Double income = 0.0;
+//		Double expence = 0.0;
+//		for (Transaction element : transactions) {
+//			if (element.getAmount() < 0) {
+//				expence += element.getAmount();
+//			} else {
+//				income += element.getAmount();
+//			}
+//		}
+//
+//		model.addAttribute("income", String.format("%.2f", income));
+//		model.addAttribute("expence", String.format("%.2f", expence));
+//		model.addAttribute("tagName", tag.getName());
+//		model.addAttribute("transactions",transactions);
+//		model.addAttribute("model","view_transaction_by_tag.jsp");
+//
+//		return "logged";
+//	}
 
 	/* It updates model object. */
 	@RequestMapping(value = "/editsavetag", method = RequestMethod.POST)

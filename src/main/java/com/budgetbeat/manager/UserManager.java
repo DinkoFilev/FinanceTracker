@@ -1,8 +1,11 @@
 package com.budgetbeat.manager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.sql.DataSource;
 
@@ -16,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.dao.IUserDAO;
 import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.Tag;
@@ -151,7 +155,6 @@ public class UserManager implements IUserDAO {
 			System.out.println("CHECK THIS"+registerredUsers.get(email));
 			System.out.println(MD5Convert(password));
 			if (registerredUsers.get(email).equals(MD5Convert(password).toString())) {
-				System.out.println("ERROR ?");
 				loggingUser(email);
 				return "success";
 			} else {
@@ -164,17 +167,54 @@ public class UserManager implements IUserDAO {
 
 	}
 
+	/*
+	 * ADD COLLECTIONS TO USER WHEN SIGN IN
+	 */
 	private void loggingUser(String email) {
-
 		loggedUsers.put(email, getUserbyEmail(email));
-		System.out.println(loggedUsers.get(email).getFirstName());
+		
+		AccountManager accountManager = (AccountManager) SpringWebConfig.context.getBean("AccountManager");
+		TagManager tagManager = (TagManager) SpringWebConfig.context.getBean("TagManager");
+		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
+		/*
+		 * ADD USER ACCOUNTS WHEN SIGN IN
+		 */
+		User user = loggedUsers.get(email);
+		List<Account> accounts = accountManager.listAccounts(loggedUsers.get(email).getUserID());
+		
+		for (Account account : accounts) {
+			user.addAccount(account);
+			
+		}
+		
+		/*
+		 * ADD USER TAGS WHEN SIGN IN
+		 */
+		
+		List<Tag> tags = tagManager.listTgs(loggedUsers.get(email).getUserID());
+		for (Tag tag : tags) {
+			user.addTag(tag);
+		}
+		
+		
+		/*
+		 * ADD USER TRANSACTIONS WHEN SIGN IN
+		 */
+		
+		List<Transaction> transactions = transactionManager.getListOfTransactionByUserID(loggedUsers.get(email).getUserID());
+		
+		for (Transaction tran : transactions) {
+			user.addTransaction(tran);
+		}
+		
+		System.out.println("user : "+ loggedUsers.get(email).getFirstName()+" successfully logging ");
 		
 	}
 	public User addUserToSession(String email) {
-
 		
 		
-		return getUserbyEmail(email);
+		
+		return loggedUsers.get(email);
 	}
 	
 	
@@ -197,5 +237,6 @@ public class UserManager implements IUserDAO {
 		return sb;
 
 	}
-
+	
+	
 }

@@ -12,7 +12,9 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.budgetbeat.manager.AccountManager;
 import com.budgetbeat.manager.TagManager;
+import com.budgetbeat.manager.UserManager;
 import com.budgetbeat.pojo.Account;
+import com.budgetbeat.pojo.User;
 
 
 public class Test {
@@ -35,8 +37,9 @@ public class Test {
 //	System.out.println("===========================================");
 //	System.out.println(tagMan.getTag(17).getName());
 //	}
-		
-		
+		UserManager asd = (UserManager) SpringWebConfig.context.getBean("UserManager");
+		User user = asd.addUserToSession("kondio@savov.com");
+		System.out.println(user.getEmail());
 		
 	}
 }

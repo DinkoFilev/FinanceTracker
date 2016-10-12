@@ -1,8 +1,8 @@
 package com.budgetbeat.pojo;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 
 public class User {
 
@@ -11,10 +11,11 @@ public class User {
 	private String lastName;
 	private String email;
 	private String password;
-	private ArrayList<Account> accounts = new ArrayList<>();
-	private ArrayList<Tag> tags = new ArrayList<>();
-	private ArrayList<Transaction> transactions = new ArrayList<>();
+	private TreeMap<Integer,Account> accounts = new TreeMap<Integer,Account>(); // ID --> Account
+	private TreeMap<Integer,Tag> tags = new TreeMap<Integer,Tag>(); // ID --> Tag
+	private TreeMap<Integer,Transaction> transactions = new TreeMap<Integer,Transaction>(); // ID --> Transaction
 
+	
 	public User(Integer userID, String firstName, String lastName, String email, String password) {
 		this.userID = userID;
 		this.firstName = firstName;
@@ -52,11 +53,19 @@ public class User {
 	}
 
 	public String getEmail() {
+		
 		return email;
 	}
 
 	void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "User [userID=" + userID + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + ", accounts=" + accounts + ", tags=" + tags + ", transactions="
+				+ transactions + "]";
 	}
 
 	String getPassword() {
@@ -66,29 +75,64 @@ public class User {
 	void setPassword(String password) {
 		this.password = password;
 	}
-
-	List<Account> getAccounts() {
-		return Collections.unmodifiableList(accounts);
+	
+	//COLLECTIONS
+	
+	public TreeMap<Integer, Account> getAccounts() {
+		return accounts;
 	}
 
-	void setAccounts(ArrayList<Account> accounts) {
+	public void setAccounts(TreeMap<Integer, Account> accounts) {
 		this.accounts = accounts;
 	}
 
-	List<Tag> getTags() {
-		return Collections.unmodifiableList(tags);
+	public TreeMap<Integer, Tag> getTags() {
+		return tags;
 	}
 
-	void setTags(ArrayList<Tag> tags) {
+	public void setTags(TreeMap<Integer, Tag> tags) {
 		this.tags = tags;
 	}
 
-	List<Transaction> getTransactions() {
-		return Collections.unmodifiableList(transactions);
+	public TreeMap<Integer, Transaction> getTransactions() {
+		return transactions;
 	}
 
-	void setTransactions(ArrayList<Transaction> transactions) {
+	public void setTransactions(TreeMap<Integer, Transaction> transactions) {
 		this.transactions = transactions;
 	}
+	public void addAccount(Account account){
+		accounts.put(account.getAccountId(),account);
+			
+			
+		}
+	public void addTag(Tag tag){
+		tags.put(tag.getTagId(),tag);
+		
+	}
+	
+	public void addTransaction(Transaction transaction){
+		transactions.put(transaction.getTransaction_id(),transaction);
+	
+		
+	}
+	public Account getAccount(Integer id){
+		
+		
+		return accounts.get(id);
+	}
+	public Tag getTag(Integer id){
+		
+		return tags.get(id);
+	}
+	
+	public Transaction getTransaction(Integer id){
+		
+	
+		return transactions.get(id);
+	}
+	
+	
+	
 
 }

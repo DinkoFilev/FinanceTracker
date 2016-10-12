@@ -79,7 +79,7 @@
 							<tbody>
 								<c:forEach var="tran" items="${list}">
 									<tr>
-										<td>${tran.description}</td>
+										<td>${tran.key}</td>
 										<td>${tran.date}</td>
 										<td><a href="edittag/${tran.amount}"><button 
 									class="btn btn-primary">Edit</button></a>

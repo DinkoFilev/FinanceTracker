@@ -12,8 +12,8 @@ public interface ITransactionDAO {
 
 	public void setDataSource(DataSource dataSource);
 
-	public void create(Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id,
-			String description, Double amount, Date date, String file, Boolean status, Long step, Boolean repeat);
+	public void create(Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id, String description, Double amount,
+			Date date, String file, Boolean status, Long step, Boolean repeat);
 
 	public Transaction getTransactionbyID(Integer id);
 

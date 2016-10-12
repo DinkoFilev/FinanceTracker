@@ -5,6 +5,7 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,49 +67,49 @@
 								<c:forEach var="trans" items="${list}">
 									<tr>
 										<td>
-											<form action="transactions_by_tag" method="post">
-												<input type="hidden" name="tagId"
-													value="${trans.transaction_id}">
+											<form action="#" method="post">
+												<input type="hidden" name="transactionId"
+													value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default">
-													${trans.description}</button>
+													${trans.value.description}</button>
 											</form>
 										</td>
 										<td>
-											<form action="transactions_by_tag" method="post">
-												<input type="hidden" name="tagId"
-													value="${trans.transaction_id}">
+											<form action="#" method="post">
+												<input type="hidden" name="transactionId"
+													value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default">
-													${trans.amount}</button>
+													${trans.value.amount}</button>
 											</form>
 										</td>
 										<td>
-											<form action="transactions_by_tag" method="post">
-												<input type="hidden" name="tagId"
-													value="${trans.transaction_id}">
+											<form action="#" method="post">
+												<input type="hidden" name="transactionId"
+													value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default">
-													${trans.date}</button>
+													${trans.value.date}</button>
 											</form>
 										</td>
 										<td>
-											<form action="transactions_by_tag" method="post">
-												<input type="hidden" name="tagId"
-													value="${trans.transaction_id}">
+											<form action="#" method="post">
+												<input type="hidden" name="transactionId"
+													value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default">
-													${trans.description}</button>
+													${user.getAccount(trans.value.getFt_account_id()).getName()}</button>
 											</form>
 										</td>
 										<td>
-											<form action="transactions_by_tag" method="post">
-												<input type="hidden" name="tagId"
-													value="${trans.transaction_id}">
+											<form action="#" method="post">
+												<input type="hidden" name="transactionId"
+													value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default">
-													${trans.description}</button>
+													${user.getTag(trans.value.getFk_tag_id()).getName()}</button>
 											</form>
 										</td>
 										<td class="col-md-1">
 											<form action="edittransaction" method="post">
 												<input type="hidden" name="action" value="edit"> <input
-													type="hidden" name="tagId" value="${trans.transaction_id}">
+													type="hidden" name="transactionId" value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="edit" />">
 													<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -118,7 +119,7 @@
 										<td class="col-md-1">
 											<form action="deletetransaction" method="post">
 												<input type="hidden" name="action" value="delete"> <input
-													type="hidden" name="tagId" value="${trans.transaction_id}">
+													type="hidden" name="transactionId" value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="delete" />">
 													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
