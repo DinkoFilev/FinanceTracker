@@ -5,6 +5,12 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
+<%
+	response.addHeader("Cache-Control",
+			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
+	response.addHeader("Pragma", "no-cache");
+	response.addDateHeader("Expires", 0);
+%>
 
 <!DOCTYPE html>
 <html>
@@ -46,7 +52,7 @@
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<a href="tagform"><button type="submit"
+						<a href="transactionform"><button type="submit"
 								class="btn btn-primary">ADD NEW TRANSACTION</button> </a>
 						<table data-toggle="table" data-show-toggle="true"
 							data-show-columns="true" data-search="true"
@@ -64,7 +70,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="trans" items="${list}">
+								<c:forEach var="trans" items="${user.getTransactions()}">
 									<tr>
 										<td>
 											<form action="#" method="post">
@@ -130,7 +136,7 @@
 								</c:forEach>
 							</tbody>
 						</table>
-						<a href="tagform"><button type="submit"
+						<a href="transactionform"><button type="submit"
 								class="btn btn-primary">ADD NEW TRANSACTION</button> </a>
 						<script>
 							$(function() {

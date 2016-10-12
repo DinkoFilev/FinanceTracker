@@ -2,18 +2,26 @@ package com.budgetbeat.manager;
 
 import java.util.Calendar;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.budgetbeat.dao.ITransactionDAO;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.TransactionMapper;
 import com.budgetbeat.pojo.User;
 import com.budgetbeat.pojo.UserMapper;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 
 
 public class TransactionManager implements ITransactionDAO{
@@ -30,15 +38,37 @@ public class TransactionManager implements ITransactionDAO{
 	}
 
 	@Override
-	public void create(Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id, String description, Double amount,
+	public int create(Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id, String description, Double amount,
 			Date date, String file, Boolean status, Long step, Boolean repeat) {
 		String SQL = "INSERT INTO transactions (fk_user_id,ft_account_id,fk_tag_id,description,amount,date,file,status,step,transaction_repeat) values (?,?,?,?,?,?,?,?,?,?)";
 			
-		jdbcTemplateObject.update(SQL,fk_user_id,ft_account_id,fk_tag_id,description,amount,date,file,status,step,repeat);
+		//jdbcTemplateObject.update(SQL,fk_user_id,ft_account_id,fk_tag_id,description,amount,date,file,status,step,repeat);
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplateObject.update(
+		    new PreparedStatementCreator() {
+		        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+		            PreparedStatement ps =
+		                connection.prepareStatement(SQL, new String[] {"id"});
+		            ps.setInt(1,fk_user_id);
+		            ps.setInt(2,ft_account_id);
+		            ps.setInt(3,fk_tag_id);
+		            ps.setString(4,description);
+		            ps.setDouble(5,amount);
+		            ps.setDate(6,date);
+		            ps.setString(7,file);
+		            ps.setBoolean(8,status);
+		            ps.setLong(9,step);
+		            ps.setBoolean(10,repeat);
+		            return ps;
+		        }
+		    },
+		    keyHolder);
+		
 		System.out.println("Created Record Transacton : FK USER = " + fk_user_id + " FT ACCOUNT = " + ft_account_id + " FK TAG = " + fk_tag_id
 				+ "  Description, = " +  description +" Amount : "+ amount + " Date "+date+" file "+file+" status "+status+" step "+step+" repeat "+repeat);
 		
-		return;
+		
+		return keyHolder.getKey().intValue();
 		
 	}
 
@@ -84,13 +114,14 @@ public class TransactionManager implements ITransactionDAO{
 	
 	@Override
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
+		String SQL = "delete from transactions where transaction_id = ?";
+		jdbcTemplateObject.update(SQL, id);
 		
 	}
 
 	@Override
 	public void update(Integer transaction_id, Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id,
-			String description, Double amount, Calendar date, String file, Boolean status, Long step, Boolean repeat) {
+			String description, Double amount, Date date, String file, Boolean status, Long step, Boolean repeat) {
 		// TODO Auto-generated method stub
 		
 	}

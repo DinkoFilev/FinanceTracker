@@ -3,6 +3,14 @@ package com.budgetbeat.pojo;
 import java.sql.Date;
 
 public class Transaction {
+	@Override
+	public String toString() {
+		return "Transaction [transaction_id=" + transaction_id + ", fk_user_id=" + fk_user_id + ", ft_account_id="
+				+ ft_account_id + ", fk_tag_id=" + fk_tag_id + ", description=" + description + ", amount=" + amount
+				+ ", date=" + date + ", file=" + file + ", status=" + status + ", step=" + step + ", repeat=" + repeat
+				+ "]";
+	}
+
 	private Integer transaction_id;
 	private Integer fk_user_id;
 	private Integer ft_account_id;

@@ -1,20 +1,6 @@
 package com.budgetbeat;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
-
-import com.budgetbeat.manager.AccountManager;
-import com.budgetbeat.manager.TagManager;
-import com.budgetbeat.manager.UserManager;
-import com.budgetbeat.pojo.Account;
-import com.budgetbeat.pojo.User;
+import java.util.TreeMap;
 
 
 public class Test {
@@ -41,10 +27,12 @@ public class Test {
 //		User user = asd.addUserToSession("kondio@savov.com");
 //		System.out.println(user.getEmail());
 		
-		TagManager am = (TagManager) SpringWebConfig.context.getBean("TagManager");
+		TreeMap<Integer,String> test = new TreeMap<Integer,String>();
 		
+		test.put(5,"mango");
+		test.put(7,"cango");
+		System.out.println(test);
 		
-		am.setInitialTags(3);
 		
 	}
 }
