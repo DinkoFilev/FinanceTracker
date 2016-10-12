@@ -46,7 +46,6 @@ public class TagController {
 		model.addAttribute("title", "Tag manager");
 		model.addAttribute("model", "tagform.jsp");
 		Tag tag = new Tag();
-
 		model.addAttribute("command", tag);
 		return "logged";
 	}
@@ -86,21 +85,12 @@ public class TagController {
 			// session.getAttribute("user")).getUserID();
 
 		// List<Tag> list = tagManager.listTgs(userId);
-		model.addAttribute("title", "TAGOVETE");
+		model.addAttribute("title", "Tags Manager");
 		model.addAttribute("model", "viewtag.jsp");
 		// model.addAttribute("list",list);
 		return "logged";
 	}
 
-	/*
-	 * It displays object data into form for the given id. The @PathVariable
-	 * puts URL data into variable.
-	 */
-	// @RequestMapping(value = "/edittag/{id}")
-	// public ModelAndView editTag(@PathVariable int id) {
-	// Tag tag = tagManager.getTag(id);
-	// return new ModelAndView("tageditform", "command", tag);
-	// }
 
 	// test as post
 	@RequestMapping(value = "/edittag", method = RequestMethod.POST)
@@ -123,19 +113,14 @@ public class TagController {
 	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
 	public String showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model) {
 		User user = ((User) session.getAttribute("user"));
-		
+
 		// Check user
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
 			return "index";
 		} // End
-		
-		
-		
-		
-		Tag tag = tagManager.getTag(tagId);
-		
 
+		Tag tag = tagManager.getTag(tagId);
 		// TODO
 		// List<Transaction> transactions =
 		// userManager.listReansactionsByTagId(tagId);
@@ -172,6 +157,7 @@ public class TagController {
 		} // End
 
 		tagManager.update(tag.getTagId(), tag.getName());
+		user.getTag(tag.getTagId()).setName(tag.getName());
 
 		return new ModelAndView("redirect:/viewtag");
 	}
@@ -195,6 +181,7 @@ public class TagController {
 		if (action.equals("delete")) {
 			// user.deleteTag(tagId)
 			tagManager.delete(tagId);
+			user.getTags().remove(tagId);
 		}
 		return new ModelAndView("redirect:/viewtag");
 	}

@@ -11,7 +11,7 @@ public interface IAccountDAO {
 
 	public void setDataSource(DataSource ds);
 
-	public void create(Integer fk_user_id, String name, Double balance, String institution, Boolean status);
+	public Account create(Account account);
 
 	public Account getAccount(Integer accountId);
 

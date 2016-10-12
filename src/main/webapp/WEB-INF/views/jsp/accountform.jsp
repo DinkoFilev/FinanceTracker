@@ -69,6 +69,9 @@ response.addDateHeader ("Expires", 0);
 							<div class="form-group">
 								<label><msg:message code="status" /></label>
 								<form:checkbox path="status" class="form-control" />
+																
+								<form:hidden path="fk_userId" />
+								
 							</div>
 
 							<div class="form-group">

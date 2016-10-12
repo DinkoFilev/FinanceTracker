@@ -31,10 +31,9 @@ public class TagManager implements ITagDAO {
 	@Override
 	public Tag create(Tag tag) {
 		String SQL = "insert into tags (name, fk_user_id, fk_parent_id) values (?, ?, ?)";
-		
-		System.out.println("===============================");
+
 		System.out.println(tag);
-		System.out.println("===============================");
+
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplateObject.update(new PreparedStatementCreator() {
 			@Override

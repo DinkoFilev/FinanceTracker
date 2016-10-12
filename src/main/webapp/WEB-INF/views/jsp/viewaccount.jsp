@@ -5,6 +5,7 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <%
 	response.addHeader("Cache-Control",
@@ -63,10 +64,9 @@
 								<msg:message code="add.new.account" />
 							</button> </a>
 						<c:set var="total1" scope="page" value="0" />
-						<c:out value='${total1}' />
 						<h4>
 							<msg:message code="Total" />
-							:<label id="total"></label>
+							: <label id="total"></label>
 						</h4>
 						<table data-toggle="table" data-show-toggle="true"
 							data-show-columns="true" data-search="true"
@@ -88,7 +88,13 @@
 									<tr>
 										<td>${account.value.name}</td>
 										<td>${account.value.institution}</td>
-										<td>${account.value.balance}</td>
+										<td class="text-right">
+
+										<fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2"
+											value="${account.value.balance}" />
+										<c:set var="total1" value="${total1 + account.value.balance}"
+											scope="page" /></td>
+
 										<td><input type="checkbox" class="form-control"
 											onclick="return false" onkeydown="return false"
 											<c:if test="${account.value.status}">checked="checked"</c:if> /></td>
@@ -104,8 +110,8 @@
 										</td>
 										<td class="col-md-1">
 											<form action="deleteaccount" method="post">
-												<input type="hidden" name="action" value="delete"> <input
-													type="hidden" name="accountId" value="${account.key}">
+												<input type="hidden" name="action" value="delete"> 
+												<input type="hidden" name="accountId" value="${account.key}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="delete" />">
 													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -116,6 +122,13 @@
 								</c:forEach>
 							</tbody>
 						</table>
+						<script>
+							(function() {
+								document.getElementById("total").innerHTML = "<c:out value="${total1} "></c:out>";
+							})();
+						</script>
+
+
 						<a href="accountform"><button type="submit"
 								class="btn btn-primary">
 								<msg:message code="add.new.account" />
