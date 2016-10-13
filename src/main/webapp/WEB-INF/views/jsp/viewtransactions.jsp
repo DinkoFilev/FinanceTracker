@@ -2,9 +2,11 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	response.addHeader("Cache-Control",
 			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
@@ -71,9 +73,10 @@
 							</thead>
 							<tbody>
 								<c:forEach var="trans" items="${user.getTransactions()}">
+								
 									<tr>
 										<td>
-											<form action="#" method="post">
+											<form action="#" method="get">
 												<input type="hidden" name="transactionId"
 													value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default">
@@ -81,15 +84,16 @@
 											</form>
 										</td>
 										<td>
-											<form action="#" method="post">
+											<form action="#" method="get">
 												<input type="hidden" name="transactionId"
 													value="${trans.key}">
-												<button class="btn btn-default btn-block btn-default">
-													${trans.value.amount}</button>
+													<button class="btn btn-default btn-block btn-default">
+												<fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2"
+													value="${trans.value.amount}"/></button>
 											</form>
 										</td>
 										<td>
-											<form action="#" method="post">
+											<form action="#" method="get">
 												<input type="hidden" name="transactionId"
 													value="${trans.key}">
 												<button class="btn btn-default btn-block btn-default">

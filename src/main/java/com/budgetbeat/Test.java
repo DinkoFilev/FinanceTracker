@@ -32,6 +32,7 @@ public class Test {
 		test.put(5,"mango");
 		test.put(7,"cango");
 		System.out.println(test);
+		test.remove(5);
 		
 		
 	}
