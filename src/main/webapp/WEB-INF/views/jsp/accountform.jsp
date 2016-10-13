@@ -64,7 +64,7 @@ response.addDateHeader ("Expires", 0);
 
 							<div class="form-group">
 								<label><msg:message code="balance" /></label>
-								<form:input path="balance" class="form-control required" required="required" type="number"  min="0" max="99999999" />
+								<form:input path="balance" class="form-control required" required="required" type="number"  step="any" min="0" max="99999999" />
 							</div>
 							<div class="form-group">
 								<label><msg:message code="status" /></label>

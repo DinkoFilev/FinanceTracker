@@ -1,9 +1,11 @@
 package com.budgetbeat.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.servlet.http.HttpSession;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.budgetbeat.manager.TagManager;
 import com.budgetbeat.manager.UserManager;
 import com.budgetbeat.pojo.Account;
+import com.budgetbeat.pojo.KeyValue;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
@@ -64,7 +67,7 @@ public class TagController {
 			return new ModelAndView("redirect:/index");
 		} // End
 		tag.setUserId(user.getUserID());
-		tag.setParentId(3);
+		tag.setParentId(25);
 
 		user.addTag(tagManager.create(tag));
 
@@ -90,7 +93,6 @@ public class TagController {
 		// model.addAttribute("list",list);
 		return "logged";
 	}
-
 
 	// test as post
 	@RequestMapping(value = "/edittag", method = RequestMethod.POST)
@@ -120,29 +122,38 @@ public class TagController {
 			return "index";
 		} // End
 
-		Tag tag = tagManager.getTag(tagId);
-		// TODO
-		// List<Transaction> transactions =
-		// userManager.listReansactionsByTagId(tagId);
 
 		List<Transaction> transactions = new ArrayList<Transaction>();
-
+		ArrayList<KeyValue> graph = new ArrayList<KeyValue>();
 		Double income = 0.0;
 		Double expence = 0.0;
-		for (Transaction element : transactions) {
-			if (element.getAmount() < 0) {
-				expence += element.getAmount();
-			} else {
-				income += element.getAmount();
+
+		for (Entry<Integer, Transaction> transaction : user.getTransactions().entrySet()) {
+			if (transaction.getValue().getFk_tag_id() == tagId) {
+				transactions.add(transaction.getValue());
+				graph.add(new KeyValue(transaction.getValue().getDescription(),
+						String.valueOf(transaction.getValue().getAmount())));
+
+				if (transaction.getValue().getAmount() < 0) {
+					expence += transaction.getValue().getAmount();
+				} else {
+					income += transaction.getValue().getAmount();
+
+				}
 			}
 		}
-
+//		graph.add(new KeyValue("Test1", "10"));
+//		graph.add(new KeyValue("Nest test", "10"));
+		
+		model.addAttribute("list", graph);
 		model.addAttribute("income", String.format("%.2f", income));
 		model.addAttribute("expence", String.format("%.2f", expence));
-		model.addAttribute("tagName", tag.getName());
+		model.addAttribute("tagName", user.getTag(tagId).getName());
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("model", "view_transaction_by_tag.jsp");
-
+		for (KeyValue keyValue : graph) {
+			System.out.println(keyValue.getKey()+" : "+ keyValue.getValue());
+		}
 		return "logged";
 	}
 

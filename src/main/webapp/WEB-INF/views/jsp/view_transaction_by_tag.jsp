@@ -7,20 +7,57 @@
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
-response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
-response.addHeader("Pragma", "no-cache"); 
-response.addDateHeader ("Expires", 0);
+	response.addHeader("Cache-Control",
+			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
+	response.addHeader("Pragma", "no-cache");
+	response.addDateHeader("Expires", 0);
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <%@include file="head_stuff.html"%>
-<title>BudgetBeat - ${title}</title>
 
+<title>BudgetBeat - ${title}</title>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    // Load the Visualization API and the piechart package.
+    google.load('visualization', '1.0', {
+        'packages' : [ 'corechart' ]
+    });
+ 
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.setOnLoadCallback(drawChart);
+ 
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    function drawChart() {
+ 
+        // Create the data table.    
+        var data = google.visualization.arrayToDataTable([
+                                                              ['Transactions', 'Amounth'],
+                                                              <c:forEach items="${list}" var="entry">
+                                                                  [ '${entry.key}', ${entry.value} ],
+                                                              </c:forEach>
+                                                        ]);
+        // Set chart options
+        var options = {
+                       is3D : true,
+            pieSliceText: 'label',
+            tooltip :  {showColorCode: true},
+                     'height' : 400
+
+        };
+ 
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
 </head>
 
 <body>
-	
+
 
 	<div>
 		<!--Your position on site-->
@@ -48,12 +85,28 @@ response.addDateHeader ("Expires", 0);
 		</div>
 		<!--/.row-->
 		<!--/Title in the page-->
+
+		<!--Title in the page-->
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div id="chart_div">${list}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.row-->
+		<!--/Title in the page-->
+
+
 		<!--content-->
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<a href="#"><button type="submit" class="btn btn-primary">
+						<a href="transactionform"><button type="submit"
+								class="btn btn-primary">
 								<msg:message code="add.new.transaction" />
 							</button> </a>
 						<h4>
@@ -79,21 +132,25 @@ response.addDateHeader ("Expires", 0);
 								<c:forEach var="transaction" items="${transactions}">
 									<tr>
 										<td>
-											<button type="button" class="btn btn-default btn-block btn-default">${transaction.description}</button>
+											<button type="button"
+												class="btn btn-default btn-block btn-default">${transaction.description}</button>
 										</td>
 
 										<td>
-											<button type="button" class="btn btn-default btn-block btn-default">${transaction.amount}</button>
+											<button type="button"
+												class="btn btn-default btn-block btn-default">${transaction.amount}</button>
 										</td>
 
 										<td>
-											<button type="button" class="btn btn-default btn-block btn-default">${transaction.ft_account_id}</button>
+											<button type="button"
+												class="btn btn-default btn-block btn-default">${user.getAccount(transaction.ft_account_id).name}</button>
 										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
 						</table>
-						<a href="#"><button type="submit" class="btn btn-primary">
+						<a href="transactionform"><button type="submit"
+								class="btn btn-primary">
 								<msg:message code="add.new.transaction" />
 							</button> </a>
 						<script>
