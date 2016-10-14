@@ -67,7 +67,6 @@ public class TagController {
 			return new ModelAndView("redirect:/index");
 		} // End
 		tag.setUserId(user.getUserID());
-		tag.setParentId(25);
 
 		user.addTag(tagManager.create(tag));
 

@@ -57,6 +57,8 @@ public class UserManager implements IUserDAO {
 	public void create(String firstName, String lastName, String email, String password) {
 		String SQL = "INSERT INTO users (first_name,last_name,email,password) values (?,?,?,?)";
 		password = MD5Convert(password).toString();
+		
+		
 		jdbcTemplateObject.update(SQL, firstName, lastName, email, password);
 		System.out.println("Created Record First Name = " + firstName + " Last Name = " + lastName + " email = " + email
 				+ " password = " + password);

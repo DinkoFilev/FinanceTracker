@@ -30,7 +30,7 @@ public class TagManager implements ITagDAO {
 
 	@Override
 	public Tag create(Tag tag) {
-		String SQL = "insert into tags (name, fk_user_id, fk_parent_id) values (?, ?, ?)";
+		String SQL = "insert into tags (name, fk_user_id) values (?, ?)";
 
 		System.out.println(tag);
 
@@ -41,7 +41,7 @@ public class TagManager implements ITagDAO {
 				PreparedStatement ps = connection.prepareStatement(SQL, new String[] { "tag_id" });
 				ps.setString(1, tag.getName());
 				ps.setInt(2, tag.getUserId());
-				ps.setInt(3, tag.getParentId());
+				//ps.setInt(3, tag.getParentId());
 				return ps;
 			}
 		}, keyHolder);
@@ -95,6 +95,7 @@ public class TagManager implements ITagDAO {
 	public void delete(Integer tagId) {
 		// Change all accounts to default tag
 
+		// TODO change Transactions to default tag
 		String SQL = "delete from tags where tag_id = ?";
 		jdbcTemplateObject.update(SQL, tagId);
 
