@@ -124,7 +124,9 @@
 						</table>
 						<script>
 							(function() {
-								document.getElementById("total").innerHTML = "<c:out value="${total1} "></c:out>";
+								
+								
+								document.getElementById("total").innerHTML = "<fmt:formatNumber pattern="0.00" value="${total1} " />";
 							})();
 						</script>
 

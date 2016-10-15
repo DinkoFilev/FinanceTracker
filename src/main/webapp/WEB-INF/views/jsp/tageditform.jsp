@@ -56,6 +56,15 @@ response.addDateHeader ("Expires", 0);
 							<div class="form-group">
 								<label><msg:message code="tag.name" /></label>
 								<form:input path="name" class="form-control" maxlength="44" required="required"/>
+								<c:if test="${error != null}">
+									
+										<div class="alert alert-danger">
+											<a href="#" class="close" data-dismiss="alert"
+												aria-label="close">&times;</a> <strong>Error!</strong>
+											<c:out value="${error}"></c:out>
+										</div>
+									
+								</c:if>
 							</div>
 
 							<div class="form-group">

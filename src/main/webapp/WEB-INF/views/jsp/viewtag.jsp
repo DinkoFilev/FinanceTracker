@@ -76,6 +76,7 @@ response.addDateHeader ("Expires", 0);
 										<td>
 											<form action="transactions_by_tag" method="post">
 												<input type="hidden" name="tagId" value="${tag.value.tagId}">
+												<input type="hidden" name="accountId" value="0">
 												<button class="btn btn-default btn-block btn-default">
 													${tag.value.name}</button>
 											</form>

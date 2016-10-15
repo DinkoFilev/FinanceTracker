@@ -111,8 +111,11 @@ public class AccountController {
 			return "redirect:/index";
 		} // End
 
+		
+		
 		for (Account accountElement : user.getAccounts().values()) {
-			if (accountElement.getName().toLowerCase().equals(account.getName().toLowerCase())) {
+			
+			if (accountElement.getName().toLowerCase().equals(account.getName().toLowerCase()) && accountElement.getAccountId() != account.getAccountId() ) {
 				model.addAttribute("title", "Account managet");
 				model.addAttribute("model", "accounteditform.jsp");
 				model.addAttribute("command", account);

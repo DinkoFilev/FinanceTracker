@@ -1,36 +1,27 @@
 package com.budgetbeat.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.sql.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Random;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.budgetbeat.manager.TagManager;
-import com.budgetbeat.manager.UserManager;
 import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.KeyValue;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
-import com.sun.media.sound.ModelDestination;
 
 @Controller
 public class TagController {
@@ -136,62 +127,109 @@ public class TagController {
 	}
 
 	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
-	public String showTransactionByTag(@ModelAttribute("tagId") Integer tagId, HttpSession session, Model model,
-			HttpServletRequest request) {
+	public String showTransactionByTag(HttpSession session, Model model, @ModelAttribute("accountId") Integer accountId,
+			@ModelAttribute("tagId") Integer tagId, HttpServletRequest request) {
 		User user = ((User) session.getAttribute("user"));
-		// if (fromDate == null) {
-		// fromDate = Utils.addMonth(new Date(), 1);
-		// }
-		//
-		// if (toDate == null) {
-		// toDate = new Date();
-		// }
-		// Integer tagId = (Integer) request.getAttribute("tagId");
-		// System.out.println(tagId);
 
-		System.out.println(request.getParameter("from"));
-		System.out.println(request.getParameter("to"));
-
-		// System.out.println("From:" + fromDate.toString());
-		// System.out.println("To:" + toDate.toString());
-
+		System.err.println("ERRRRROR" + tagId);
 		// Check user
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
 			return "index";
 		} // End
 
+		System.out.println("ACCOUNT: " + accountId);
+		System.out.println("TAG: " + tagId);
+
+		System.err.println(request.getParameter("tadId"));
+		System.err.println(request.getParameter("accountId"));
+
+		if (request.getParameter("tadId") != null) {
+			tagId = Integer.valueOf(request.getParameter("tagId"));
+		}
+
+		if (request.getParameter("accountId") != null) {
+			accountId = Integer.valueOf(request.getParameter("accountId"));
+		}
+
+		System.out.println("ACCOUNT: " + accountId);
+		System.out.println("TAG: " + tagId);
+
+		Calendar currenttime = Calendar.getInstance();
+		Date toDate;
+		if (request.getParameter("toDate") == null) {
+			toDate = new Date((currenttime.getTime()).getTime());
+		} else {
+			toDate = Date.valueOf(request.getParameter("toDate"));
+		}
+
+		Date fromDate;
+		if (request.getParameter("fromDate") == null) {
+			fromDate = Date.valueOf(toDate.toLocalDate().minusMonths(1));
+		} else {
+			fromDate = Date.valueOf(request.getParameter("fromDate"));
+		}
+
+		System.out.println("From:" + fromDate.toString());
+		System.out.println("To:" + toDate.toString());
+
 		List<Transaction> transactions = new ArrayList<Transaction>();
 		ArrayList<KeyValue> graph = new ArrayList<KeyValue>();
 		Double income = 0.0;
 		Double expence = 0.0;
 
+		boolean accountCheck, tagCheck, fromDateCheck, toDateCheck;
+
 		for (Entry<Integer, Transaction> entry : user.getTransactions().entrySet()) { // Transactions
 			System.out.println(entry.getValue());
-			if (entry.getValue().getFk_tag_id() == tagId
-					&& entry.getValue().getDate().after(Date.valueOf("2016-09-01"))
-					&& entry.getValue().getDate().before(Date.valueOf("2016-10-15"))) {
+
+			// Tag
+			if (tagId == 0) {
+				tagCheck = true;
+			} else {
+				tagCheck = (entry.getValue().getFk_tag_id() == tagId);
+			}
+
+			// Account
+			if (accountId == 0) {
+				accountCheck = true;
+			} else {
+				accountCheck = (entry.getValue().getFt_account_id() == accountId);
+			}
+
+			fromDateCheck = entry.getValue().getDate().after(fromDate) || entry.getValue().getDate().equals(fromDate);
+
+			toDateCheck = entry.getValue().getDate().before(toDate) || entry.getValue().getDate().equals(toDate);
+
+			// All check
+			if (accountCheck && tagCheck && fromDateCheck && toDateCheck) {
+
 				transactions.add(entry.getValue());
-				System.out.println("TAG ID" + tagId + "TRAN" + entry.getValue().getDescription());
-				if(!entry.getValue().getIncome()){
-				graph.add(new KeyValue(entry.getValue().getDescription(),
-						String.valueOf((entry.getValue().getAmount()*-1)),null));
+
+				if (!entry.getValue().getIncome()) {
+					graph.add(new KeyValue(entry.getValue().getDescription(),
+							String.valueOf((entry.getValue().getAmount() * -1)), null));
 				}
+
 				if (entry.getValue().getAmount() < 0) {
 					expence += entry.getValue().getAmount();
 				} else {
 					income += entry.getValue().getAmount();
-
 				}
 			}
 		}
+
 		System.out.println(transactions);
 		model.addAttribute("graph", graph);
 		model.addAttribute("income", String.format("%.2f", income));
 		model.addAttribute("expence", String.format("%.2f", expence));
 		model.addAttribute("tag", user.getTag(tagId));
+		model.addAttribute("tagId", tagId);
+		model.addAttribute("accountId", accountId);
+		model.addAttribute("user", user);
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("model", "view_transaction_by_tag.jsp");
+
 		for (KeyValue keyValue : graph) {
 			System.out.println(keyValue.getKey() + " : " + keyValue.getValue());
 		}
@@ -200,26 +238,39 @@ public class TagController {
 
 	/* It updates model object. */
 	@RequestMapping(value = "/editsavetag", method = RequestMethod.POST)
-	public ModelAndView editSaveTag(@ModelAttribute("tag") Tag tag, HttpSession session, Model model) {
+	public String editSaveTag(@ModelAttribute("tag") Tag tag, HttpSession session, Model model) {
 		User user = ((User) session.getAttribute("user"));
 
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
-			return new ModelAndView("redirect:/index");
+			return "redirect:/index";
 		} // End
+		
+		if(tag.getTagId() == user.getTags().firstKey()){
+			model.addAttribute("title", "Tag manager");
+			model.addAttribute("model", "tageditform.jsp");
+			model.addAttribute("command", tag);
+			model.addAttribute("error", "You can not edit default tag!!!");
+			return "logged";
+		}
+
+		for (Tag tagElement : user.getTags().values()) {
+
+			if (tagElement.getName().toLowerCase().equals(tag.getName().toLowerCase())
+					&& tagElement.getTagId() != tag.getTagId()) {
+				model.addAttribute("title", "Tag manager");
+				model.addAttribute("model", "tageditform.jsp");
+				model.addAttribute("command", tag);
+				model.addAttribute("error", "Tag " + tag.getName() + " exist!");
+				return "logged";
+			}
+		}
 
 		tagManager.update(tag.getTagId(), tag.getName());
 		user.getTag(tag.getTagId()).setName(tag.getName());
-
-		return new ModelAndView("redirect:/viewtag");
+		model.addAttribute("model", "viewtag.jsp");
+		return "logged";
 	}
-
-	/* It deletes record for the given id in URL and redirects to /viewemp */
-	// @RequestMapping(value = "/deletetag/{id}", method = RequestMethod.GET)
-	// public ModelAndView deleteTag(@PathVariable int id) {
-	// tagManager.delete(id);
-	// return new ModelAndView("redirect:/viewtag");
-	// }
 
 	// test as post
 	@RequestMapping(value = "/deletetag", method = RequestMethod.POST)
@@ -230,9 +281,17 @@ public class TagController {
 			model.addAttribute("model", "login.jsp");
 			return new ModelAndView("redirect:/index");
 		} // End
+
+		if(tagId == user.getTags().lastKey()){
+			System.err.println("GLEDAI KUDE ME PRATI");
+			return new ModelAndView("redirect:/viewtag");
+		}
+		
+		System.out.println("Will delete " + tagId);
+		
 		if (action.equals("delete")) {
-			// user.deleteTag(tagId)
-			tagManager.delete(tagId);
+			System.out.println("Will delete " + tagId);
+			tagManager.delete(tagId, user.getTags().lastKey());
 			user.getTags().remove(tagId);
 		}
 		return new ModelAndView("redirect:/viewtag");

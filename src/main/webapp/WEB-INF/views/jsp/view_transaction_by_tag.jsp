@@ -104,30 +104,23 @@
 
 		<!--Title in the page-->
 		<div class="row">
-			<div class="col-lg-12">
+			<div class="col-lg-6">
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div id="chart_div">${list}</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--/.row-->
-		<!--/Title in the page-->
-
-		<!--Title in the page-->
-		<div class="row row-eq-height">
-			<div class="col-xs-6">
+			<div class="col-lg-6">
 				<div class="panel panel-default">
 					<div class="panel-body table-responsive"">
 						<table class="table">
 							<tr>
-								<td>
-								<a href="transactionform"><button type="submit"
+								<td><a href="transactionform"><button type="submit"
 											class="btn btn-primary">
 											<msg:message code="add.new.transaction" />
-										</button> </a>
-								</td><td>
+										</button> </a></td>
+								<td>
 									<h4>
 										<msg:message code="INCOME" />
 										:
@@ -138,7 +131,7 @@
 								<th></th>
 							</tr>
 							<tr>
-							<td></td>
+								<td></td>
 								<td>
 									<h4>
 										<msg:message code="EXPENSE" />
@@ -146,46 +139,66 @@
 									</h4>
 								</td>
 								<td><h4>${expence}</h4></td>
-								
+
 							</tr>
 						</table>
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-3">
-				<div class="panel panel-default">
-					<div class="panel-body"></div>
-				</div>
-			</div>
-			<div class="col-xs-3">
+			<div class="col-lg-6">
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div id="reportrange" class="pull-right"
 							style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
 							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-
 							<span></span> <b class="caret"></b>
 						</div>
 
 						<form action="transactions_by_tag" method="post">
+							<div class="form-group">
+								<label for="accountId">Account</label> <select name='accountId'
+									class="form-control" id="accountId">
+									<option value="0">All</option>
+									<c:forEach items="${user.getAccounts()}" var="role">
+										<option
+											<c:if test="${role.key == accountId}">selected="selected"</c:if>
+											value="${role.key}">${role.value.getName()}</option>
+									</c:forEach>
 
-							<input id="from" name="from" value=""> <input id="to"
-								name="to" value=""> <input type="hidden" name="tagId"
-								value="${tag.tagId}">
-							<button class="btn btn-default btn-block btn-default"
-								title="<msg:message code="edit" />">
-								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+
+								</select>
+							</div>
+
+
+							<div class="form-group">
+								<label for="tagId">Tag</label> <select name='tagId'
+									class="form-control" id="tadId">
+									<option value="0">All</option>
+									<c:forEach items="${user.getTags()}" var="role">
+										<option
+											<c:if test="${role.key==tagId}">selected="selected"</c:if>
+											value="${role.key}">${role.value.getName()}</option>
+									</c:forEach>
+								</select>
+							</div>
+
+							<input type="hidden" id="fromDate" name="fromDate" value="">
+							<input type="hidden" id="toDate" name="toDate" value="">
+
+
+							<button class="btn btn-info" title="<msg:message code="edit" />">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							</button>
 						</form>
-
-
-
-
 					</div>
-
 				</div>
 			</div>
 		</div>
+		<!--/.row-->
+		<!--/Title in the page-->
+
+		<!--Title in the page-->
+		<div class="row row-eq-height"></div>
 		<!--/.row-->
 		<!--/Title in the page-->
 
@@ -208,25 +221,78 @@
 								<tr>
 									<th data-sortable="true">Description</th>
 									<th data-sortable="true">Amount</th>
-									<th data-sortable="true">Account</th>
+									<th data-sortable="true">Date</th>
+									<th data-sortable="true">Account name</th>
+									<th data-sortable="true">Tag name</th>
+									<th data-sortable="true">Edit</th>
+									<th data-sortable="true">Delete</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="transaction" items="${transactions}">
+								<c:forEach var="trans" items="${transactions}">
+
 									<tr>
 										<td>
-											<button type="button"
-												class="btn btn-default btn-block btn-default">${transaction.description}</button>
+											<form>
+												<input type="hidden" name="transactionId"
+													value="${trans.getTransaction_id()}">
+												<button type="reset" class="btn btn-default btn-block btn-default">
+													${trans.description}</button>
+											</form>
 										</td>
-
 										<td>
-											<button type="button"
-												class="btn btn-default btn-block btn-default">${transaction.amount}</button>
+											<form>
+												<input type="hidden" name="transactionId"
+													value="${trans.getTransaction_id()}">
+												<button type="reset" class="btn btn-default btn-block">
+													<fmt:formatNumber type="number" maxFractionDigits="2"
+														minFractionDigits="2" value="${trans.amount}" />
+												</button>
+											</form>
 										</td>
-
 										<td>
-											<button type="button"
-												class="btn btn-default btn-block btn-default">${user.getAccount(transaction.ft_account_id).name}</button>
+											<form >
+												<input type="hidden" name="transactionId"
+													value="${trans.getTransaction_id()}">
+												<button type="reset" class="btn btn-default btn-block">
+													${trans.date}</button>
+											</form>
+										</td>
+										<td>
+											<form action="transactions_by_tag" method="post">
+												<input type="hidden" name="tagId" value="0"> <input
+													type="hidden" name="accountId" value="${trans.getFt_account_id()}">
+												<button class="btn btn-default btn-block btn-default">
+													${user.getAccount(trans.getFt_account_id()).getName()}</button>
+											</form>
+										</td>
+										<td>
+											<form action="transactions_by_tag" method="post">
+												<input type="hidden" name="tagId" value="${trans.getFk_tag_id()}"> <input
+													type="hidden" name="accountId"  value="0">
+												<button class="btn btn-default btn-block btn-default">
+													${user.getTag(trans.getFk_tag_id()).getName()}</button>
+											</form>
+										</td>
+										<td class="col-md-1">
+											<form action="edittransaction" method="post">
+												<input type="hidden" name="action" value="edit"> <input
+													type="hidden" name="transactionId" value="${trans.getTransaction_id()}">
+												<button class="btn btn-default btn-block btn-default"
+													title="<msg:message code="edit" />">
+													<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+												</button>
+											</form>
+										</td>
+										<td class="col-md-1">
+											<form action="deletetransaction" method="post">
+												<input type="hidden" name="action" value="delete"> <input
+													type="hidden" name="transactionId" value="${trans.getTransaction_id()}">
+												<button class="btn btn-default btn-block btn-default"
+													title="<msg:message code="delete" />">
+													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+												</button>
+											</form>
 										</td>
 									</tr>
 								</c:forEach>
@@ -319,10 +385,10 @@ $(function() {
     var end = moment();
 
     function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
         
-        $('#from').val(start.format('MMMM D, YYYY')) ; 
-        $('#to').val(end.format('MMMM D, YYYY')) ; 
+        $('#fromDate').val(start.format('YYYY-MM-DD')) ; 
+        $('#toDate').val(end.format('YYYY-MM-DD')) ; 
     }
     
     

@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.budgetbeat.dao.ITagDAO;
 import com.budgetbeat.pojo.Tag;
@@ -92,14 +93,15 @@ public class TagManager implements ITagDAO {
 	 */
 
 	@Override
-	public void delete(Integer tagId) {
+	@Transactional
+	public void delete(Integer tagId, Integer defaultTagId) {
 		// Change all accounts to default tag
 
 		// TODO change Transactions to default tag
-		String SQL = "delete from tags where tag_id = ?";
-		jdbcTemplateObject.update(SQL, tagId);
+		String SQL = "UPDATE transactions  SET fk_tag_id = ?  WHERE fk_tag_id = ?;";
+		jdbcTemplateObject.update(SQL, defaultTagId, tagId);
 
-		SQL = "delete from tags where tag_id = ?";
+		SQL = "delete from tags where tag_ id = ?";
 		jdbcTemplateObject.update(SQL, tagId);
 		System.out.println("Deleted Tag with ID = " + tagId);
 		return;
