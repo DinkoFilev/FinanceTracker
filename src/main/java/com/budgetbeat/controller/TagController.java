@@ -30,7 +30,6 @@ import com.budgetbeat.pojo.KeyValue;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
-import com.budgetbeat.util.Utils;
 import com.sun.media.sound.ModelDestination;
 
 @Controller
@@ -167,21 +166,21 @@ public class TagController {
 		Double income = 0.0;
 		Double expence = 0.0;
 
-		for (Entry<Integer, Transaction> transaction : user.getTransactions().entrySet()) {
-			System.out.println(transaction.getValue());
-			if (transaction.getValue().getFk_tag_id() == tagId
-					&& transaction.getValue().getDate().after(Date.valueOf("2016-09-01"))
-					&& transaction.getValue().getDate().before(Date.valueOf("2016-10-15"))) {
-				transactions.add(transaction.getValue());
-				System.out.println("TAG ID" + tagId + "TRAN" + transaction.getValue().getDescription());
-			
-				graph.add(new KeyValue(transaction.getValue().getDescription(),
-						String.valueOf(transaction.getValue().getAmount())));
-
-				if (transaction.getValue().getAmount() < 0) {
-					expence += transaction.getValue().getAmount();
+		for (Entry<Integer, Transaction> entry : user.getTransactions().entrySet()) { // Transactions
+			System.out.println(entry.getValue());
+			if (entry.getValue().getFk_tag_id() == tagId
+					&& entry.getValue().getDate().after(Date.valueOf("2016-09-01"))
+					&& entry.getValue().getDate().before(Date.valueOf("2016-10-15"))) {
+				transactions.add(entry.getValue());
+				System.out.println("TAG ID" + tagId + "TRAN" + entry.getValue().getDescription());
+				if(!entry.getValue().getIncome()){
+				graph.add(new KeyValue(entry.getValue().getDescription(),
+						String.valueOf((entry.getValue().getAmount()*-1)),null));
+				}
+				if (entry.getValue().getAmount() < 0) {
+					expence += entry.getValue().getAmount();
 				} else {
-					income += transaction.getValue().getAmount();
+					income += entry.getValue().getAmount();
 
 				}
 			}

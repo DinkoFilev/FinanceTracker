@@ -142,6 +142,7 @@ CREATE TABLE IF NOT EXISTS `finance_tracker`.`transactions` (
   `status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
   `step` INT(11) NULL DEFAULT '0',
   `transaction_repeat` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+  `income` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`transaction_id`),
   UNIQUE INDEX `idtransactions_UNIQUE` (`transaction_id` ASC),
   INDEX `fk_transactions_user_id_idx` (`fk_user_id` ASC),
