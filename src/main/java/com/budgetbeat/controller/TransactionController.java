@@ -3,13 +3,15 @@ package com.budgetbeat.controller;
 
 
 import java.sql.Date;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.manager.TransactionManager;
 import com.budgetbeat.manager.UserManager;
+import com.budgetbeat.pojo.Account;
+import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
 
@@ -50,9 +54,7 @@ public class TransactionController {
 			model.addAttribute("model","login.jsp");
 			return "index";
 		}
-		Transaction transaction = new Transaction();
-		transaction.setDate(Date.valueOf(LocalDate.now()));
-		model.addAttribute("command", transaction);
+		model.addAttribute("command", new Transaction());
 		//model.addAttribute("collection",user.getAccounts());
 		
 		model.addAttribute("model","transactionform.jsp");
@@ -69,8 +71,10 @@ public class TransactionController {
 			return new ModelAndView("redirect:/index");
 		}
 		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
-		
-		transaction.setTransaction_id(transactionManager.create(user.getUserID(),transaction.getFt_account_id(), transaction.getFk_tag_id(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), "asdsa", true, (long) 123123, true));
+		if(!transaction.getIncome()){
+			transaction.setAmount(transaction.getAmount()*-1);
+		}
+		transaction.setTransaction_id(transactionManager.create(user.getUserID(),transaction.getFt_account_id(), transaction.getFk_tag_id(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), "", true, (long) 0, true,transaction.getIncome()));
 		user.addTransaction(transaction);
 
 		return new ModelAndView("redirect:/viewtransaction");
@@ -86,7 +90,11 @@ public class TransactionController {
 			return "index";
 		} // End
 		if (action.equals("edit")) {
-			model.addAttribute("command", user.getTransaction(id));
+			Transaction transaction = user.getTransaction(id);
+			if(!transaction.getIncome()){
+			transaction.setAmount(transaction.getAmount()*-1);
+			}
+			model.addAttribute("command", transaction);
 			model.addAttribute("model", "transactioneditform.jsp");
 			return ("logged");
 		}
@@ -101,7 +109,10 @@ public class TransactionController {
 			return new ModelAndView("redirect:/index");
 		} 
 		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
-		transactionManager.update(transaction.getTransaction_id(),user.getUserID(),transaction.getFt_account_id(), transaction.getFk_tag_id(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), "asdsa", true, (long) 123123, true);
+		if(!transaction.getIncome()){
+			transaction.setAmount(transaction.getAmount()*-1);
+		}
+		transactionManager.update(transaction.getTransaction_id(),user.getUserID(),transaction.getFt_account_id(), transaction.getFk_tag_id(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), "asdsa", true,(long) 0, true,transaction.getIncome());
 		transaction.setFk_user_id(user.getUserID());
 		user.addTransaction(transaction);
 		return new ModelAndView("redirect:/viewtransaction");

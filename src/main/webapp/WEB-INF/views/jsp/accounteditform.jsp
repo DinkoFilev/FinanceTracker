@@ -55,26 +55,17 @@ response.addDateHeader ("Expires", 0);
 
 							<div class="form-group">
 								<label><msg:message code="account.name" /></label>
-								<form:input path="name" class="form-control" maxlength="44" required="required"/>
-															<c:if test="${error != null}">
-									<div class="form-group ">
-										<div class="alert alert-danger">
-											<a href="#" class="close" data-dismiss="alert"
-												aria-label="close">&times;</a> <strong>Error!</strong>
-											<c:out value="${error}"></c:out>
-										</div>
-									</div>
-								</c:if>
+								<form:input path="name" class="form-control" maxlength="44"/>
 							</div>
 
 							<div class="form-group">
 								<label><msg:message code="institution" /></label>
-								<form:input path="institution" class="form-control" maxlength="49" required="required"/>
+								<form:input path="institution" class="form-control" maxlength="49"/>
 							</div>
 
 							<div class="form-group">
 								<label><msg:message code="balance" /></label>
-								<form:input path="balance" class="form-control" type="number" step="any" min="0" max="99999999" required="required"/>
+								<form:input path="balance" class="form-control" type="number" step="any" min="0" max="99999999"/>
 							</div>
 							<div class="form-group">
 								<label><msg:message code="status" /></label>

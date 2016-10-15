@@ -7,7 +7,7 @@ public class Transaction {
 	public String toString() {
 		return "Transaction [transaction_id=" + transaction_id + ", fk_user_id=" + fk_user_id + ", ft_account_id="
 				+ ft_account_id + ", fk_tag_id=" + fk_tag_id + ", description=" + description + ", amount=" + amount
-				+ ", date=" + date + ", file=" + file + ", status=" + status + ", step=" + step + ", repeat=" + repeat
+				+ ", date=" + date + ", file=" + file + ", status=" + status + ", step=" + step + ", repeat=" + repeat + ", income=" + income
 				+ "]";
 	}
 
@@ -22,9 +22,10 @@ public class Transaction {
 	private Boolean status;
 	private Long step;
 	private Boolean repeat;
+	private Boolean income;
 
 	public Transaction(Integer transaction_id, Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id,
-			String description, Double amount, Date date, String file, Boolean status, Long step, Boolean repeat) {
+			String description, Double amount, Date date, String file, Boolean status, Long step, Boolean repeat,Boolean income) {
 
 		this.transaction_id = transaction_id;
 		this.fk_user_id = fk_user_id;
@@ -37,6 +38,14 @@ public class Transaction {
 		this.status = status;
 		this.step = step;
 		this.repeat = repeat;
+	}
+
+	public Boolean getIncome() {
+		return income;
+	}
+
+	public void setIncome(Boolean income) {
+		this.income = income;
 	}
 
 	public Transaction() {

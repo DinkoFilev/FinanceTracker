@@ -26,6 +26,7 @@ response.addDateHeader ("Expires", 0);
 <script src="js/bootstrap-table.js"></script>
 
 
+
 <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
 <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
 
@@ -106,13 +107,20 @@ response.addDateHeader ("Expires", 0);
 							</div>
 							<div class="form-group">
 								<label>Amount</label>
-								<form:input path="amount" class="form-control required" required="required" type="number"  min="0" max="99999999" />
+								<form:input path="amount" class="form-control required" required="required" type="number"  step="0.01" min="0" max="99999999" />
 							</div>
 							      <div class="form-group"> <!-- Date input -->
 							        <label class="control-label" for="date">Date</label>
 							        <form:input class="form-control" path="date" id="date" name="date" placeholder="YYYY-MM-DD" type="date"/>
 							      </div>
- 
+							 <div class="form-group">
+								<label>Transaction type</label>
+								<form:select path="income" class="form-control required">
+								   <form:option value="false" label="Expense" />
+								  <form:option value="true" label="Income" />				                
+				                </form:select>
+							</div>
+							      
 								<div class="form-group">
 								<button type="submit" class="btn btn-primary">
 									<msg:message code="save" />

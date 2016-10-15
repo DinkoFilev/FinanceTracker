@@ -67,8 +67,10 @@ public class UserController {
 		System.out.println(status);
 		if (status.equals("register")) {
 			try {
-				usermanager.create(firstName, lastName, email, password);
+				int userID = usermanager.create(firstName, lastName, email, password);
+				usermanager.insertDefaultTagsAndAccounts(userID);
 			} catch (Exception e) {
+				e.printStackTrace();
 				return "errorpage";
 				
 			}

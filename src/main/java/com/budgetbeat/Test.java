@@ -1,5 +1,6 @@
 package com.budgetbeat;
 
+import java.util.Calendar;
 import java.util.TreeMap;
 
 
@@ -26,13 +27,6 @@ public class Test {
 //		UserManager asd = (UserManager) SpringWebConfig.context.getBean("UserManager");
 //		User user = asd.addUserToSession("kondio@savov.com");
 //		System.out.println(user.getEmail());
-		
-		TreeMap<Integer,String> test = new TreeMap<Integer,String>();
-		
-		test.put(5,"mango");
-		test.put(7,"cango");
-		System.out.println(test);
-		test.remove(5);
 		
 		
 	}

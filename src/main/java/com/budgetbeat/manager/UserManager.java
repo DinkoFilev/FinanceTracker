@@ -11,10 +11,15 @@ import javax.sql.DataSource;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,6 +39,8 @@ public class UserManager implements IUserDAO {
 	private ConcurrentHashMap<String, User> loggedUsers = new ConcurrentHashMap<>(); // Logged users : email , UserObject
 																						
 	private DataSource dataSource;
+	
+	
 
 	public void updateRegisterredUsers() { // bean init method
 		if (registerredUsers.size() == 0) {
@@ -54,16 +61,26 @@ public class UserManager implements IUserDAO {
 	}
 
 	@Override
-	public void create(String firstName, String lastName, String email, String password) {
+	public int create(String firstName, String lastName, String email, String password) {
 		String SQL = "INSERT INTO users (first_name,last_name,email,password) values (?,?,?,?)";
-		password = MD5Convert(password).toString();
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplateObject.update(new PreparedStatementCreator() {
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(SQL, new String[] { "id" });
+				ps.setString(1, firstName);
+				ps.setString(2, lastName);
+				ps.setString(3, email);
+				ps.setString(4, MD5Convert(password).toString());
+				
+				return ps;
+			}
+		}, keyHolder);
 		
 		
-		jdbcTemplateObject.update(SQL, firstName, lastName, email, password);
 		System.out.println("Created Record First Name = " + firstName + " Last Name = " + lastName + " email = " + email
 				+ " password = " + password);
-		registerredUsers.put(email, password);
-		return;
+		registerredUsers.put(email,  MD5Convert(password).toString());
+		return keyHolder.getKey().intValue();
 	}
 
 	@Override
@@ -182,7 +199,7 @@ public class UserManager implements IUserDAO {
 		 * ADD USER ACCOUNTS WHEN SIGN IN
 		 */
 		User user = loggedUsers.get(email);
-		List<Account> accounts = accountManager.listAccounts(loggedUsers.get(email).getUserID());
+		List<Account> accounts = accountManager.listAccounts(user.getUserID());
 		
 		for (Account account : accounts) {
 			user.addAccount(account);
@@ -193,7 +210,7 @@ public class UserManager implements IUserDAO {
 		 * ADD USER TAGS WHEN SIGN IN
 		 */
 		
-		List<Tag> tags = tagManager.listTgs(loggedUsers.get(email).getUserID());
+		List<Tag> tags = tagManager.listTgs(user.getUserID());
 		for (Tag tag : tags) {
 			user.addTag(tag);
 		}
@@ -203,13 +220,13 @@ public class UserManager implements IUserDAO {
 		 * ADD USER TRANSACTIONS WHEN SIGN IN
 		 */
 		
-		List<Transaction> transactions = transactionManager.getListOfTransactionByUserID(loggedUsers.get(email).getUserID());
+		List<Transaction> transactions = transactionManager.getListOfTransactionByUserID(user.getUserID());
 		
 		for (Transaction tran : transactions) {
 			user.addTransaction(tran);
 		}
 		
-		System.out.println("user : "+ loggedUsers.get(email).getFirstName()+" successfully logging ");
+		System.out.println("user : "+ user.getFirstName()+" successfully logging ");
 		
 	}
 	public User addUserToSession(String email) {
@@ -217,6 +234,17 @@ public class UserManager implements IUserDAO {
 		
 		
 		return loggedUsers.get(email);
+	}
+	
+	/*
+	 * Insert default Tags and Accounts to Registered user
+	 */
+	public void insertDefaultTagsAndAccounts(Integer userID){
+		AccountManager accountManager = (AccountManager) SpringWebConfig.context.getBean("AccountManager");
+		TagManager tagManager = (TagManager) SpringWebConfig.context.getBean("TagManager");
+		accountManager.setInitialAccount(userID);
+		tagManager.setInitialTags(userID);
+		
 	}
 	
 	

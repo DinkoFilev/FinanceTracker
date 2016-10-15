@@ -3,14 +3,24 @@ package com.budgetbeat.pojo;
 public  class KeyValue {
     String key;
     String value;
+    String value2;
 
-    public KeyValue(String key, String value) {
+    public KeyValue(String key, String value,String value2) {
         super();
         this.key = key;
         this.value = value;
+        this.value2 = value;
     }
 
-    public String getKey() {
+    public String getValue2() {
+		return value2;
+	}
+
+	public void setValue2(String value2) {
+		this.value2 = value2;
+	}
+
+	public String getKey() {
         return key;
     }
 

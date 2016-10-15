@@ -11,7 +11,7 @@ public interface IUserDAO {
 
 	public void setDataSource(DataSource dataSource);
 
-	public void create(String firstName, String lastName, String email, String password);
+	public int create(String firstName, String lastName, String email, String password);
 
 	public User getUserbyID(Integer id);
 
