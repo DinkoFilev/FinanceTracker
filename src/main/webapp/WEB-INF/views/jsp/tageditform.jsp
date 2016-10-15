@@ -55,7 +55,7 @@ response.addDateHeader ("Expires", 0);
 							<form:hidden path="tagId" />
 							<div class="form-group">
 								<label><msg:message code="tag.name" /></label>
-								<form:input path="name" class="form-control" maxlength="44" />
+								<form:input path="name" class="form-control" maxlength="44" required="required"/>
 							</div>
 
 							<div class="form-group">

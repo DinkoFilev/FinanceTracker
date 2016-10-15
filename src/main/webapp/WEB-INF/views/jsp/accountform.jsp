@@ -7,9 +7,10 @@
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
 
 <%
-response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
-response.addHeader("Pragma", "no-cache"); 
-response.addDateHeader ("Expires", 0);
+	response.addHeader("Cache-Control",
+			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
+	response.addHeader("Pragma", "no-cache");
+	response.addDateHeader("Expires", 0);
 %>
 <!DOCTYPE html>
 <html>
@@ -20,7 +21,7 @@ response.addDateHeader ("Expires", 0);
 </head>
 
 <body>
-	
+
 
 	<div>
 		<!--Your position on site-->
@@ -54,24 +55,38 @@ response.addDateHeader ("Expires", 0);
 
 							<div class="form-group">
 								<label><msg:message code="account.name" /></label>
-								<form:input path="name" class="form-control required" required="required" maxlength="44" />
+								<form:input path="name" class="form-control required"
+									required="required" maxlength="44" />
+								<c:if test="${error != null}">
+									<div class="form-group ">
+										<div class="alert alert-danger">
+											<a href="#" class="close" data-dismiss="alert"
+												aria-label="close">&times;</a> <strong>Error!</strong>
+											<c:out value="${error}"></c:out>
+										</div>
+									</div>
+								</c:if>
+
 							</div>
 
 							<div class="form-group">
 								<label><msg:message code="institution" /></label>
-								<form:input path="institution" class="form-control required" required="required" maxlength="49" />
+								<form:input path="institution" class="form-control required"
+									required="required" maxlength="49" />
 							</div>
 
 							<div class="form-group">
 								<label><msg:message code="balance" /></label>
-								<form:input path="balance" class="form-control required" required="required" type="number"  step="any" min="0" max="99999999" />
+								<form:input path="balance" class="form-control required"
+									required="required" type="number" step="any" min="0"
+									max="99999999" />
 							</div>
 							<div class="form-group">
 								<label><msg:message code="status" /></label>
 								<form:checkbox path="status" class="form-control" />
-																
+
 								<form:hidden path="fk_userId" />
-								
+
 							</div>
 
 							<div class="form-group">

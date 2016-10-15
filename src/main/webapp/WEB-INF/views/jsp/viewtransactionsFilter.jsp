@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
@@ -12,52 +13,16 @@
 	response.addHeader("Pragma", "no-cache");
 	response.addDateHeader("Expires", 0);
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <%@include file="head_stuff.html"%>
-
 <title>BudgetBeat - ${title}</title>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-    // Load the Visualization API and the piechart package.
-    google.load('visualization', '1.0', {
-        'packages' : [ 'corechart' ]
-    });
- 
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.setOnLoadCallback(drawChart);
- 
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    function drawChart() {
- 
-        // Create the data table.    
-        var data = google.visualization.arrayToDataTable([
-                                                              ['Transactions', 'Amounth'],
-                                                              <c:forEach items="${list}" var="entry">
-                                                                  [ '${entry.key}', ${entry.value} ],
-                                                              </c:forEach>
-                                                        ]);
-        // Set chart options
-        var options = {
-                       is3D : true,
-            pieSliceText: 'label',
-            tooltip :  {showColorCode: true},
-                     'height' : 400
 
-        };
- 
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    }
-</script>
 </head>
 
 <body>
-
 
 	<div>
 		<!--Your position on site-->
@@ -75,12 +40,7 @@
 		<!--Title in the page-->
 		<div class="row">
 			<div class="col-lg-12">
-
-				<h1 class="page-header">
-					<msg:message code="transactions.by" />
-					${tagName}
-				</h1>
-
+				<h1 class="page-header">Transaction Manager</h1>
 			</div>
 		</div>
 		<!--/.row-->
@@ -89,55 +49,26 @@
 		<!--Title in the page-->
 		<div class="row">
 			<div class="col-lg-4">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="form-group">
-								<label>Account</label>
-								<form:select path="ft_account_id" class="form-control required">
-				                <form:option value="0" label="---Account---" />
-				                <c:forEach var="acc" items="${user.getAccounts()}">
-				                    <form:option value="${acc.key}"><c:out value="${acc.value.getName()}"/></form:option>
-				                </c:forEach>
-				                </form:select>
-							
-							</div>
-					</div>
-				</div>
-			</div>
-						<div class="col-lg-4">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="form-group">
-								<label>Tag</label>
-								<form:select path="fk_tag_id" class="form-control required">
-				                <form:option value="0" label="---Tag---" />
-				                <c:forEach var="tag" items="${user.getTags()}">
-				                    <form:option value="${tag.key}"><c:out value="${tag.value.getName()}"/></form:option>
-				                </c:forEach>
-				                </form:select>
-							</div>
-					</div>
-				</div>
+				Account: <select class="selectpicker" multiple>
+					<option>Mustard</option>
+					<option>Ketchup</option>
+					<option>Relish</option>
+				</select>
 			</div>
 			<div class="col-lg-4">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div id="chart_div">${list}</div>
-					</div>
-				</div>
+								Tag: <select class="selectpicker" multiple>
+					<option>Mustard</option>
+					<option>Ketchup</option>
+					<option>Relish</option>
+				</select>
+			</div>
+			</div>
+			<div class="col-lg-4">
+			
 			</div>
 		</div>
 		<!--/.row-->
-
-
-							
-
-
-
-
-
-
-
+		<!--/Title in the page-->
 
 
 		<!--content-->
@@ -164,7 +95,7 @@
 							</thead>
 							<tbody>
 								<c:forEach var="trans" items="${user.getTransactions()}">
-								
+
 									<tr>
 										<td>
 											<form action="#" method="get">
@@ -178,9 +109,10 @@
 											<form action="#" method="get">
 												<input type="hidden" name="transactionId"
 													value="${trans.key}">
-													<button class="btn btn-default btn-block btn-default">
-												<fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2"
-													value="${trans.value.amount}"/></button>
+												<button class="btn btn-default btn-block btn-default">
+													<fmt:formatNumber type="number" maxFractionDigits="2"
+														minFractionDigits="2" value="${trans.value.amount}" />
+												</button>
 											</form>
 										</td>
 										<td>

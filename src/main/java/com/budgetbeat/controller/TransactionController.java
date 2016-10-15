@@ -3,15 +3,13 @@ package com.budgetbeat.controller;
 
 
 import java.sql.Date;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,8 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.manager.TransactionManager;
 import com.budgetbeat.manager.UserManager;
-import com.budgetbeat.pojo.Account;
-import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
 
@@ -54,7 +50,9 @@ public class TransactionController {
 			model.addAttribute("model","login.jsp");
 			return "index";
 		}
-		model.addAttribute("command", new Transaction());
+		Transaction transaction = new Transaction();
+		transaction.setDate(Date.valueOf(LocalDate.now()));
+		model.addAttribute("command", transaction);
 		//model.addAttribute("collection",user.getAccounts());
 		
 		model.addAttribute("model","transactionform.jsp");

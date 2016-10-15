@@ -6,9 +6,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
 <%
-response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
-response.addHeader("Pragma", "no-cache"); 
-response.addDateHeader ("Expires", 0);
+	response.addHeader("Cache-Control",
+			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
+	response.addHeader("Pragma", "no-cache");
+	response.addDateHeader("Expires", 0);
 %>
 <!DOCTYPE html>
 <html>
@@ -19,7 +20,7 @@ response.addDateHeader ("Expires", 0);
 </head>
 
 <body>
-	
+
 
 	<div>
 		<!--Your position on site-->
@@ -53,10 +54,24 @@ response.addDateHeader ("Expires", 0);
 
 							<div class="form-group">
 								<label><msg:message code="tag.name" /></label>
-								<form:input path="name" class="form-control" maxlength="44"/>
+								<form:input path="name" class="form-control" maxlength="44"
+									required="required" />
 								<form:hidden path="userId" />
 								<form:hidden path="parentId" />
+								<c:if test="${error != null}">
+									<div class="form-group ">
+										<div class="alert alert-danger">
+											<a href="#" class="close" data-dismiss="alert"
+												aria-label="close">&times;</a> <strong>Error!</strong>
+											<c:out value="${error}"></c:out>
+										</div>
+									</div>
+								</c:if>
 							</div>
+
+
+
+
 
 							<div class="form-group">
 								<button type="submit" class="btn btn-primary">

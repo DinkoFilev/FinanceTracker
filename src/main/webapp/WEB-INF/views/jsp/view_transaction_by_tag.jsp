@@ -15,10 +15,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@include file="head_stuff.html"%>
+
 
 <title>BudgetBeat - ${title}</title>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<link href="css/bootstrap-table.css" rel="stylesheet">
+<script src="js/lumino.glyphs.js"></script>
+<!-- Include Required Prerequisites -->
+<script type="text/javascript"
+	src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+<script type="text/javascript"
+	src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript"
+	src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+
+<script type="text/javascript" src="js/jsapi.js"></script>
 <script type="text/javascript">
     // Load the Visualization API and the piechart package.
     google.load('visualization', '1.0', {
@@ -36,7 +52,7 @@
         // Create the data table.    
         var data = google.visualization.arrayToDataTable([
                                                               ['Transactions', 'Amounth'],
-                                                              <c:forEach items="${list}" var="entry">
+                                                              <c:forEach items="${graph}" var="entry">
                                                                   [ '${entry.key}', ${entry.value} ],
                                                               </c:forEach>
                                                         ]);
@@ -99,24 +115,91 @@
 		<!--/.row-->
 		<!--/Title in the page-->
 
+		<!--Title in the page-->
+		<div class="row row-eq-height">
+			<div class="col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-body table-responsive"">
+						<table class="table">
+							<tr>
+								<td>
+								<a href="transactionform"><button type="submit"
+											class="btn btn-primary">
+											<msg:message code="add.new.transaction" />
+										</button> </a>
+								</td><td>
+									<h4>
+										<msg:message code="INCOME" />
+										:
+									</h4>
+
+								</td>
+								<td><h4>${income}</h4></td>
+								<th></th>
+							</tr>
+							<tr>
+							<td></td>
+								<td>
+									<h4>
+										<msg:message code="EXPENSE" />
+										:
+									</h4>
+								</td>
+								<td><h4>${expence}</h4></td>
+								
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="panel panel-default">
+					<div class="panel-body"></div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div id="reportrange" class="pull-right"
+							style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+
+							<span></span> <b class="caret"></b>
+						</div>
+
+						<form action="transactions_by_tag" method="post">
+
+							<input id="from" name="from" value=""> <input id="to"
+								name="to" value=""> <input type="hidden" name="tagId"
+								value="${tag.tagId}">
+							<button class="btn btn-default btn-block btn-default"
+								title="<msg:message code="edit" />">
+								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+							</button>
+						</form>
+
+
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--/.row-->
+		<!--/Title in the page-->
+
+
+
+
 
 		<!--content-->
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<a href="transactionform"><button type="submit"
-								class="btn btn-primary">
-								<msg:message code="add.new.transaction" />
-							</button> </a>
-						<h4>
-							<c:if test="${income != null}">
-								<msg:message code="INCOME" />: ${income}</c:if>
-						</h4>
-						<h4>
-							<c:if test="${expence != null}">
-								<msg:message code="EXPENSE" />: ${expence}</c:if>
-						</h4>
+
+
 						<table data-toggle="table" data-show-toggle="true"
 							data-show-columns="true" data-search="true"
 							data-select-item-name="toolbar1" data-pagination="true"
@@ -204,7 +287,64 @@
 	</div>
 	<!--/.main-->
 
-	<%@include file="end_scripts.html"%>
+
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/chart.min.js"></script>
+	<script src="js/chart-data.js"></script>
+	<script src="js/easypiechart.js"></script>
+	<script src="js/easypiechart-data.js"></script>
+
+	<script src="js/bootstrap-table.js"></script>
+	<script>
+	!function($) {
+		$(document).on("click", "ul.nav li.parent > a > span.icon", function() {
+			$(this).find('em:first').toggleClass("glyphicon-minus");
+		});
+		$(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+	}(window.jQuery);
+
+	$(window).on('resize', function() {
+		if ($(window).width() > 768)
+			$('#sidebar-collapse').collapse('show')
+	})
+	$(window).on('resize', function() {
+		if ($(window).width() <= 767)
+			$('#sidebar-collapse').collapse('hide')
+	})
+</script>
+	<script type="text/javascript">
+$(function() {
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        
+        $('#from').val(start.format('MMMM D, YYYY')) ; 
+        $('#to').val(end.format('MMMM D, YYYY')) ; 
+    }
+    
+    
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(start, end);
+    
+});
+</script>
+
 </body>
 
 </html>

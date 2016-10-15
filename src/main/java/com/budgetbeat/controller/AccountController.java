@@ -1,24 +1,19 @@
 package com.budgetbeat.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.budgetbeat.manager.AccountManager;
 import com.budgetbeat.pojo.Account;
-import com.budgetbeat.pojo.Tag;
+
 import com.budgetbeat.pojo.User;
-import com.sun.scenario.effect.Blend.Mode;
 
 @Controller
 public class AccountController {
@@ -49,19 +44,27 @@ public class AccountController {
 	 * default request is GET
 	 */
 	@RequestMapping(value = "/saveaccount", method = RequestMethod.POST)
-	public ModelAndView saveAccount(@ModelAttribute("account") Account account, HttpSession session, Model model) {
+	public String saveAccount(@ModelAttribute("account") Account account, HttpSession session, Model model) {
 		User user = ((User) session.getAttribute("user"));
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
-			return new ModelAndView("redirect:/index");
+			return "redirect:/index";
 		} // End
-		
+
+		for (Account accountElement : user.getAccounts().values()) {
+			if (accountElement.getName().toLowerCase().equals(account.getName().toLowerCase())) {
+				model.addAttribute("title", "Account managet");
+				model.addAttribute("model", "accountform.jsp");
+				model.addAttribute("command", account);
+				model.addAttribute("error", "Account " + account.getName() + " exist!");
+				return "logged";
+			}
+		}
+
 		account.setFk_userId(user.getUserID());
 		user.addAccount(accountManager.create(account));
-
-		return new ModelAndView("redirect:/viewaccount");// will redirect to
-															// viewemp
-															// request mapping
+		model.addAttribute("model", "viewaccount.jsp");
+		return "logged";
 	}
 
 	/* It provides list of employees in model object */
@@ -100,19 +103,30 @@ public class AccountController {
 
 	/* It updates model object. */
 	@RequestMapping(value = "/editsaveaccount", method = RequestMethod.POST)
-	public ModelAndView editSaveAccount(@ModelAttribute("account") Account account, HttpSession session, Model model) {
+	public String editSaveAccount(@ModelAttribute("account") Account account, HttpSession session, Model model) {
 		User user = ((User) session.getAttribute("user"));
 		// Check user
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
-			return new ModelAndView("redirect:/index");
+			return "redirect:/index";
 		} // End
+
+		for (Account accountElement : user.getAccounts().values()) {
+			if (accountElement.getName().toLowerCase().equals(account.getName().toLowerCase())) {
+				model.addAttribute("title", "Account managet");
+				model.addAttribute("model", "accounteditform.jsp");
+				model.addAttribute("command", account);
+				model.addAttribute("error", "Account " + account.getName() + " exist!");
+				return "logged";
+			}
+		}
 
 		accountManager.update(account.getAccountId(), account.getName(), account.getBalance(), account.getInstitution(),
 				account.getStatus());
 
 		user.getAccounts().put(account.getAccountId(), account);
-		return new ModelAndView("redirect:/viewaccount");
+		model.addAttribute("model", "viewaccount.jsp");
+		return "logged";
 	}
 
 	/* It deletes record for the given id in URL and redirects to /viewemp */
@@ -127,7 +141,7 @@ public class AccountController {
 		} // End
 
 		if (action.equals("delete")) {
-			
+
 			System.err.println("Delete " + accountId);
 			accountManager.delete(accountId);
 			user.getAccounts().remove(accountId);
