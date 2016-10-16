@@ -32,7 +32,7 @@ public class DashBoardController {
 
 		// Vsqka tranzakciq kum Acc s tag
 		TransactionManager tranManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
-		Account account = user.getAccount(6);
+	
 		ArrayList<Transaction> tran = (ArrayList<Transaction>) tranManager
 				.getListOfTransactionByUserID(user.getUserID());
 		TreeMap<String, Double> test = new TreeMap<String, Double>();

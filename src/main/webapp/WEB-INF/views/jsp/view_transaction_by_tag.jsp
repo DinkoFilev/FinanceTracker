@@ -186,7 +186,7 @@
 							<input type="hidden" id="toDate" name="toDate" value="">
 
 
-							<button class="btn btn-info btn-lg" title="<msg:message code="search" />">
+							<button class="btn btn-info" title="<msg:message code="edit" />">
 								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 							</button>
 						</form>
