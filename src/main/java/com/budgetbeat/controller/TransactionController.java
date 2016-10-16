@@ -3,12 +3,16 @@ package com.budgetbeat.controller;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.manager.TransactionManager;
 import com.budgetbeat.manager.UserManager;
 import com.budgetbeat.pojo.Account;
+import com.budgetbeat.pojo.KeyValue;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
@@ -30,21 +35,146 @@ import com.budgetbeat.pojo.User;
 @Controller
 public class TransactionController {
 	
-	@RequestMapping(value = "/viewtransaction", method = RequestMethod.GET)
-	public String transGet(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
+	@RequestMapping(value = "/transactions_by_tag", method = { RequestMethod.POST, RequestMethod.GET })
+	public String showTransactions(HttpSession session, Model model, @ModelAttribute("accountId") Integer accountId,
+			@ModelAttribute("tagId") Integer tagId, HttpServletRequest request) {
 		User user = ((User) session.getAttribute("user"));
-		if(user == null){
-			model.addAttribute("model","login.jsp");
+
+		System.err.println("ERRRRROR" + tagId);
+		// Check user
+		if (user == null) {
+			model.addAttribute("model", "login.jsp");
 			return "index";
+		} // End
+
+		System.out.println("ACCOUNT: " + accountId);
+		System.out.println("TAG: " + tagId);
+
+		System.err.println(request.getParameter("tadId"));
+		System.err.println(request.getParameter("accountId"));
+
+		if (request.getParameter("tadId") != null) {
+			tagId = Integer.valueOf(request.getParameter("tagId"));
 		}
-		UserManager usermanager = (UserManager) SpringWebConfig.context.getBean("UserManager");
-		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
+
+		if (request.getParameter("accountId") != null) {
+			accountId = Integer.valueOf(request.getParameter("accountId"));
+		}
+
+		System.out.println("ACCOUNT: " + accountId);
+		System.out.println("TAG: " + tagId);
+
+		Calendar currenttime = Calendar.getInstance();
+		Date toDate;
+		if (request.getParameter("toDate") == null) {
+			toDate = new Date((currenttime.getTime()).getTime());
+		} else {
+			toDate = Date.valueOf(request.getParameter("toDate"));
+		}
+
+		Date fromDate;
+		if (request.getParameter("fromDate") == null) {
+			fromDate = Date.valueOf(toDate.toLocalDate().minusMonths(1));
+		} else {
+			fromDate = Date.valueOf(request.getParameter("fromDate"));
+		}
+
+		System.out.println("From:" + fromDate.toString());
+		System.out.println("To:" + toDate.toString());
+
+		List<Transaction> transactions = new ArrayList<Transaction>();
+		ArrayList<KeyValue> graphIncome = new ArrayList<KeyValue>();
+		ArrayList<KeyValue> graphExpense = new ArrayList<KeyValue>();
+		ArrayList<KeyValue> graphCompare = new ArrayList<KeyValue>();
+		Double income = 0.0;
+		Double expence = 0.0;
+
+		boolean accountCheck, tagCheck, fromDateCheck, toDateCheck;
+
+		for (Entry<Integer, Transaction> entry : user.getTransactions().entrySet()) { // Transactions
+			System.out.println(entry.getValue());
+
+			// Tag
+			if (tagId == 0) {
+				tagCheck = true;
+			} else {
+				tagCheck = (entry.getValue().getFk_tag_id() == tagId);
+			}
+
+			// Account
+			if (accountId == 0) {
+				accountCheck = true;
+			} else {
+				accountCheck = (entry.getValue().getFt_account_id() == accountId);
+			}
+
+			fromDateCheck = entry.getValue().getDate().after(fromDate) || entry.getValue().getDate().equals(fromDate);
+
+			toDateCheck = entry.getValue().getDate().before(toDate) || entry.getValue().getDate().equals(toDate);
+
+			// All check
+			if (accountCheck && tagCheck && fromDateCheck && toDateCheck) {
+
+				transactions.add(entry.getValue());
+
+				// if (!entry.getValue().getIncome()) {
+				// graph.add(new KeyValue(entry.getValue().getDescription(),
+				// String.valueOf((entry.getValue().getAmount() * -1)), null));
+				// }
+
+				if (entry.getValue().getAmount() < 0) {
+					expence += entry.getValue().getAmount();
+					graphExpense.add(new KeyValue(entry.getValue().getDescription(),
+							String.valueOf((Math.abs(entry.getValue().getAmount()))), null));
+
+				} else {
+					income += entry.getValue().getAmount();
+					graphIncome.add(new KeyValue(entry.getValue().getDescription(),
+							String.valueOf((Math.abs(entry.getValue().getAmount()))), null));
+
+				}
+			}
+		}
+
+		graphCompare.add(new KeyValue("Income", String.valueOf(income), null));
+		graphCompare.add(new KeyValue("Expense", String.valueOf(expence * -1), null));
+		System.out.println(transactions);
 		
-		
-		TreeMap<Integer,Transaction> list = user.getTransactions();
-		model.addAttribute("list", list);
-		model.addAttribute("model","viewtransactions.jsp");
+		model.addAttribute("graphIncome", graphIncome);
+		model.addAttribute("graphExpense", graphExpense);
+		model.addAttribute("graphCompare", graphCompare);
+
+		model.addAttribute("income", String.format("%.2f", income));
+		model.addAttribute("expence", String.format("%.2f", expence));
+		model.addAttribute("tag", user.getTag(tagId));
+		model.addAttribute("tagId", tagId);
+		model.addAttribute("accountId", accountId);
+		model.addAttribute("user", user);
+		model.addAttribute("transactions", transactions);
+		model.addAttribute("model", "view_transaction_by_tag.jsp");
 		return "logged";
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/viewtransaction", method = RequestMethod.GET)
+	public ModelAndView transGet(Locale locale, Model model, HttpServletRequest request,HttpSession session, HttpServletResponse response) {
+		User user = ((User) session.getAttribute("user"));
+//		if(user == null){
+//			model.addAttribute("model","login.jsp");
+//			return "index";
+//		}
+//		UserManager usermanager = (UserManager) SpringWebConfig.context.getBean("UserManager");
+//		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
+//		
+//		
+//		TreeMap<Integer,Transaction> list = user.getTransactions();
+		model.addAttribute("tagId", 0);
+		model.addAttribute("accountId", 0);
+		
+		return new ModelAndView("redirect:/transactions_by_tag");
 		
 	}
 	@RequestMapping(value = "/transactionform", method = RequestMethod.GET)

@@ -35,40 +35,107 @@
 
 
 <script type="text/javascript" src="js/jsapi.js"></script>
-<script type="text/javascript">
-    // Load the Visualization API and the piechart package.
-    google.load('visualization', '1.0', {
-        'packages' : [ 'corechart' ]
-    });
- 
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.setOnLoadCallback(drawChart);
- 
-    // Callback that creates and populates a data table,
-    // instantiates the pie chart, passes in the data and
-    // draws it.
-    function drawChart() {
- 
-        // Create the data table.    
-        var data = google.visualization.arrayToDataTable([
-                                                              ['Transactions', 'Amounth'],
-                                                              <c:forEach items="${graph}" var="entry">
-                                                                  [ '${entry.key}', ${entry.value} ],
-                                                              </c:forEach>
-                                                        ]);
-        // Set chart options
-        var options = {
-                       is3D : true,
-            pieSliceText: 'label',
-            tooltip :  {showColorCode: true},
-                     'height' : 400
 
-        };
- 
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+<script type="text/javascript">
+
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart1);
+function drawChart1() {
+  var dataIncome = google.visualization.arrayToDataTable([
+                                                    ['Transactions', 'Amounth'],
+                                                    <c:forEach items="${graphIncome}" var="entry">
+                                                        [ '${entry.key}', ${entry.value} ],
+                                                    </c:forEach>
+                                              ]);
+
+  var options = {
+		  is3D : true,
+          pieSliceText: 'label',
+          tooltip :  {showColorCode: true},
+  
+      
+          height: "280",
+
+  chartArea: {
+	  left:"5%",
+      top: "0%",
+      height: "280"
     }
+  
+  
+ };
+
+  var chartIncome = new google.visualization.PieChart(document.getElementById('chart_div_income'));  
+  chartIncome.draw(dataIncome, options);
+  }
+
+
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart2);
+function drawChart2() {
+  var dataExpense = google.visualization.arrayToDataTable([
+                                                    ['Transactions', 'Amounth'],
+                                                    <c:forEach items="${graphExpense}" var="entry">
+                                                        [ '${entry.key}', ${entry.value} ],
+                                                    </c:forEach>
+                                              ]);
+
+  var options = {
+		  is3D : true,
+          pieSliceText: 'label',
+          tooltip :  {showColorCode: true},
+  
+        
+          
+          height: "280",
+
+          chartArea: {
+        	  left:"10%",
+               height: "500",
+              width:"500"}
+         };
+
+  var chartExpense = new google.visualization.PieChart(document.getElementById('chart_div_expense'));  
+  chartExpense.draw(dataExpense, options);
+  }
+
+
+
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart3);
+function drawChart3() {
+  var dataCompare = google.visualization.arrayToDataTable([
+                                                    ['Transactions', 'Amounth'],
+                                                    <c:forEach items="${graphCompare}" var="entry">
+                                                        [ '${entry.key}', ${entry.value} ],
+                                                    </c:forEach>
+                                              ]);
+
+  var options = {
+		  is3D : true,
+          pieSliceText: 'label',
+          tooltip :  {showColorCode: true},
+  
+ 
+  height: "280",
+
+  chartArea: {
+	  left:"10%",
+       height: "500",
+      width:"500"}
+ };
+
+  var chartCompare = new google.visualization.PieChart(document.getElementById('chart_div_compare'));  
+  chartCompare.draw(dataCompare, options);
+  }
+
+
+
+$(window).resize(function(){
+	  drawChart1();
+	  drawChart2();
+	  drawChart3();
+	});
 </script>
 </head>
 
@@ -106,19 +173,45 @@
 		<div class="row">
 			<div class="col-lg-6">
 				<div class="panel panel-default">
-					<div class="panel-body">
-						<div id="chart_div">${list}</div>
+					<div class="tabbable-panel">
+						<div class="tabbable-line">
+							<ul class="nav nav-tabs nav-justified">
+								<li class="active"><a role="presentation" data-toggle="tab"
+									href="#incomeTab">Income</a></li>
+								<li><a role="presentation" data-toggle="tab"
+									href="#expenseTab">Expense</a></li>
+								<li><a role="presentation" data-toggle="tab"
+									href="#compareTab">Compare</a></li>
+							</ul>
+						</div>
+						<div class="tabbable-panel">
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane fade in active"
+									id="incomeTab">
+									<div id="chart_div_income"></div>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="expenseTab">
+									<div id="chart_div_expense"></div>
+								</div>
+								<div role="tabpanel" class="tab-pane fade in" id="compareTab">
+									<div id="chart_div_compare"></div>
+
+								</div>
+							</div>
+
+						</div>
 					</div>
 				</div>
 			</div>
+
 			<div class="col-lg-6">
 				<div class="panel panel-default">
-					<div class="panel-body table-responsive"">
+					<div class="panel-body table-responsive">
 						<table class="table">
 							<tr>
 								<td><a href="transactionform"><button type="submit"
 											class="btn btn-primary">
-											<msg:message code="add.new.transaction" />
+											<msg:message code="new.transaction" />
 										</button> </a></td>
 								<td>
 									<h4>
@@ -147,14 +240,21 @@
 			</div>
 			<div class="col-lg-6">
 				<div class="panel panel-default">
+
+					<div class="container">
+
+						<h2>Search</h2>
+					</div>
 					<div class="panel-body">
 						<div id="reportrange" class="pull-right"
 							style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
 							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
 							<span></span> <b class="caret"></b>
 						</div>
-
-						<form action="transactions_by_tag" method="post">
+					</div>
+					<div class="panel-body">
+						<form action="transactions_by_tag" method="post"
+							class="form-inline">
 							<div class="form-group">
 								<label for="accountId">Account</label> <select name='accountId'
 									class="form-control" id="accountId">
@@ -187,7 +287,7 @@
 
 
 							<button class="btn btn-info" title="<msg:message code="edit" />">
-								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>Search
 							</button>
 						</form>
 					</div>
@@ -198,7 +298,7 @@
 		<!--/Title in the page-->
 
 		<!--Title in the page-->
-		<div class="row row-eq-height"></div>
+
 		<!--/.row-->
 		<!--/Title in the page-->
 
@@ -236,7 +336,8 @@
 											<form>
 												<input type="hidden" name="transactionId"
 													value="${trans.getTransaction_id()}">
-												<button type="reset" class="btn btn-default btn-block btn-default">
+												<button type="reset"
+													class="btn btn-default btn-block btn-default">
 													${trans.description}</button>
 											</form>
 										</td>
@@ -251,7 +352,7 @@
 											</form>
 										</td>
 										<td>
-											<form >
+											<form>
 												<input type="hidden" name="transactionId"
 													value="${trans.getTransaction_id()}">
 												<button type="reset" class="btn btn-default btn-block">
@@ -261,15 +362,17 @@
 										<td>
 											<form action="transactions_by_tag" method="post">
 												<input type="hidden" name="tagId" value="0"> <input
-													type="hidden" name="accountId" value="${trans.getFt_account_id()}">
+													type="hidden" name="accountId"
+													value="${trans.getFt_account_id()}">
 												<button class="btn btn-default btn-block btn-default">
 													${user.getAccount(trans.getFt_account_id()).getName()}</button>
 											</form>
 										</td>
 										<td>
 											<form action="transactions_by_tag" method="post">
-												<input type="hidden" name="tagId" value="${trans.getFk_tag_id()}"> <input
-													type="hidden" name="accountId"  value="0">
+												<input type="hidden" name="tagId"
+													value="${trans.getFk_tag_id()}"> <input
+													type="hidden" name="accountId" value="0">
 												<button class="btn btn-default btn-block btn-default">
 													${user.getTag(trans.getFk_tag_id()).getName()}</button>
 											</form>
@@ -277,7 +380,8 @@
 										<td class="col-md-1">
 											<form action="edittransaction" method="post">
 												<input type="hidden" name="action" value="edit"> <input
-													type="hidden" name="transactionId" value="${trans.getTransaction_id()}">
+													type="hidden" name="transactionId"
+													value="${trans.getTransaction_id()}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="edit" />">
 													<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -287,7 +391,8 @@
 										<td class="col-md-1">
 											<form action="deletetransaction" method="post">
 												<input type="hidden" name="action" value="delete"> <input
-													type="hidden" name="transactionId" value="${trans.getTransaction_id()}">
+													type="hidden" name="transactionId"
+													value="${trans.getTransaction_id()}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="delete" />">
 													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -410,7 +515,6 @@ $(function() {
     
 });
 </script>
-
 </body>
 
 </html>
