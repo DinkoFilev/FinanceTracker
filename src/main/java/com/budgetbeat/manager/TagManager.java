@@ -63,8 +63,8 @@ public class TagManager implements ITagDAO {
 		jdbcTemplateObject.update(SQL, "No tag", fk_user_id);
 
 		// Adds top X tags
-		SQL = "INSERT INTO tags (name, fk_user_id) select name, ? from (SELECT count(name) as count, tag_id, name, fk_parent_id, fk_user_id  FROM finance_tracker.tags group by tag_id, name, fk_parent_id, fk_user_id order by count desc limit ?) as t";
-		jdbcTemplateObject.update(SQL, fk_user_id, 3);
+		//SQL = "INSERT INTO tags (name, fk_user_id) select name, ? from (SELECT count(name) as count, tag_id, name, fk_parent_id, fk_user_id  FROM finance_tracker.tags group by tag_id, name, fk_parent_id, fk_user_id order by count desc limit ?) as t";
+		//jdbcTemplateObject.update(SQL, fk_user_id, 3);
 		return;
 	}
 

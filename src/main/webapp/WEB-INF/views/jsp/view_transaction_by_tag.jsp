@@ -52,15 +52,15 @@ function drawChart1() {
 		  is3D : true,
           pieSliceText: 'label',
           tooltip :  {showColorCode: true},
+      
   
       
-          height: "280",
+          height: "280", width:"500",
 
-  chartArea: {
-	  left:"5%",
-      top: "0%",
-      height: "280"
-    }
+          chartArea: {
+        	  left:"10%",
+               height: "500",
+              width:"500"}
   
   
  };
@@ -87,7 +87,7 @@ function drawChart2() {
   
         
           
-          height: "280",
+          height: "280", width:"500",
 
           chartArea: {
         	  left:"10%",
@@ -117,7 +117,7 @@ function drawChart3() {
           tooltip :  {showColorCode: true},
   
  
-  height: "280",
+  height: "280", width:"500",
 
   chartArea: {
 	  left:"10%",
