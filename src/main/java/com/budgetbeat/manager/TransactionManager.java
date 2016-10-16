@@ -110,7 +110,7 @@ public class TransactionManager implements ITransactionDAO {
 	public void delete(Integer id) {
 		String SQL = "delete from transactions where transaction_id = ?";
 		jdbcTemplateObject.update(SQL, id);
-		System.out.println("Delete record transaction with ID "+ id);
+		System.out.println("Delete record transaction with ID " + id);
 
 	}
 
@@ -125,6 +125,34 @@ public class TransactionManager implements ITransactionDAO {
 		System.out.println("Updated Record transaction with ID = " + transaction_id);
 		return;
 
+	}
+
+	// Move transactions to default Account
+	public void moveToDefaultAccount(User user, Integer accountId, Integer defaultAccountId) {
+
+		String SQL = "UPDATE transactions  SET ft_account_id = ?  WHERE ft_account_id = ?;";
+		jdbcTemplateObject.update(SQL, defaultAccountId, accountId);
+		
+		for (Integer key : user.getTransactions().keySet()) {
+			Transaction transaction = user.getTransaction(key);
+			if (transaction.getFt_account_id() == accountId) {
+				transaction.setFt_account_id(defaultAccountId);
+			}
+		}
+	}
+
+	// Move transactions to default tag
+	public void moveToDefaultTag(User user, Integer tagId, Integer defaultTagId) {
+
+		String SQL = "UPDATE transactions  SET fk_tag_id = ?  WHERE fk_tag_id = ?;";
+		jdbcTemplateObject.update(SQL, defaultTagId, tagId);
+
+		for (Integer key : user.getTransactions().keySet()) {
+			Transaction transaction = user.getTransaction(key);
+			if (transaction.getFk_tag_id() == tagId) {
+				transaction.setFk_tag_id(defaultTagId);
+			}
+		}
 	}
 
 }

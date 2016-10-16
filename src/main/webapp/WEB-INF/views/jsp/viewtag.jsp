@@ -7,9 +7,10 @@
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
 
 <%
-response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
-response.addHeader("Pragma", "no-cache"); 
-response.addDateHeader ("Expires", 0);
+	response.addHeader("Cache-Control",
+			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
+	response.addHeader("Pragma", "no-cache");
+	response.addDateHeader("Expires", 0);
 %>
 <!DOCTYPE html>
 <html>
@@ -22,7 +23,7 @@ response.addDateHeader ("Expires", 0);
 
 <body>
 	<div>
-	
+
 		<!--Your position on site-->
 		<div class="row">
 			<ol class="breadcrumb">
@@ -41,6 +42,13 @@ response.addDateHeader ("Expires", 0);
 				<h1 class="page-header">
 					<msg:message code="tags.manager" />
 				</h1>
+				<c:if test="${error != null}">
+					<div class="alert alert-danger">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Error!</strong>
+						<c:out value="${error}"></c:out>
+					</div>
+				</c:if>
 			</div>
 		</div>
 		<!--/.row-->
@@ -54,7 +62,7 @@ response.addDateHeader ("Expires", 0);
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-body">
-					
+
 						<a href="tagform"><button type="submit"
 								class="btn btn-primary">
 								<msg:message code="add.new.tag" />

@@ -16,6 +16,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import com.budgetbeat.dao.IAccountDAO;
 import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.AccountMapper;
+import com.budgetbeat.pojo.Transaction;
+import com.budgetbeat.pojo.User;
 
 public class AccountManager implements IAccountDAO {
 	private DataSource dataSource;
@@ -35,9 +37,8 @@ public class AccountManager implements IAccountDAO {
 
 	@Override
 	public void delete(Integer accountId) {
-		String SQL = "DELETE FROM transactions WHERE ft_account_id=?;";
-		jdbcTemplateObject.update(SQL, accountId);
-		SQL = "DELETE FROM accounts_log WHERE fk_account_id=?;";
+
+		String SQL = "DELETE FROM accounts_log WHERE fk_account_id=?;";
 		jdbcTemplateObject.update(SQL, accountId);
 		SQL = "DELETE FROM accounts WHERE account_id=?; ";
 		jdbcTemplateObject.update(SQL, accountId);

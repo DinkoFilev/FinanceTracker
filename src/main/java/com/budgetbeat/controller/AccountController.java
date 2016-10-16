@@ -8,9 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.budgetbeat.manager.AccountManager;
+import com.budgetbeat.manager.TransactionManager;
 import com.budgetbeat.pojo.Account;
 
 import com.budgetbeat.pojo.User;
@@ -20,6 +20,9 @@ public class AccountController {
 
 	@Autowired
 	AccountManager accountManager;// will inject dao from xml file
+
+	@Autowired
+	TransactionManager transactionManager;
 
 	/*
 	 * It displays a form to input data, here "command" is a reserved request
@@ -111,11 +114,10 @@ public class AccountController {
 			return "redirect:/index";
 		} // End
 
-		
-		
 		for (Account accountElement : user.getAccounts().values()) {
-			
-			if (accountElement.getName().toLowerCase().equals(account.getName().toLowerCase()) && accountElement.getAccountId() != account.getAccountId() ) {
+
+			if (accountElement.getName().toLowerCase().equals(account.getName().toLowerCase())
+					&& accountElement.getAccountId() != account.getAccountId()) {
 				model.addAttribute("title", "Account managet");
 				model.addAttribute("model", "accounteditform.jsp");
 				model.addAttribute("command", account);
@@ -134,22 +136,28 @@ public class AccountController {
 
 	/* It deletes record for the given id in URL and redirects to /viewemp */
 	@RequestMapping(value = "/deleteaccount", method = RequestMethod.POST)
-	public ModelAndView deleteAccountPost(@ModelAttribute("action") String action,
+	public String deleteAccountPost(@ModelAttribute("action") String action,
 			@ModelAttribute("accountId") Integer accountId, HttpSession session, Model model) {
 		User user = ((User) session.getAttribute("user"));
 		// Check user
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
-			return new ModelAndView("redirect:/index");
+			return "redirect:/index";
 		} // End
 
-		if (action.equals("delete")) {
+		if (accountId == user.getAccounts().lastKey()) {
+			model.addAttribute("error", "You can not delete default account!!!");
+			model.addAttribute("model", "viewaccount.jsp");
+			return "logged";
+		}
 
-			System.err.println("Delete " + accountId);
+		if (action.equals("delete")) {
+			transactionManager.moveToDefaultAccount(user, accountId, user.getAccounts().lastKey());
 			accountManager.delete(accountId);
 			user.getAccounts().remove(accountId);
 		}
 
-		return new ModelAndView("redirect:/viewaccount");
+		model.addAttribute("model", "viewaccount.jsp");
+		return "logged";
 	}
 }

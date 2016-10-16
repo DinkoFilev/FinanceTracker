@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.budgetbeat.manager.TagManager;
+import com.budgetbeat.manager.TransactionManager;
 import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.KeyValue;
 import com.budgetbeat.pojo.Tag;
@@ -28,6 +29,9 @@ public class TagController {
 
 	@Autowired
 	TagManager tagManager;// will inject dao from xml file
+	
+	@Autowired
+	TransactionManager transactionManager;
 
 	@RequestMapping("/test")
 	public String test() {
@@ -206,10 +210,13 @@ public class TagController {
 
 				transactions.add(entry.getValue());
 
-				if (!entry.getValue().getIncome()) {
-					graph.add(new KeyValue(entry.getValue().getDescription(),
-							String.valueOf((entry.getValue().getAmount() * -1)), null));
-				}
+				// if (!entry.getValue().getIncome()) {
+				// graph.add(new KeyValue(entry.getValue().getDescription(),
+				// String.valueOf((entry.getValue().getAmount() * -1)), null));
+				// }
+
+				graph.add(new KeyValue(entry.getValue().getDescription(),
+						String.valueOf((Math.abs(entry.getValue().getAmount()))), null));
 
 				if (entry.getValue().getAmount() < 0) {
 					expence += entry.getValue().getAmount();
@@ -245,8 +252,8 @@ public class TagController {
 			model.addAttribute("model", "login.jsp");
 			return "redirect:/index";
 		} // End
-		
-		if(tag.getTagId() == user.getTags().firstKey()){
+
+		if (tag.getTagId() == user.getTags().lastKey()) {
 			model.addAttribute("title", "Tag manager");
 			model.addAttribute("model", "tageditform.jsp");
 			model.addAttribute("command", tag);
@@ -274,27 +281,33 @@ public class TagController {
 
 	// test as post
 	@RequestMapping(value = "/deletetag", method = RequestMethod.POST)
-	public ModelAndView deleteTagPost(@ModelAttribute("action") String action, Model model,
+	public String deleteTagPost(@ModelAttribute("action") String action, Model model,
 			@ModelAttribute("tagId") Integer tagId, HttpSession session) {
 		User user = ((User) session.getAttribute("user"));
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
-			return new ModelAndView("redirect:/index");
+			return "redirect:/index";
 		} // End
 
-		if(tagId == user.getTags().lastKey()){
+		if (tagId == user.getTags().lastKey()) {
 			System.err.println("GLEDAI KUDE ME PRATI");
-			return new ModelAndView("redirect:/viewtag");
+			model.addAttribute("error", "You can not delete default tag!!!");
+			
+			model.addAttribute("model", "viewtag.jsp");
+			return "logged";
 		}
-		
+
 		System.out.println("Will delete " + tagId);
-		
+
 		if (action.equals("delete")) {
-			System.out.println("Will delete " + tagId);
-			tagManager.delete(tagId, user.getTags().lastKey());
+					
+			transactionManager.moveToDefaultTag(user, tagId, user.getTags().lastKey());
+			tagManager.delete(tagId);
 			user.getTags().remove(tagId);
 		}
-		return new ModelAndView("redirect:/viewtag");
+		
+		model.addAttribute("model", "viewtag.jsp");
+		return "logged";
 	}
 
 }

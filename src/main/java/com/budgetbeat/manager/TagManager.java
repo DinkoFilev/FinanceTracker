@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.budgetbeat.dao.ITagDAO;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.TagMapper;
+import com.budgetbeat.pojo.Transaction;
+import com.budgetbeat.pojo.User;
 
 public class TagManager implements ITagDAO {
 
@@ -42,7 +45,7 @@ public class TagManager implements ITagDAO {
 				PreparedStatement ps = connection.prepareStatement(SQL, new String[] { "tag_id" });
 				ps.setString(1, tag.getName());
 				ps.setInt(2, tag.getUserId());
-				//ps.setInt(3, tag.getParentId());
+				// ps.setInt(3, tag.getParentId());
 				return ps;
 			}
 		}, keyHolder);
@@ -94,18 +97,16 @@ public class TagManager implements ITagDAO {
 
 	@Override
 	@Transactional
-	public void delete(Integer tagId, Integer defaultTagId) {
+	public void delete(Integer tagId) {
 		// Change all accounts to default tag
 
-		// TODO change Transactions to default tag
-		String SQL = "UPDATE transactions  SET fk_tag_id = ?  WHERE fk_tag_id = ?;";
-		jdbcTemplateObject.update(SQL, defaultTagId, tagId);
-
-		SQL = "delete from tags where tag_ id = ?";
+		String SQL = "delete from tags where tag_id = ?";
 		jdbcTemplateObject.update(SQL, tagId);
 		System.out.println("Deleted Tag with ID = " + tagId);
 		return;
 	}
+
+
 
 	@Override
 	public void update(Integer tagId, String name) {

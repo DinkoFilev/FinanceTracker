@@ -44,6 +44,13 @@
 				<h1 class="page-header">
 					<msg:message code="accounts.manager" />
 				</h1>
+				<c:if test="${error != null}">
+					<div class="alert alert-danger">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Error!</strong>
+						<c:out value="${error}"></c:out>
+					</div>
+				</c:if>
 			</div>
 		</div>
 		<!--/.row-->
@@ -88,12 +95,10 @@
 									<tr>
 										<td>${account.value.name}</td>
 										<td>${account.value.institution}</td>
-										<td class="text-right">
-
-										<fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2"
-											value="${account.value.balance}" />
-										<c:set var="total1" value="${total1 + account.value.balance}"
-											scope="page" /></td>
+										<td class="text-right"><fmt:formatNumber type="NUMBER"
+												maxFractionDigits="2" minFractionDigits="2"
+												value="${account.value.balance}" /> <c:set var="total1"
+												value="${total1 + account.value.balance}" scope="page" /></td>
 
 										<td><input type="checkbox" class="form-control"
 											onclick="return false" onkeydown="return false"
@@ -110,8 +115,8 @@
 										</td>
 										<td class="col-md-1">
 											<form action="deleteaccount" method="post">
-												<input type="hidden" name="action" value="delete"> 
-												<input type="hidden" name="accountId" value="${account.key}">
+												<input type="hidden" name="action" value="delete"> <input
+													type="hidden" name="accountId" value="${account.key}">
 												<button class="btn btn-default btn-block btn-default"
 													title="<msg:message code="delete" />">
 													<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -124,9 +129,8 @@
 						</table>
 						<script>
 							(function() {
-								
-								
-								document.getElementById("total").innerHTML = "<fmt:formatNumber pattern="0.00" value="${total1} " />";
+
+								document.getElementById("total").innerHTML = "<fmt:formatNumber pattern="###,###,###,###.##" value="${total1}" type="NUMBER" />";
 							})();
 						</script>
 

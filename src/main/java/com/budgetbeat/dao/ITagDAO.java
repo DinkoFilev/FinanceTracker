@@ -16,7 +16,7 @@ public interface ITagDAO {
 
 	public List<Tag> listTgs(Integer userId);
 
-	public void delete(Integer tagId, Integer defaultTagId );
-
 	public void update(Integer tagId, String name);
+
+	public void delete(Integer tagId);
 }
