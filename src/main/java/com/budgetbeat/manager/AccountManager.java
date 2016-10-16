@@ -12,7 +12,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.dao.IAccountDAO;
 import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.AccountMapper;
@@ -36,14 +38,26 @@ public class AccountManager implements IAccountDAO {
 	}
 
 	@Override
-	public void delete(Integer accountId) {
+	@Transactional
+	public void delete(User user, Integer accountId, Integer defaultaccountId) throws Exception {
 
-		String SQL = "DELETE FROM accounts_log WHERE fk_account_id=?;";
-		jdbcTemplateObject.update(SQL, accountId);
-		SQL = "DELETE FROM accounts WHERE account_id=?; ";
-		jdbcTemplateObject.update(SQL, accountId);
-		System.out.println("Deleted Account with ID = " + accountId);
-		return;
+	
+			TransactionManager tranManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
+
+			String SQL = "UPDATE transactions  SET ft_account_id = ?  WHERE ft_account_id = ?;";
+			jdbcTemplateObject.update(SQL, defaultaccountId, accountId);
+
+			SQL = "DELETE FROM accounts_log WHERE fk_account_id=?;";
+			jdbcTemplateObject.update(SQL, accountId);
+
+			SQL = "DELETE FROM accounts WHERE account_id=?; ";
+			jdbcTemplateObject.update(SQL, accountId);
+
+			tranManager.moveToDefaultAccountCollection(user, accountId, user.getAccounts().lastKey());
+			user.getAccounts().remove(accountId);
+
+			System.out.println("Deleted Account with ID = " + accountId);
+
 	}
 
 	@Override

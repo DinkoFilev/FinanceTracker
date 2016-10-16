@@ -10,7 +10,11 @@ body {
 	background: #f1f4f7;
 	padding-top: 50px;
 	color: #5f6468;
+	overflow-x: hidden;
 }
+
+
+
 
 p {
 	color: #777;
@@ -964,7 +968,6 @@ h1.page-header {
 	height: 65px;
 	overflow: scroll;
 }
-
 
 
 

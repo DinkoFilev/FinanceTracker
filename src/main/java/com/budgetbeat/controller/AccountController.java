@@ -152,11 +152,13 @@ public class AccountController {
 		}
 
 		if (action.equals("delete")) {
-			transactionManager.moveToDefaultAccount(user, accountId, user.getAccounts().lastKey());
-			accountManager.delete(accountId);
-			user.getAccounts().remove(accountId);
+			try {
+				accountManager.delete(user, accountId, user.getAccounts().lastKey());
+			} catch (Exception e) {
+				model.addAttribute("error", "Account was not deleted!!!");
+				e.printStackTrace();
+			}
 		}
-
 		model.addAttribute("model", "viewaccount.jsp");
 		return "logged";
 	}

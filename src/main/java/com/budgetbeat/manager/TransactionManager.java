@@ -128,18 +128,21 @@ public class TransactionManager implements ITransactionDAO {
 	}
 
 	// Move transactions to default Account
-	public void moveToDefaultAccount(User user, Integer accountId, Integer defaultAccountId) {
-
+	public void moveToDefaultAccountDB(User user, Integer accountId, Integer defaultAccountId) {
 		String SQL = "UPDATE transactions  SET ft_account_id = ?  WHERE ft_account_id = ?;";
 		jdbcTemplateObject.update(SQL, defaultAccountId, accountId);
 
+	}
+	
+	public void moveToDefaultAccountCollection(User user, Integer accountId, Integer defaultAccountId) {
 		for (Integer key : user.getTransactions().keySet()) {
 			Transaction transaction = user.getTransaction(key);
 			if (transaction.getFt_account_id() == accountId) {
 				transaction.setFt_account_id(defaultAccountId);
 			}
 		}
-	}
+	}	
+	
 
 	// Move transactions to default tag
 	public void moveToDefaultTagDB(User user, Integer tagId, Integer defaultTagId) {

@@ -1,5 +1,6 @@
 package com.budgetbeat.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -19,5 +20,5 @@ public interface ITagDAO {
 
 	public void update(Integer tagId, String name);
 
-	public void delete(User userm,Integer tagId,Integer defaultTagId);
+	public void delete(User userm,Integer tagId,Integer defaultTagId) throws SQLException, Exception;
 }
