@@ -5,6 +5,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.budgetbeat.pojo.Tag;
+import com.budgetbeat.pojo.User;
 
 public interface ITagDAO {
 
@@ -18,5 +19,5 @@ public interface ITagDAO {
 
 	public void update(Integer tagId, String name);
 
-	public void delete(Integer tagId);
+	public void delete(User userm,Integer tagId,Integer defaultTagId);
 }

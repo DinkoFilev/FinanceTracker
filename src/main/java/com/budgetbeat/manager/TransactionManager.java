@@ -132,7 +132,7 @@ public class TransactionManager implements ITransactionDAO {
 
 		String SQL = "UPDATE transactions  SET ft_account_id = ?  WHERE ft_account_id = ?;";
 		jdbcTemplateObject.update(SQL, defaultAccountId, accountId);
-		
+
 		for (Integer key : user.getTransactions().keySet()) {
 			Transaction transaction = user.getTransaction(key);
 			if (transaction.getFt_account_id() == accountId) {
@@ -142,11 +142,14 @@ public class TransactionManager implements ITransactionDAO {
 	}
 
 	// Move transactions to default tag
-	public void moveToDefaultTag(User user, Integer tagId, Integer defaultTagId) {
+	public void moveToDefaultTagDB(User user, Integer tagId, Integer defaultTagId) {
 
 		String SQL = "UPDATE transactions  SET fk_tag_id = ?  WHERE fk_tag_id = ?;";
 		jdbcTemplateObject.update(SQL, defaultTagId, tagId);
 
+	}
+
+	public void moveToDefaultTagCollection(User user, Integer tagId, Integer defaultTagId) {
 		for (Integer key : user.getTransactions().keySet()) {
 			Transaction transaction = user.getTransaction(key);
 			if (transaction.getFk_tag_id() == tagId) {
@@ -154,5 +157,4 @@ public class TransactionManager implements ITransactionDAO {
 			}
 		}
 	}
-
 }

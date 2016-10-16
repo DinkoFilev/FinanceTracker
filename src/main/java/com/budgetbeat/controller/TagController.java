@@ -301,9 +301,9 @@ public class TagController {
 
 		if (action.equals("delete")) {
 					
-			transactionManager.moveToDefaultTag(user, tagId, user.getTags().lastKey());
-			tagManager.delete(tagId);
-			user.getTags().remove(tagId);
+			
+			tagManager.delete(user,tagId,user.getTags().lastKey());
+			
 		}
 		
 		model.addAttribute("model", "viewtag.jsp");

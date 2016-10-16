@@ -9,12 +9,14 @@ import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.dao.ITagDAO;
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.TagMapper;
@@ -25,7 +27,7 @@ public class TagManager implements ITagDAO {
 
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplateObject;
-
+	
 	@Override
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -97,12 +99,19 @@ public class TagManager implements ITagDAO {
 
 	@Override
 	@Transactional
-	public void delete(Integer tagId) {
+	public void delete(User user,Integer tagId,Integer defaultTagId) {
 		// Change all accounts to default tag
-
-		String SQL = "delete from tags where tag_id = ?";
+		TransactionManager tranManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
+		//tranManager.moveToDefaultTagDB(user, tagId, defaultTagId);
+		
+		String SQL = "UPDATE transactions  SET fk_tag_id = ?  WHERE fk_tag_id = ?;";
+		jdbcTemplateObject.update(SQL, defaultTagId, tagId);
+		 SQL = "delete from tags where tag_id = ?";
 		jdbcTemplateObject.update(SQL, tagId);
 		System.out.println("Deleted Tag with ID = " + tagId);
+		tranManager.moveToDefaultTagCollection(user, tagId, user.getTags().lastKey());
+		user.getTags().remove(tagId);
+		
 		return;
 	}
 
