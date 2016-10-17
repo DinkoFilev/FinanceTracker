@@ -74,13 +74,11 @@ public class DashBoardController {
 			model.addAttribute("model", "login.jsp");
 			return "index";
 		}
-
-		// Vsqka tranzakciq kum Acc s tag
-		TransactionManager tranManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
-		Account account = user.getAccount(3);
+		
+		//All transactions for year 2016
+		TransactionManager tranManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");		
 		ArrayList<Transaction> tran = (ArrayList<Transaction>) tranManager
 				.getListOfTransactionByUserID(user.getUserID());
-		TreeMap<String, Double> test = new TreeMap<String, Double>();
 		ArrayList<KeyValue> graph = new ArrayList<KeyValue>();
 		graph.add(new KeyValue("JANUARY", "0", null));
 		graph.add(new KeyValue("FEBRUARY", "0", null));
@@ -95,7 +93,7 @@ public class DashBoardController {
 		graph.add(new KeyValue("NOVEMBER", "0", null));
 		graph.add(new KeyValue("DECEMBER", "0", null));
 		for (Transaction transaction : tran) {
-			if (transaction.getFt_account_id() == 3) {
+			
 				if (transaction.getDate().after(Date.valueOf("2016-01-01"))
 						&& transaction.getDate().before(Date.valueOf("2016-01-31"))) {
 					if (!transaction.getIncome()) {
@@ -231,7 +229,7 @@ public class DashBoardController {
 
 			}
 
-		}
+		
 
 		for (KeyValue key : graph) {
 			System.out.println(key.getKey() + " " + key.getValue() + " " + key.getValue2());

@@ -37,7 +37,7 @@ import com.budgetbeat.pojo.User;
 @Controller
 public class TransactionController {
 
-	@RequestMapping(value = "/transactions_by_tag", method = { RequestMethod.POST, RequestMethod.GET })
+	@RequestMapping(value = "/transactions_by_tag", method = RequestMethod.POST)
 	public String showTransactions(HttpSession session, Model model, @ModelAttribute("accountId") Integer accountId,
 			@ModelAttribute("tagId") Integer tagId, HttpServletRequest request) {
 		User user = ((User) session.getAttribute("user"));
@@ -176,18 +176,142 @@ public class TransactionController {
 	}
 
 	@RequestMapping(value = "/viewtransaction", method = RequestMethod.GET)
-	public ModelAndView transGet(Locale locale, Model model, HttpServletRequest request, HttpSession session,
+	public String transGet(Locale locale, Model model, HttpServletRequest request, HttpSession session,
 			HttpServletResponse response) {
 		User user = ((User) session.getAttribute("user"));
+		Integer tagId = 0;
+		Integer accountId = 0;
+		// Check user
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
-			return new ModelAndView("index");
+			return "index";
+		} // End
+
+		StringBuilder searchBy = new StringBuilder();
+
+		System.out.println("ACCOUNT: " + accountId);
+		System.out.println("TAG: " + tagId);
+
+		System.err.println(request.getParameter("tadId"));
+		System.err.println(request.getParameter("accountId"));
+
+		if (request.getParameter("tadId") != null) {
+			tagId = Integer.valueOf(request.getParameter("tagId"));
 		}
 
-		model.addAttribute("tagId", 0);
-		model.addAttribute("accountId", 0);
+		if (request.getParameter("accountId") != null) {
+			accountId = Integer.valueOf(request.getParameter("accountId"));
+		}
 
-		return new ModelAndView("redirect:/transactions_by_tag");
+		System.out.println("ACCOUNT: " + accountId);
+		System.out.println("TAG: " + tagId);
+
+		if (accountId > 0) {
+			searchBy.append("[Account: ");
+			searchBy.append(user.getAccount(accountId).getName());
+			searchBy.append("]");
+		}
+
+		if (tagId > 0) {
+			searchBy.append("[Tag: ");
+			searchBy.append(user.getTag(tagId).getName());
+			searchBy.append("]");
+		}
+
+		Calendar currenttime = Calendar.getInstance();
+		Date toDate;
+		if (request.getParameter("toDate") == null) {
+			toDate = new Date((currenttime.getTime()).getTime());
+		} else {
+			toDate = Date.valueOf(request.getParameter("toDate"));
+		}
+
+		Date fromDate;
+		if (request.getParameter("fromDate") == null) {
+			fromDate = Date.valueOf(toDate.toLocalDate().minusMonths(1));
+		} else {
+			fromDate = Date.valueOf(request.getParameter("fromDate"));
+		}
+
+		searchBy.append("[From: ");
+		searchBy.append(fromDate.toString());
+		searchBy.append("]");
+
+		searchBy.append("[To: ");
+		searchBy.append(toDate.toString());
+		searchBy.append("]");
+
+		System.out.println("From:" + fromDate.toString());
+		System.out.println("To:" + toDate.toString());
+
+		List<Transaction> transactions = new ArrayList<Transaction>();
+		ArrayList<KeyValue> graphIncome = new ArrayList<KeyValue>();
+		ArrayList<KeyValue> graphExpense = new ArrayList<KeyValue>();
+		ArrayList<KeyValue> graphCompare = new ArrayList<KeyValue>();
+		Double income = 0.0;
+		Double expence = 0.0;
+
+		boolean accountCheck, tagCheck, fromDateCheck, toDateCheck;
+
+		for (Entry<Integer, Transaction> entry : user.getTransactions().entrySet()) { // Transactions
+			System.out.println(entry.getValue());
+
+			// Tag
+			if (tagId == 0) {
+				tagCheck = true;
+			} else {
+				tagCheck = (entry.getValue().getFk_tag_id() == tagId);
+			}
+
+			// Account
+			if (accountId == 0) {
+				accountCheck = true;
+			} else {
+				accountCheck = (entry.getValue().getFt_account_id() == accountId);
+			}
+
+			// Time check
+			fromDateCheck = entry.getValue().getDate().after(fromDate) || entry.getValue().getDate().equals(fromDate);
+			toDateCheck = entry.getValue().getDate().before(toDate) || entry.getValue().getDate().equals(toDate);
+
+			// All check
+			if (accountCheck && tagCheck && fromDateCheck && toDateCheck) {
+
+				transactions.add(entry.getValue());
+
+
+				if (entry.getValue().getAmount() < 0) {
+					expence += entry.getValue().getAmount();
+					graphExpense.add(new KeyValue(entry.getValue().getDescription(),
+							String.valueOf((Math.abs(entry.getValue().getAmount()))), null));
+
+				} else {
+					income += entry.getValue().getAmount();
+					graphIncome.add(new KeyValue(entry.getValue().getDescription(),
+							String.valueOf((Math.abs(entry.getValue().getAmount()))), null));
+
+				}
+			}
+		}
+
+		graphCompare.add(new KeyValue("Income", String.valueOf(income), null));
+		graphCompare.add(new KeyValue("Expense", String.valueOf(expence * -1), null));
+
+		model.addAttribute("graphIncome", graphIncome);
+		model.addAttribute("graphExpense", graphExpense);
+		model.addAttribute("graphCompare", graphCompare);
+
+		model.addAttribute("income", String.format("%.2f", income));
+		model.addAttribute("expence", String.format("%.2f", expence));
+		model.addAttribute("tag", user.getTag(tagId));
+		model.addAttribute("tagId", tagId);
+		model.addAttribute("searchBy", searchBy);
+		
+		model.addAttribute("accountId", accountId);
+		model.addAttribute("user", user);
+		model.addAttribute("transactions", transactions);
+		model.addAttribute("model", "view_transaction_by_tag.jsp");
+		return "logged";
 
 	}
 
