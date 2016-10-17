@@ -26,9 +26,10 @@ response.addDateHeader ("Expires", 0);
 		<!--Your position on site-->
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="logged"><svg class="glyph stroked home">
+				<li><a href="dashboard"><svg class="glyph stroked home">
 							<use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">${title}</li>
+				<li><a href="viewtag">Tags</a></li>
+				<li class="active">Edit tag</li>
 			</ol>
 		</div>
 		<!--/.row-->
@@ -39,7 +40,7 @@ response.addDateHeader ("Expires", 0);
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">
-					<msg:message code="tags.manager" />
+					Edit tag
 				</h1>
 			</div>
 		</div>

@@ -17,7 +17,7 @@
 <html>
 <head>
 <%@include file="head_stuff.html"%>
-<title>BudgetBeat - ${title}</title>
+<title>BudgetBeat - Accounts</title>
 
 </head>
 
@@ -29,9 +29,9 @@
 		<!--Your position on site-->
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="logged"><svg class="glyph stroked home">
+				<li><a href="dashboard"><svg class="glyph stroked home">
 							<use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">${title}</li>
+				<li class="active">Accounts</li>
 			</ol>
 		</div>
 		<!--/.row-->
@@ -42,7 +42,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">
-					<msg:message code="accounts.manager" />
+					Accounts
 				</h1>
 				<c:if test="${error != null}">
 					<div class="alert alert-danger">

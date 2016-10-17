@@ -108,17 +108,28 @@ public class AccountController {
 	@RequestMapping(value = "/editsaveaccount", method = RequestMethod.POST)
 	public String editSaveAccount(@ModelAttribute("account") Account account, HttpSession session, Model model) {
 		User user = ((User) session.getAttribute("user"));
+		
 		// Check user
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
 			return "redirect:/index";
 		} // End
+		
+		
+		if (account.getAccountId() == user.getAccounts().lastKey()) {
+			model.addAttribute("title", "Accounts");
+			model.addAttribute("model", "accounteditform.jsp");
+			model.addAttribute("command", account);
+			model.addAttribute("error", "You can not edit default account!!!");
+			return "logged";
+		}
+		
 
 		for (Account accountElement : user.getAccounts().values()) {
 
 			if (accountElement.getName().toLowerCase().equals(account.getName().toLowerCase())
 					&& accountElement.getAccountId() != account.getAccountId()) {
-				model.addAttribute("title", "Account managet");
+				model.addAttribute("title", "Accounts");
 				model.addAttribute("model", "accounteditform.jsp");
 				model.addAttribute("command", account);
 				model.addAttribute("error", "Account " + account.getName() + " exist!");

@@ -6,28 +6,30 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
 <%
-response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
-response.addHeader("Pragma", "no-cache"); 
-response.addDateHeader ("Expires", 0);
+	response.addHeader("Cache-Control",
+			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
+	response.addHeader("Pragma", "no-cache");
+	response.addDateHeader("Expires", 0);
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
 <%@include file="head_stuff.html"%>
-<title>BudgetBeat - ${title}</title>
+<title>BudgetBeat - Accounts</title>
 
 </head>
 
 <body>
-	
+
 	<div>
 		<!--Your position on site-->
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="logged"><svg class="glyph stroked home">
+				<li><a href="dashboard"><svg class="glyph stroked home">
 							<use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">${title}</li>
+				<li><a href="viewaccount">Accounts</a></li>
+				<li class="active">Edit account</li>
 			</ol>
 		</div>
 		<!--/.row-->
@@ -37,9 +39,7 @@ response.addDateHeader ("Expires", 0);
 		<!--Title in the page-->
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">
-					<msg:message code="accounts.manager" />
-				</h1>
+				<h1 class="page-header">Edit account</h1>
 			</div>
 		</div>
 		<!--/.row-->
@@ -55,26 +55,29 @@ response.addDateHeader ("Expires", 0);
 
 							<div class="form-group">
 								<label><msg:message code="account.name" /></label>
-								<form:input path="name" class="form-control" maxlength="44"/>
-																<c:if test="${error != null}">
-									
-										<div class="alert alert-danger">
-											<a href="#" class="close" data-dismiss="alert"
-												aria-label="close">&times;</a> <strong>Error!</strong>
-											<c:out value="${error}"></c:out>
-										</div>
-									
+								<form:input path="name" class="form-control" maxlength="44"
+									required="required" />
+								<c:if test="${error != null}">
+
+									<div class="alert alert-danger">
+										<a href="#" class="close" data-dismiss="alert"
+											aria-label="close">&times;</a> <strong>Error!</strong>
+										<c:out value="${error}"></c:out>
+									</div>
+
 								</c:if>
 							</div>
 
 							<div class="form-group">
 								<label><msg:message code="institution" /></label>
-								<form:input path="institution" class="form-control" maxlength="49"/>
+								<form:input path="institution" class="form-control"
+									maxlength="49" required="required" />
 							</div>
 
 							<div class="form-group">
 								<label><msg:message code="balance" /></label>
-								<form:input path="balance" class="form-control" type="number" step="any" min="0" max="99999999"/>
+								<form:input path="balance" class="form-control" type="number"
+									step="any" min="0" max="99999999" required="required" />
 							</div>
 							<div class="form-group">
 								<label><msg:message code="status" /></label>
@@ -96,7 +99,7 @@ response.addDateHeader ("Expires", 0);
 	</div>
 	<!--/.main-->
 
-		<%@include file="end_scripts.html"%>
+	<%@include file="end_scripts.html"%>
 </body>
 
 </html>

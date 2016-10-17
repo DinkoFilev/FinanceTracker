@@ -27,9 +27,9 @@
 		<!--Your position on site-->
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="logged"><svg class="glyph stroked home">
+				<li><a href="dashboard"><svg class="glyph stroked home">
 							<use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">${title}</li>
+				<li class="active">Tags</li>
 			</ol>
 		</div>
 		<!--/.row-->
@@ -40,7 +40,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">
-					<msg:message code="tags.manager" />
+					Tags
 				</h1>
 				<c:if test="${error != null}">
 					<div class="alert alert-danger">

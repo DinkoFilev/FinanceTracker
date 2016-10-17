@@ -17,7 +17,7 @@
 <head>
 
 
-<title>BudgetBeat - ${title}</title>
+<title>BudgetBeat - Transaction</title>
 
 <link href="css/bootstrap-table.css" rel="stylesheet">
 <script src="js/lumino.glyphs.js"></script>
@@ -146,9 +146,9 @@ $(window).resize(function(){
 		<!--Your position on site-->
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="index.jsp"><svg class="glyph stroked home">
+				<li><a href="dashboard"><svg class="glyph stroked home">
 							<use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">${title}</li>
+				<li class="active">Transactios</li>
 			</ol>
 		</div>
 		<!--/.row-->
@@ -160,10 +160,9 @@ $(window).resize(function(){
 			<div class="col-lg-12">
 
 				<h1 class="page-header">
-					<msg:message code="transactions.by" />
-					${tagName}
-				</h1>
-
+					<msg:message code="transactions" />
+									</h1>
+									<h3>${searchBy}</h3>
 			</div>
 		</div>
 		<!--/.row-->
