@@ -66,7 +66,7 @@ public class UserController {
 		String lastName = request.getParameter("lastName");
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
-		String status = usermanager.registerValidation(firstName, lastName, email, password);
+		String status = usermanager.registerValidation(null ,firstName, lastName, email, password);
 		System.out.println(status);
 		if (status.equals("register")) {
 			try {
@@ -160,7 +160,9 @@ public class UserController {
 			return "index";
 		}
 		System.out.println(user.toString());
-		String registerValidation = userManager.registerValidation(user.getFirstName(), user.getLastName(), user.getEmail(), null);
+		String registerValidation = userManager.registerValidation(user,user.getFirstName(), user.getLastName(), user.getEmail(), null);
+		
+		
 		if(registerValidation != "register"){
 			
 			model.addAttribute("model", "settings.jsp");
@@ -177,11 +179,11 @@ public class UserController {
 			return "logged";
 		}
 		
-		if (!newpassword.equals(repeatpassword)) {
+		if (!(newpassword.equals(repeatpassword)) || newpassword.length() < 3) {
 			
 			model.addAttribute("model", "settings.jsp");
 			model.addAttribute("command", user);
-			model.addAttribute("status", "Passwords don't match ");
+			model.addAttribute("status", "Passwords don't match or length is under 3 symbols");
 			return "logged";
 		}
 		

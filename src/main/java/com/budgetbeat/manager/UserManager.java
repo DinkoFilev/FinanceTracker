@@ -139,7 +139,7 @@ public class UserManager implements IUserDAO {
 		return;
 	}
 
-	public String registerValidation(String firstName, String lastName, String email, String password) {
+	public String registerValidation(User user ,String firstName, String lastName, String email, String password) {
 
 		if (!firstName.matches("^[a-zA-Z]{3,45}$")) {
 			System.out.println("NE MATCHVA firstName");
@@ -156,7 +156,7 @@ public class UserManager implements IUserDAO {
 		}
 
 		
-		if (registerredUsers.containsKey(email)) {
+		if (registerredUsers.containsKey(email) && user.getEmail() != email) {
 			return "Email is already used";
 
 		}

@@ -106,13 +106,18 @@
 
 							</div>
 
-							<div class="form-group">
+							<div class="form-group ">
 								<button type="submit" class="btn btn-primary">
 									<msg:message code="save" />
 								</button>
 							</div>
 
 						</form:form>
+						<div class="form-group">
+						<a href = "dashboard"><button type="submit"  class="btn btn-primary">Cancel
+												</button></a>
+								
+							</div>
 					</div>
 				</div>
 			</div>
