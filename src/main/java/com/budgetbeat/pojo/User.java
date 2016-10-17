@@ -41,7 +41,7 @@ public class User {
 		return firstName;
 	}
 
-	void setFirstName(String firstName) {
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -49,7 +49,7 @@ public class User {
 		return lastName;
 	}
 
-	void setLastName(String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -58,7 +58,7 @@ public class User {
 		return email;
 	}
 
-	void setEmail(String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
@@ -69,11 +69,11 @@ public class User {
 				+ transactions + "]";
 	}
 
-	String getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
-	void setPassword(String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 	

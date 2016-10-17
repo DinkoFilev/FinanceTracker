@@ -162,15 +162,11 @@ public class TransactionController {
 	@RequestMapping(value = "/viewtransaction", method = RequestMethod.GET)
 	public ModelAndView transGet(Locale locale, Model model, HttpServletRequest request,HttpSession session, HttpServletResponse response) {
 		User user = ((User) session.getAttribute("user"));
-//		if(user == null){
-//			model.addAttribute("model","login.jsp");
-//			return "index";
-//		}
-//		UserManager usermanager = (UserManager) SpringWebConfig.context.getBean("UserManager");
-//		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
-//		
-//		
-//		TreeMap<Integer,Transaction> list = user.getTransactions();
+		if(user == null){
+			model.addAttribute("model","login.jsp");
+			return new ModelAndView("index");
+		}
+
 		model.addAttribute("tagId", 0);
 		model.addAttribute("accountId", 0);
 		

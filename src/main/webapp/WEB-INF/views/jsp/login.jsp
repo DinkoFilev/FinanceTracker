@@ -38,7 +38,15 @@
 							<a href="register">
    					<input class="btn btn-primary" type="button" value="REGISTER" />
 					</a>
-							<h1>${status}</h1>
+							<c:if test="${status != null}">
+									
+										<div class="alert alert-danger">
+											<a href="#" class="close" data-dismiss="alert"
+												aria-label="close">&times;</a>
+											<c:out value="${status}"></c:out>
+										</div>
+									
+								</c:if>
 					</sform:form>
 					
 					

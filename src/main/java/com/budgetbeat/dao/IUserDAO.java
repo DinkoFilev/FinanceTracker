@@ -21,5 +21,5 @@ public interface IUserDAO {
 
 	public void delete(Integer id);
 
-	public void update(Integer userID, String firstName, String lastName, String email, String password);
+	public void update(User olduser ,Integer userID, String firstName, String lastName, String email, String password);
 }

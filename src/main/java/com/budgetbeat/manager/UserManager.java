@@ -126,10 +126,16 @@ public class UserManager implements IUserDAO {
 	}
 
 	@Override
-	public void update(Integer userID, String firstName, String lastName, String email, String password) {
+	public void update(User olduser , Integer userID, String firstName, String lastName, String email, String password) {
+		password =  String.valueOf(MD5Convert(password));
 		String SQL = "UPDATE users set first_name = ? ,last_name = ? , email = ? , password = ? where user_id = ?";
-		jdbcTemplateObject.update(SQL, userID, firstName, lastName, email, password);
+		jdbcTemplateObject.update(SQL,firstName, lastName, email,password , userID);
 		System.out.println("Updated Record with ID = " + userID);
+		registerredUsers.remove(olduser.getEmail());
+		System.out.println(email + "  "+ password);
+		registerredUsers.put(email, password);
+		loggedUsers.remove(olduser.getEmail());
+		
 		return;
 	}
 
@@ -137,22 +143,19 @@ public class UserManager implements IUserDAO {
 
 		if (!firstName.matches("^[a-zA-Z]{3,45}$")) {
 			System.out.println("NE MATCHVA firstName");
-			return "firstName";
+			return "First name Allowed symbols only letters length 3 to 45";
 		}
 		if (!lastName.matches("^[a-zA-Z]{3,45}$")) {
 			System.out.println("NE MATCHVA LastName");
 
-			return "lastName";
+			return "Last name Allowed symbols only letters length 3 to 45";
 		}
 		if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
 			System.out.println("NE MATCHVA emaila");
 			return "Email doesn't match the requirements";
 		}
 
-		if (!password.matches("^[a-zA-Z0-9._-]{3,30}$")) {
-			System.out.println("NE MATCHVA parolata");
-			return "password";
-		}
+		
 		if (registerredUsers.containsKey(email)) {
 			return "Email is already used";
 
@@ -249,7 +252,7 @@ public class UserManager implements IUserDAO {
 	
 	
 
-	private StringBuffer MD5Convert(String password) {
+	public StringBuffer MD5Convert(String password) {
 		MessageDigest md;
 		StringBuffer sb = null;
 		try {

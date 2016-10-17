@@ -13,12 +13,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.manager.UserManager;
+import com.budgetbeat.pojo.Tag;
+import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
 
 @Controller
@@ -131,6 +134,66 @@ public class UserController {
 		return "logged";
 		
 		
+	}
+	
+	@RequestMapping(value = "/settings", method = RequestMethod.GET)
+	public String settings(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
+		User user = (User)session.getAttribute("user");
+		if(user == null){
+			model.addAttribute("model","login.jsp");
+			return "index";
+		}
+		User newUser = new User(null, user.getFirstName(), user.getLastName(), user.getEmail(), null);
+		model.addAttribute("command",newUser);
+		model.addAttribute("model","settings.jsp");
+		return "logged";
+		
+		
+	}
+	
+	@RequestMapping(value = "/editsettings", method = RequestMethod.POST)
+	public String editsettings(@ModelAttribute("usera")User user,@ModelAttribute("newpassword")String newpassword,@ModelAttribute("repeatpassword")String repeatpassword, Locale locale, Model model, HttpServletRequest request,HttpSession session) {
+		User sessionUser = (User) session.getAttribute("user");
+		UserManager userManager = (UserManager) SpringWebConfig.context.getBean("UserManager");
+		if(sessionUser == null){
+			model.addAttribute("model","login.jsp");
+			return "index";
+		}
+		System.out.println(user.toString());
+		String registerValidation = userManager.registerValidation(user.getFirstName(), user.getLastName(), user.getEmail(), null);
+		if(registerValidation != "register"){
+			
+			model.addAttribute("model", "settings.jsp");
+			model.addAttribute("command", user);
+			model.addAttribute("status", registerValidation);
+			return "logged";
+		}
+		System.out.println(sessionUser.getPassword()+" "+ String.valueOf(userManager.MD5Convert(user.getPassword())));
+		if (!sessionUser.getPassword().equals(String.valueOf(userManager.MD5Convert(user.getPassword())))) {
+			
+			model.addAttribute("model", "settings.jsp");
+			model.addAttribute("command", user);
+			model.addAttribute("status", "Wrong password");
+			return "logged";
+		}
+		
+		if (!newpassword.equals(repeatpassword)) {
+			
+			model.addAttribute("model", "settings.jsp");
+			model.addAttribute("command", user);
+			model.addAttribute("status", "Passwords don't match ");
+			return "logged";
+		}
+		
+		userManager.update(sessionUser ,sessionUser.getUserID(), user.getFirstName(), user.getLastName(),user.getEmail(),user.getPassword());
+		String status = "You should re-login";
+		if(!sessionUser.getEmail().equals(user.getEmail())){
+			status = "You can re-login with your new email now";
+		}
+		session.invalidate();
+		model.addAttribute("status",status);
+		model.addAttribute("model","login.jsp");
+		return "index";
 	}
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(Locale locale, Model model, HttpServletRequest request,HttpSession session) {
