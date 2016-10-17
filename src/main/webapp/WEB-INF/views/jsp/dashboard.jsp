@@ -35,9 +35,14 @@
           hAxis: {title: 'Year 2016',  titleTextStyle: {color: '#333'}},
           vAxis: {minValue: 0}
         };
+        
 
         var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
         chart.draw(data, options);
+        $(window).resize(function(){
+        	chart.draw(data, options);
+        	 
+        	})
       }
     </script>
 </head>
@@ -115,11 +120,11 @@
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">Year Overview</div>
-					<div class="panel-body">
+					
 						
 						<div id="chart_div" style="width:100%; height: 500px;"></div>
 						
-					</div>
+					
 				</div>
 			</div>
 		</div><!--/.row-->
