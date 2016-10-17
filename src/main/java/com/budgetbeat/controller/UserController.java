@@ -30,8 +30,8 @@ public class UserController {
 	@RequestMapping(value = "/*", method = RequestMethod.GET)
 	public String index(Locale locale, Model model, HttpServletRequest request, HttpSession session) {
 		if (session.getAttribute("user") != null) {
-			model.addAttribute("model", "dashboard.jsp");
-			return "logged";
+			
+			return "redirect:/dashboard";
 		}
 		System.out.println(session.getId());
 		model.addAttribute("model", "login.jsp");
@@ -115,17 +115,7 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	public String dashboard(Locale locale, Model model, HttpServletRequest request, HttpSession session) {
-		if (session.getAttribute("user") == null) {
-			model.addAttribute("model", "login.jsp");
-			return "index";
-		}
-		model.addAttribute("pagename", "Dashboard");
-		model.addAttribute("model", "dashboard.jsp");
-		return "logged";
-
-	}
+	
 
 	@RequestMapping(value = "/settings", method = RequestMethod.GET)
 	public String settings(Locale locale, Model model, HttpServletRequest request, HttpSession session) {

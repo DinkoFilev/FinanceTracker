@@ -9,7 +9,9 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -86,6 +88,8 @@ public class TagController {
 			}
 		}
 
+		tag.setName(Jsoup.parse(tag.getName()).text());
+
 		tag.setUserId(user.getUserID());
 
 		user.addTag(tagManager.create(tag));
@@ -131,8 +135,6 @@ public class TagController {
 		return "redirect:/viewtag";
 	}
 
-	
-
 	/* It updates model object. */
 	@RequestMapping(value = "/editsavetag", method = RequestMethod.POST)
 	public String editSaveTag(@ModelAttribute("tag") Tag tag, HttpSession session, Model model) {
@@ -163,6 +165,8 @@ public class TagController {
 			}
 		}
 
+		tag.setName(Jsoup.parse(tag.getName()).text());
+
 		tagManager.update(tag.getTagId(), tag.getName());
 		user.getTag(tag.getTagId()).setName(tag.getName());
 		model.addAttribute("model", "viewtag.jsp");
@@ -190,12 +194,11 @@ public class TagController {
 		System.out.println("Will delete " + tagId);
 
 		if (action.equals("delete")) {
-			
-			
+
 			try {
-				tagManager.delete(user, tagId, user.getTags().lastKey()) ;
-									
-			} catch (Exception e) {
+				tagManager.delete(user, tagId, user.getTags().lastKey());
+
+			} catch (DataAccessException e) {
 				model.addAttribute("error", "The tag was not deleted!!!");
 				e.printStackTrace();
 			}

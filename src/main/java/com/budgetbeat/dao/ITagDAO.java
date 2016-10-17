@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.DataAccessException;
+
 import com.budgetbeat.pojo.Tag;
 import com.budgetbeat.pojo.User;
 
@@ -20,5 +22,5 @@ public interface ITagDAO {
 
 	public void update(Integer tagId, String name);
 
-	public void delete(User userm,Integer tagId,Integer defaultTagId) throws SQLException, Exception;
+	public void delete(User userm,Integer tagId,Integer defaultTagId) throws DataAccessException;
 }

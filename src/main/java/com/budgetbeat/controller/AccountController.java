@@ -2,7 +2,9 @@ package com.budgetbeat.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -63,7 +65,13 @@ public class AccountController {
 				return "logged";
 			}
 		}
-
+		System.out.println(account.getName());
+		System.out.println(account.getInstitution());
+		System.out.println("-----------------------");
+		account.setName(Jsoup.parse(account.getName()).text());
+		account.setInstitution(Jsoup.parse(account.getInstitution()).text());
+		System.out.println(account.getName());
+		System.out.println(account.getInstitution());
 		account.setFk_userId(user.getUserID());
 		user.addAccount(accountManager.create(account));
 		model.addAttribute("model", "viewaccount.jsp");
@@ -165,7 +173,7 @@ public class AccountController {
 		if (action.equals("delete")) {
 			try {
 				accountManager.delete(user, accountId, user.getAccounts().lastKey());
-			} catch (Exception e) {
+			} catch (DataAccessException e) {
 				model.addAttribute("error", "Account was not deleted!!!");
 				e.printStackTrace();
 			}
