@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <%@ taglib prefix="sform" uri="http://www.springframework.org/tags/form"%>
-	<%@ taglib prefix="stag" uri="http://www.springframework.org/tags"%>
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sform" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="stag" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,41 +28,44 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#"><span>Budget</span>Beat</a>
 				<ul class="user-menu">
-					<li class="dropdown pull-right">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> User <span class="caret"></span></a>
+					<li class="dropdown pull-right"><a href="#"
+						class="dropdown-toggle" data-toggle="dropdown"><svg
+								class="glyph stroked male-user">
+								<use xlink:href="#stroked-male-user"></use></svg> User <span
+							class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="login"><svg class="glyph stroked home"><use xlink:href="#stroked-home"/></svg> Login</a></li>
-							<li><a href="register"><svg class="glyph stroked checkmark"><use xlink:href="#stroked-checkmark"/></svg> Register</a></li>
-						</ul>
-					</li>
+							<li><a href="login"><svg class="glyph stroked home">
+										<use xlink:href="#stroked-home" /></svg> Login</a></li>
+							<li><a href="register"><svg
+										class="glyph stroked checkmark">
+										<use xlink:href="#stroked-checkmark" /></svg> Register</a></li>
+						</ul></li>
 				</ul>
-		<a class="navbar-brand pull-right" href="?language=en"><img alt="" src="https://www.easterisland.travel/images/misc/flag-england-30x20.png"> </a>
-		<a class="navbar-brand pull-right" href="?language=bg"><img alt="" src="http://www.rudi-2010.com/en/images/stories/rudi/flag_bulgaria_sm.gif"> </a>
-				
 			</div>
-							
-		</div><!-- /.container-fluid -->
-		
+
+		</div>
+		<!-- /.container-fluid -->
+
 	</nav>
-	
-		
-	<div class="login">	
-	<div class="input">
-	<c:import url="${model}"></c:import>  
-	</div>
+
+
+	<div class="login">
+		<div class="input">
+			<c:import url="${model}"></c:import>
+		</div>
 	</div>
 
-	
-	
-	
+
+
+
 </body>
 
 </html>

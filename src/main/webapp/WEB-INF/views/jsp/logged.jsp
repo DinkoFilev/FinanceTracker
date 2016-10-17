@@ -56,14 +56,6 @@
 						</ul></li>
 
 				</ul>
-				<a class="navbar-brand pull-right" href="?language=en"><img
-					alt=""
-					src="https://www.easterisland.travel/images/misc/flag-england-30x20.png">
-				</a> <a class="navbar-brand pull-right" href="?language=bg"><img
-					alt=""
-					src="http://www.rudi-2010.com/en/images/stories/rudi/flag_bulgaria_sm.gif">
-				</a>
-
 			</div>
 		</div>
 		<!-- /.container-fluid -->

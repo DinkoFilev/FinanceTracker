@@ -56,6 +56,20 @@ public class AccountController {
 			return "redirect:/index";
 		} // End
 
+		if (account.getName().length() < 2 || account.getName().length() > 44) {
+			model.addAttribute("model", "accountform.jsp");
+			model.addAttribute("command", account);
+			model.addAttribute("error", "Account name lenght error!!!");
+			return "logged";
+		}
+
+		if (account.getInstitution().length() < 2 || account.getInstitution().length() > 49) {
+			model.addAttribute("model", "accountform.jsp");
+			model.addAttribute("command", account);
+			model.addAttribute("error", "Account institution name lenght error!!!");
+			return "logged";
+		}
+
 		for (Account accountElement : user.getAccounts().values()) {
 			if (accountElement.getName().toLowerCase().equals(account.getName().toLowerCase())) {
 				model.addAttribute("title", "Account managet");
@@ -65,13 +79,10 @@ public class AccountController {
 				return "logged";
 			}
 		}
-		System.out.println(account.getName());
-		System.out.println(account.getInstitution());
-		System.out.println("-----------------------");
+
 		account.setName(Jsoup.parse(account.getName()).text());
 		account.setInstitution(Jsoup.parse(account.getInstitution()).text());
-		System.out.println(account.getName());
-		System.out.println(account.getInstitution());
+
 		account.setFk_userId(user.getUserID());
 		user.addAccount(accountManager.create(account));
 		model.addAttribute("model", "viewaccount.jsp");
@@ -116,7 +127,7 @@ public class AccountController {
 	@RequestMapping(value = "/editsaveaccount", method = RequestMethod.POST)
 	public String editSaveAccount(@ModelAttribute("account") Account account, HttpSession session, Model model) {
 		User user = ((User) session.getAttribute("user"));
-		
+
 		// Check user
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
@@ -124,6 +135,21 @@ public class AccountController {
 		} // End
 		
 		
+		if (account.getName().length() < 2 || account.getName().length() > 44) {
+			model.addAttribute("model", "accounteditform.jsp");
+			model.addAttribute("command", account);
+			model.addAttribute("error", "Account name lenght error!!!");
+			return "logged";
+		}
+
+		if (account.getInstitution().length() < 2 || account.getInstitution().length() > 49) {
+			model.addAttribute("model", "accounteditform.jsp");
+			model.addAttribute("command", account);
+			model.addAttribute("error", "Account institution name lenght error!!!");
+			return "logged";
+		}
+		
+
 		if (account.getAccountId() == user.getAccounts().lastKey()) {
 			model.addAttribute("title", "Accounts");
 			model.addAttribute("model", "accounteditform.jsp");
@@ -131,7 +157,6 @@ public class AccountController {
 			model.addAttribute("error", "You can not edit default account!!!");
 			return "logged";
 		}
-		
 
 		for (Account accountElement : user.getAccounts().values()) {
 

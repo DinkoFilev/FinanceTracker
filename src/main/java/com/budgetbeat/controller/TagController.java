@@ -1,12 +1,5 @@
 package com.budgetbeat.controller;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map.Entry;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.jsoup.Jsoup;
@@ -17,14 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.budgetbeat.manager.TagManager;
 import com.budgetbeat.manager.TransactionManager;
-import com.budgetbeat.pojo.Account;
-import com.budgetbeat.pojo.KeyValue;
 import com.budgetbeat.pojo.Tag;
-import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.User;
 
 @Controller
@@ -75,6 +63,13 @@ public class TagController {
 			return "redirect:/index";
 		} // End
 
+		if (tag.getName().length() < 2 || tag.getName().length() > 44) {
+			model.addAttribute("model", "tagform.jsp");
+			model.addAttribute("command", tag);
+			model.addAttribute("error", "Tag name length error!");
+			return "logged";
+		}
+		
 		for (Tag tagElement : user.getTags().values()) {
 			System.out.println(tagElement.getName() + " < >" + tag.getName());
 
@@ -89,6 +84,8 @@ public class TagController {
 		}
 
 		tag.setName(Jsoup.parse(tag.getName()).text());
+
+
 
 		tag.setUserId(user.getUserID());
 
@@ -107,10 +104,7 @@ public class TagController {
 			model.addAttribute("model", "login.jsp");
 			return "index";
 		} // End
-			// Integer userId = ((User)
-			// session.getAttribute("user")).getUserID();
 
-		// List<Tag> list = tagManager.listTgs(userId);
 		model.addAttribute("title", "Tags Manager");
 		model.addAttribute("model", "viewtag.jsp");
 		// model.addAttribute("list",list);
@@ -144,6 +138,14 @@ public class TagController {
 			model.addAttribute("model", "login.jsp");
 			return "redirect:/index";
 		} // End
+		
+		if (tag.getName().length() < 2 || tag.getName().length() > 44) {
+			model.addAttribute("title", "Tag manager");
+			model.addAttribute("model", "tageditform.jsp");
+			model.addAttribute("command", tag);
+			model.addAttribute("error", "Tag name length error!");
+			return "logged";
+		}
 
 		if (tag.getTagId() == user.getTags().lastKey()) {
 			model.addAttribute("title", "Tag manager");
@@ -157,7 +159,6 @@ public class TagController {
 
 			if (tagElement.getName().toLowerCase().equals(tag.getName().toLowerCase())
 					&& tagElement.getTagId() != tag.getTagId()) {
-				model.addAttribute("title", "Tag manager");
 				model.addAttribute("model", "tageditform.jsp");
 				model.addAttribute("command", tag);
 				model.addAttribute("error", "Tag " + tag.getName() + " exist!");
