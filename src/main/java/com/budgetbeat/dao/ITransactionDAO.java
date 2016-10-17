@@ -25,7 +25,7 @@ public interface ITransactionDAO {
 
 	public List<Transaction> listOfAllTransaction();
 
-	public void delete(Integer id);
+	public void delete(User user,Integer id);
 
 	public void update(User user ,Transaction transaction);
 }

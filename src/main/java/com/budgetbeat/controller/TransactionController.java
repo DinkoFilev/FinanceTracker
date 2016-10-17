@@ -1,6 +1,7 @@
 package com.budgetbeat.controller;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -219,7 +220,9 @@ public class TransactionController {
 		if (!transaction.getIncome()) {
 			transaction.setAmount((transaction.getAmount()*-1));
 		}
+		
 		transactionManager.create(user, transaction);
+		
 		
 	
 		return new ModelAndView("redirect:/viewtransaction");
@@ -276,8 +279,8 @@ public class TransactionController {
 		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context
 				.getBean("TransactionManager");
 		if (action.equals("delete")) {
-			transactionManager.delete(transactionID);
-			user.getTransactions().remove(transactionID);
+			transactionManager.delete(user , transactionID);
+			
 		}
 		return new ModelAndView("redirect:/viewtransaction");
 	}

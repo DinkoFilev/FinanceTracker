@@ -113,13 +113,22 @@ public class TransactionManager implements ITransactionDAO {
 		List<Transaction> transaction = jdbcTemplateObject.query(SQL, new TransactionMapper());
 		return transaction;
 	}
-
+	@Transactional
 	@Override
-	public void delete(Integer id) {
-		String SQL = "delete from transactions where transaction_id = ?";
+	public void delete(User user ,Integer id) {
+		Transaction tran = user.getTransaction(id);
+		Account acc = user.getAccount(tran.getFt_account_id());
+		
+		String SQL = "UPDATE accounts  SET balance= ?  WHERE account_id = ?;";
+		jdbcTemplateObject.update(SQL, acc.getBalance()-tran.getAmount(),tran.getFt_account_id());
+		
+		
+		SQL = "delete from transactions where transaction_id = ?";
 		jdbcTemplateObject.update(SQL, id);
 		System.out.println("Delete record transaction with ID " + id);
-
+		acc.setBalance(acc.getBalance()-tran.getAmount());
+		user.getTransactions().remove(tran.getTransaction_id());
+		
 	}
 	@Transactional
 	@Override
