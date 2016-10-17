@@ -79,20 +79,20 @@
 							<div class="form-group">
 								<label>Current Password</label>
 								<form:input type="password" path="password"
-									class="form-control required" required="required"
+									class="form-control required" 
 									maxlength="49" />
 							</div>
 							<div class="form-group">
 								<label>New password</label> <input type="password"
 									id="newpassword" name="newpassword"
-									class="form-control required" required="required"
+									class="form-control required"
 									maxlength="49" />
 
 							</div>
 							<div class="form-group">
 								<label>Repeat new password</label> <input type="password"
 									id="repeatpassword" name="repeatpassword"
-									class="form-control required" required="required"
+									class="form-control required"
 									maxlength="49" />
 								<c:if test="${status != null}">
 

@@ -127,7 +127,7 @@ public class UserManager implements IUserDAO {
 
 	@Override
 	public void update(User olduser , Integer userID, String firstName, String lastName, String email, String password) {
-		password =  String.valueOf(MD5Convert(password));
+		
 		String SQL = "UPDATE users set first_name = ? ,last_name = ? , email = ? , password = ? where user_id = ?";
 		jdbcTemplateObject.update(SQL,firstName, lastName, email,password , userID);
 		System.out.println("Updated Record with ID = " + userID);
@@ -155,8 +155,8 @@ public class UserManager implements IUserDAO {
 			return "Email doesn't match the requirements";
 		}
 
-		
-		if (registerredUsers.containsKey(email) && user.getEmail() != email) {
+		System.out.println(user.getEmail() + " EMAILS " + email);
+		if (registerredUsers.containsKey(email) && !(user.getEmail().equals(email))) {
 			return "Email is already used";
 
 		}
