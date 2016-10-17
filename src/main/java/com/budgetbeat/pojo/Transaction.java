@@ -2,6 +2,10 @@ package com.budgetbeat.pojo;
 
 import java.sql.Date;
 
+import org.jsoup.Jsoup;
+import org.springframework.web.util.HtmlUtils;
+
+
 public class Transaction {
 	@Override
 	public String toString() {
@@ -87,7 +91,9 @@ public class Transaction {
 		return description;
 	}
 
+	
 	public void setDescription(String description) {
+		//this.description = HtmlUtils.htmlEscape(description);
 		this.description = description;
 	}
 

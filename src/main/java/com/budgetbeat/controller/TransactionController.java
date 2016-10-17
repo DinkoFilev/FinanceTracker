@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
 
 import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.manager.TransactionManager;
@@ -220,7 +222,8 @@ public class TransactionController {
 		if (!transaction.getIncome()) {
 			transaction.setAmount((transaction.getAmount()*-1));
 		}
-		
+		System.out.println("DESCRIPTIONAAAA" + transaction.getDescription());
+		transaction.setDescription(Jsoup.parse(transaction.getDescription()).text());
 		transactionManager.create(user, transaction);
 		
 		
@@ -262,6 +265,7 @@ public class TransactionController {
 		if (!transaction.getIncome()) {
 			transaction.setAmount(transaction.getAmount() * -1);
 		}
+		transaction.setDescription(Jsoup.parse(transaction.getDescription()).text());
 		transactionManager.update(user, transaction);
 		
 		return new ModelAndView("redirect:/viewtransaction");
