@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.dao.DataAccessException;
-
 import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.User;
 
@@ -22,5 +20,5 @@ public interface IAccountDAO {
 
 	public void update(Integer accountId, String name, Double balance, String institution, Boolean status);
 
-	public void delete(User user, Integer accountId, Integer defaultaccountId) throws DataAccessException;
+	public void delete(User user, Integer accountId, Integer defaultaccountId) throws Exception;
 }

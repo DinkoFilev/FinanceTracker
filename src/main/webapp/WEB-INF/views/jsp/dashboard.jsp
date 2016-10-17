@@ -14,7 +14,7 @@
 
 <!--Icons-->
 <script src="js/lumino.glyphs.js"></script>
- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+ <script type="text/javascript" src="js/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);

@@ -23,15 +23,15 @@
 <script src="js/lumino.glyphs.js"></script>
 <!-- Include Required Prerequisites -->
 <script type="text/javascript"
-	src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+	src="js/jquery.min.js"></script>
 <script type="text/javascript"
-	src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	src="js/moment.min.js"></script>
 
 <!-- Include Date Range Picker -->
 <script type="text/javascript"
-	src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+	src="js/daterangepicker.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+	href="css/daterangepicker.css" />
 
 
 <script type="text/javascript" src="js/jsapi.js"></script>

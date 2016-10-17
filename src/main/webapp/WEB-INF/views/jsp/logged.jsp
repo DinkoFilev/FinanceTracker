@@ -67,8 +67,7 @@
 						class="glyph stroked dashboard-dial">
 				<use xlink:href="#stroked-dashboard-dial"></use>
 				</svg> Dashboard</a></li>
-			<li><a href="reports"><svg class="glyph stroked line-graph">
-				<use xlink:href="#stroked-line-graph"></use></svg> Reports</a></li>
+		
 			<li role="presentation" class="divider"></li>
 			<li><a href="viewaccount"><svg class="glyph stroked chain">
 				<use xlink:href="#stroked-chain" /></svg> Accounts</a></li>
@@ -76,8 +75,7 @@
 				<use xlink:href="#stroked-tag" /></svg> Tags</a></li>
 			<li><a href="viewtransaction"><svg class="glyph stroked star">
 				<use xlink:href="#stroked-star" /></svg> Transactions</a></li>
-			<li><a href="reminders"><svg class="glyph stroked calendar">
-				<use xlink:href="#stroked-calendar" /></svg> Reminders</a></li>
+			
 		</ul>
 	</div>
 

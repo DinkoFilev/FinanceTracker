@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -103,7 +102,7 @@ public class TagManager implements ITagDAO {
 
 	@Override
 	@Transactional
-	public void delete(User user, Integer tagId, Integer defaultTagId)throws DataAccessException {
+	public void delete(User user, Integer tagId, Integer defaultTagId)throws Exception {
 
 		TransactionManager tranManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
 
