@@ -7,9 +7,10 @@
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags"%>
 
 <%
-response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
-response.addHeader("Pragma", "no-cache"); 
-response.addDateHeader ("Expires", 0);
+	response.addHeader("Cache-Control",
+			"no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
+	response.addHeader("Pragma", "no-cache");
+	response.addDateHeader("Expires", 0);
 %>
 <!DOCTYPE html>
 <html>
@@ -28,28 +29,33 @@ response.addDateHeader ("Expires", 0);
 
 
 <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
-<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+<link rel="stylesheet"
+	href="https://formden.com/static/cdn/bootstrap-iso.css" />
 
 <!-- Bootstrap Date-Picker Plugin -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
 <script>
-    $(document).ready(function(){
-      var date_input=$('input[name="date"]'); //our date input has the name "date"
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options={
-    	 format: "yyyy-mm-dd",
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-      };
-      date_input.datepicker(options);
-    })
+	$(document).ready(
+			function() {
+				var date_input = $('input[name="date"]'); //our date input has the name "date"
+				var container = $('.bootstrap-iso form').length > 0 ? $(
+						'.bootstrap-iso form').parent() : "body";
+				var options = {
+					format : "yyyy-mm-dd",
+					container : container,
+					todayHighlight : true,
+					autoclose : true,
+				};
+				date_input.datepicker(options);
+			})
 </script>
 </head>
 
 <body>
-	
+
 	<div>
 		<!--Your position on site-->
 		<div class="row">
@@ -65,9 +71,14 @@ response.addDateHeader ("Expires", 0);
 		<!--Title in the page-->
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">
-					Transaction Manager
-				</h1>
+				<h1 class="page-header">Transaction Manager</h1>
+				<c:if test="${error != null}">
+					<div class="alert alert-danger">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<strong>Error!</strong>
+						<c:out value="${error}"></c:out>
+					</div>
+				</c:if>
 			</div>
 		</div>
 		<!--/.row-->
@@ -78,53 +89,63 @@ response.addDateHeader ("Expires", 0);
 			<div class="col-lg-6">
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<form:form method="post" commandname="command" action="savetransaction">
+						<form:form method="post" commandname="command"
+							action="savetransaction">
 
 							<div class="form-group">
 								<label>Account</label>
-								<form:select path="ft_account_id" class="form-control required">			               
-				                <c:forEach var="acc" items="${user.getAccounts()}">
-				                    <form:option value="${acc.key}"><c:out value="${acc.value.getName()}"/></form:option>
-				                </c:forEach>
-				                </form:select>
-							
+								<form:select path="ft_account_id" class="form-control required">
+									<c:forEach var="acc" items="${user.getAccounts()}">
+										<form:option value="${acc.key}">
+											<c:out value="${acc.value.getName()}" />
+										</form:option>
+									</c:forEach>
+								</form:select>
+
 							</div>
 
 							<div class="form-group">
 								<label>Tag</label>
-								<form:select path="fk_tag_id" class="form-control required">				               
-				                <c:forEach var="tag" items="${user.getTags()}">
-				                    <form:option value="${tag.key}"><c:out value="${tag.value.getName()}"/></form:option>
-				                </c:forEach>
-				                </form:select>
+								<form:select path="fk_tag_id" class="form-control required">
+									<c:forEach var="tag" items="${user.getTags()}">
+										<form:option value="${tag.key}">
+											<c:out value="${tag.value.getName()}" />
+										</form:option>
+									</c:forEach>
+								</form:select>
 							</div>
 
 							<div class="form-group">
 								<label>Description</label>
-								<form:input path="description" class="form-control required" required="required" maxlength="49" />
+								<form:input path="description" class="form-control required"
+									required="required" maxlength="49" />
 							</div>
 							<div class="form-group">
 								<label>Amount</label>
-								<form:input path="amount" class="form-control required" required="required" type="number"  step="0.01" min="0" max="99999999" />
+								<form:input path="amount" class="form-control required"
+									required="required" type="number" step="0.01" min="0"
+									max="99999999" />
 							</div>
-							      <div class="form-group"> <!-- Date input -->
-							        <label class="control-label" for="date">Date</label>
-							        <form:input class="form-control" path="date" id="date" name="date" placeholder="YYYY-MM-DD" type="date"/>
-							      </div>
-							 <div class="form-group">
+							<div class="form-group">
+								<!-- Date input -->
+								<label class="control-label" for="date">Date</label>
+								<form:input class="form-control" path="date" id="date"
+									name="date" placeholder="YYYY-MM-DD" type="date" />
+							</div>
+							<div class="form-group">
 								<label>Transaction type</label>
 								<form:select path="income" class="form-control required">
-								   <form:option value="false" label="Expense" />
-								  <form:option value="true" label="Income" />				                
-				                </form:select>
+									<form:option value="false" label="Expense" />
+									<form:option value="true" label="Income" />
+								</form:select>
 							</div>
-							      
-								<div class="form-group">
+
+							<div class="form-group">
 								<button type="submit" class="btn btn-primary">
 									<msg:message code="save" />
 								</button>
 							</div>
-							
+
 						</form:form>
 					</div>
 				</div>
@@ -133,31 +154,37 @@ response.addDateHeader ("Expires", 0);
 
 		<!--/content-->
 	</div>
-				
+
 	<!--/.main-->
 
-	
-	
-	
-	
-	<script>
-		$('#calendar').datepicker({
-		});
 
-		!function ($) {
-		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
-		        $(this).find('em:first').toggleClass("glyphicon-minus");      
-		    }); 
-		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+
+
+
+	<script>
+		$('#calendar').datepicker({});
+
+		!function($) {
+			$(document)
+					.on(
+							"click",
+							"ul.nav li.parent > a > span.icon",
+							function() {
+								$(this).find('em:first').toggleClass(
+										"glyphicon-minus");
+							});
+			$(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
 		}(window.jQuery);
 
-		$(window).on('resize', function () {
-		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		$(window).on('resize', function() {
+			if ($(window).width() > 768)
+				$('#sidebar-collapse').collapse('show')
 		})
-		$(window).on('resize', function () {
-		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		$(window).on('resize', function() {
+			if ($(window).width() <= 767)
+				$('#sidebar-collapse').collapse('hide')
 		})
-	</script>	
+	</script>
 </body>
 
 </html>

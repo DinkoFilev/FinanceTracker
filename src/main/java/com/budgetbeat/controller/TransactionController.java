@@ -333,14 +333,23 @@ public class TransactionController {
 	}
 
 	@RequestMapping(value = "/savetransaction", method = RequestMethod.POST)
-	public ModelAndView saveAccount(@ModelAttribute("transaction") Transaction transaction, HttpSession session,
+	public String saveAccount(@ModelAttribute("transaction") Transaction transaction, HttpSession session,
 			Model model) {
 		User user = ((User) session.getAttribute("user"));
 
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
-			return new ModelAndView("redirect:/index");
+			return "index";
 		}
+		
+		
+		if (transaction.getDescription().length() < 2 || transaction.getDescription().length() > 44) {
+			model.addAttribute("model", "transactionform.jsp");
+			model.addAttribute("command", transaction);
+			model.addAttribute("error", "Transaction name length error!");
+			return "logged";
+		}
+		
 		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context
 				.getBean("TransactionManager");
 		if (!transaction.getIncome()) {
@@ -352,7 +361,7 @@ public class TransactionController {
 		
 		
 	
-		return new ModelAndView("redirect:/viewtransaction");
+		return "redirect:/viewtransaction";
 	}
 
 	@RequestMapping(value = "/edittransaction", method = RequestMethod.POST)
@@ -377,13 +386,22 @@ public class TransactionController {
 	}
 
 	@RequestMapping(value = "/editsavetransaction", method = RequestMethod.POST)
-	public ModelAndView editSaveTag(@ModelAttribute("transaction") Transaction transaction, HttpSession session,
+	public String editSaveTag(@ModelAttribute("transaction") Transaction transaction, HttpSession session,
 			Model model) {
 		User user = ((User) session.getAttribute("user"));
 		if (user == null) {
 			model.addAttribute("model", "login.jsp");
-			return new ModelAndView("redirect:/index");
+			return "index";
 		}
+		
+		if (transaction.getDescription().length() < 2 || transaction.getDescription().length() > 44) {
+			model.addAttribute("model", "transactioneditform.jsp");
+			model.addAttribute("command", transaction);
+			model.addAttribute("error", "Transaction name length error!");
+			return "logged";
+		}
+		
+		
 		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context
 				.getBean("TransactionManager");
 		if (!transaction.getIncome()) {
@@ -392,7 +410,7 @@ public class TransactionController {
 		transaction.setDescription(Jsoup.parse(transaction.getDescription()).text());
 		transactionManager.update(user, transaction);
 		
-		return new ModelAndView("redirect:/viewtransaction");
+		return "redirect:/viewtransaction";
 	}
 
 	@RequestMapping(value = "/deletetransaction", method = RequestMethod.POST)
