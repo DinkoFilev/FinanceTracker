@@ -222,7 +222,7 @@ public class TransactionController {
 		if (!transaction.getIncome()) {
 			transaction.setAmount((transaction.getAmount()*-1));
 		}
-		System.out.println("DESCRIPTIONAAAA" + transaction.getDescription());
+		
 		transaction.setDescription(Jsoup.parse(transaction.getDescription()).text());
 		transactionManager.create(user, transaction);
 		

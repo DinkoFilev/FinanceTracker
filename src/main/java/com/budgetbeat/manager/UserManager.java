@@ -155,7 +155,10 @@ public class UserManager implements IUserDAO {
 			return "Email doesn't match the requirements";
 		}
 
-		System.out.println(user.getEmail() + " EMAILS " + email);
+		if(user == null){
+			user = new User();
+			user.setEmail("");
+		}
 		if (registerredUsers.containsKey(email) && !(user.getEmail().equals(email))) {
 			return "Email is already used";
 

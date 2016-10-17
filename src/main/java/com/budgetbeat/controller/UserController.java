@@ -156,7 +156,6 @@ public class UserController {
 				user.getEmail(), null);
 		System.out.println("REG VALIDATION " + registerValidation);
 		if (!registerValidation.equals("register")) {
-
 			model.addAttribute("model", "settings.jsp");
 			model.addAttribute("command", user);
 			model.addAttribute("status", registerValidation);
@@ -211,13 +210,14 @@ public class UserController {
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(Locale locale, Model model, HttpServletRequest request, HttpSession session) {
-		if (session.getAttribute("user") == null) {
+		User user = (User)session.getAttribute("user");
+		if (user == null) {
 			model.addAttribute("model", "login.jsp");
 			return "index";
 		}
 		System.out.println(session.getId());
 		session.invalidate();
-
+		model.addAttribute("email",user.getEmail());
 		model.addAttribute("model", "login.jsp");
 		return "index";
 
