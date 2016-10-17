@@ -1,6 +1,7 @@
 package com.budgetbeat.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -194,7 +195,9 @@ public class TransactionController {
 			model.addAttribute("model", "login.jsp");
 			return "index";
 		}
-		model.addAttribute("command", new Transaction());
+		Transaction tran = new Transaction();
+		tran.setDate(Date.valueOf(LocalDate.now()));
+		model.addAttribute("command", tran);
 		// model.addAttribute("collection",user.getAccounts());
 
 		model.addAttribute("model", "transactionform.jsp");
@@ -214,13 +217,11 @@ public class TransactionController {
 		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context
 				.getBean("TransactionManager");
 		if (!transaction.getIncome()) {
-			transaction.setAmount(transaction.getAmount() * -1);
+			transaction.setAmount((transaction.getAmount()*-1));
 		}
-		transaction.setTransaction_id(transactionManager.create(user.getUserID(), transaction.getFt_account_id(),
-				transaction.getFk_tag_id(), transaction.getDescription(), transaction.getAmount(),
-				transaction.getDate(), "", true, (long) 0, true, transaction.getIncome()));
-		user.addTransaction(transaction);
-
+		transactionManager.create(user, transaction);
+		
+	
 		return new ModelAndView("redirect:/viewtransaction");
 	}
 
@@ -236,7 +237,7 @@ public class TransactionController {
 		if (action.equals("edit")) {
 			Transaction transaction = user.getTransaction(id);
 			if (!transaction.getIncome()) {
-				transaction.setAmount(transaction.getAmount() * -1);
+				transaction.setAmount((transaction.getAmount() * -1));
 			}
 			model.addAttribute("command", transaction);
 			model.addAttribute("model", "transactioneditform.jsp");
@@ -258,11 +259,8 @@ public class TransactionController {
 		if (!transaction.getIncome()) {
 			transaction.setAmount(transaction.getAmount() * -1);
 		}
-		transactionManager.update(transaction.getTransaction_id(), user.getUserID(), transaction.getFt_account_id(),
-				transaction.getFk_tag_id(), transaction.getDescription(), transaction.getAmount(),
-				transaction.getDate(), "asdsa", true, (long) 0, true, transaction.getIncome());
-		transaction.setFk_user_id(user.getUserID());
-		user.addTransaction(transaction);
+		transactionManager.update(user, transaction);
+		
 		return new ModelAndView("redirect:/viewtransaction");
 	}
 

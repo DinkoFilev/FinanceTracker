@@ -12,8 +12,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.budgetbeat.SpringWebConfig;
 import com.budgetbeat.dao.ITransactionDAO;
+import com.budgetbeat.pojo.Account;
 import com.budgetbeat.pojo.Transaction;
 import com.budgetbeat.pojo.TransactionMapper;
 import com.budgetbeat.pojo.User;
@@ -33,10 +36,9 @@ public class TransactionManager implements ITransactionDAO {
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 
 	}
-
+	@Transactional
 	@Override
-	public int create(Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id, String description, Double amount,
-			Date date, String file, Boolean status, Long step, Boolean repeat, Boolean income) {
+	public int create(User user ,Transaction transaction) {
 		String SQL = "INSERT INTO transactions (fk_user_id,ft_account_id,fk_tag_id,description,amount,date,file,status,step,transaction_repeat,income) values (?,?,?,?,?,?,?,?,?,?,?)";
 
 		// jdbcTemplateObject.update(SQL,fk_user_id,ft_account_id,fk_tag_id,description,amount,date,file,status,step,repeat);
@@ -44,24 +46,30 @@ public class TransactionManager implements ITransactionDAO {
 		jdbcTemplateObject.update(new PreparedStatementCreator() {
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				PreparedStatement ps = connection.prepareStatement(SQL, new String[] { "id" });
-				ps.setInt(1, fk_user_id);
-				ps.setInt(2, ft_account_id);
-				ps.setInt(3, fk_tag_id);
-				ps.setString(4, description);
-				ps.setDouble(5, amount);
-				ps.setDate(6, date);
-				ps.setString(7, file);
-				ps.setBoolean(8, status);
-				ps.setLong(9, step);
-				ps.setBoolean(10, repeat);
-				ps.setBoolean(11, income);
+				ps.setInt(1, user.getUserID());
+				ps.setInt(2, transaction.getFt_account_id());
+				ps.setInt(3, transaction.getFk_tag_id());
+				ps.setString(4, transaction.getDescription());
+				ps.setDouble(5, transaction.getAmount());
+				ps.setDate(6, transaction.getDate());
+				ps.setString(7, "");
+				ps.setBoolean(8, true);
+				ps.setLong(9, 0);
+				ps.setBoolean(10, true);
+				ps.setBoolean(11, transaction.getIncome());
 				return ps;
 			}
 		}, keyHolder);
-
-		System.out.println("Created Record Transacton : FK USER = " + fk_user_id + " FT ACCOUNT = " + ft_account_id
-				+ " FK TAG = " + fk_tag_id + "  Description, = " + description + " Amount : " + amount + " Date " + date
-				+ " file " + file + " status " + status + " step " + step + " repeat " + repeat + " income " + income);
+		
+		 Account acc = user.getAccount(transaction.getFt_account_id());
+		 String SQLacc = "UPDATE accounts  SET balance= ?  WHERE account_id = ?;";
+		 
+		jdbcTemplateObject.update(SQLacc, acc.getBalance()+transaction.getAmount(), transaction.getFt_account_id());
+		
+		acc.setBalance(acc.getBalance()+transaction.getAmount());
+		
+		transaction.setTransaction_id(keyHolder.getKey().intValue());
+		user.addTransaction(transaction);
 
 		return keyHolder.getKey().intValue();
 
@@ -113,16 +121,21 @@ public class TransactionManager implements ITransactionDAO {
 		System.out.println("Delete record transaction with ID " + id);
 
 	}
-
+	@Transactional
 	@Override
-	public void update(Integer transaction_id, Integer fk_user_id, Integer ft_account_id, Integer fk_tag_id,
-			String description, Double amount, Date date, String file, Boolean status, Long step, Boolean repeat,
-			Boolean income) {
-
+	public void update(User user,Transaction transaction) {
+		System.out.println(transaction.toString());
 		String SQL = "UPDATE transactions SET fk_user_id=?,ft_account_id=?,fk_tag_id=?,description=?,amount=?,date=?,file=?,status=?,step=?,transaction_repeat=?,income=? WHERE transaction_id = ?";
-		jdbcTemplateObject.update(SQL, fk_user_id, ft_account_id, fk_tag_id, description, amount, date, file, status,
-				step, repeat, income, transaction_id);
-		System.out.println("Updated Record transaction with ID = " + transaction_id);
+		jdbcTemplateObject.update(SQL, user.getUserID(), transaction.getFt_account_id(), transaction.getFk_tag_id(), transaction.getDescription(), transaction.getAmount(), transaction.getDate(), "",true,0,true,transaction.getIncome(),
+				transaction.getTransaction_id());
+		System.out.println("Updated Record transaction with ID = " + transaction.getTransaction_id());
+		
+		Account acc = user.getAccount(transaction.getFt_account_id());
+		SQL = "UPDATE accounts  SET balance= ?  WHERE account_id = ?;";
+		jdbcTemplateObject.update(SQL, acc.getBalance()+transaction.getAmount(),transaction.getFt_account_id());
+	
+		acc.setBalance(acc.getBalance()+transaction.getAmount());
+		user.addTransaction(transaction);
 		return;
 
 	}
@@ -159,5 +172,11 @@ public class TransactionManager implements ITransactionDAO {
 				transaction.setFk_tag_id(defaultTagId);
 			}
 		}
+	}
+	
+	public void transactionValidation(Transaction transaction){
+		
+		
+		
 	}
 }

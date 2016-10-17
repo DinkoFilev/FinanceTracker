@@ -84,7 +84,6 @@ response.addDateHeader ("Expires", 0);
 								<label>Account</label>
 								<form:hidden path="transaction_id" />
 								<form:select path="ft_account_id" class="form-control required">
-				                <form:option value="0" label="---Account---" />
 				                <c:forEach var="acc" items="${user.getAccounts()}">
 				                    <form:option value="${acc.key}"><c:out value="${acc.value.getName()}"/></form:option>
 				                </c:forEach>
@@ -94,8 +93,7 @@ response.addDateHeader ("Expires", 0);
 
 							<div class="form-group">
 								<label>Tag</label>
-								<form:select path="fk_tag_id" class="form-control required">
-				                <form:option value="0" label="---Tag---" />
+								<form:select path="fk_tag_id" class="form-control required">				            
 				                <c:forEach var="tag" items="${user.getTags()}">
 				                    <form:option value="${tag.key}"><c:out value="${tag.value.getName()}"/></form:option>
 				                </c:forEach>
