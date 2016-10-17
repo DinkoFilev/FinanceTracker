@@ -31,7 +31,7 @@
         ]);
 
         var options = {
-          title: 'Year Overview',
+          title: '',
           hAxis: {title: 'Year 2016',  titleTextStyle: {color: '#333'}},
           vAxis: {minValue: 0}
         };

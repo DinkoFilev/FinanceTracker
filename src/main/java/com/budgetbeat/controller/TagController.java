@@ -197,6 +197,7 @@ public class TagController {
 		if (action.equals("delete")) {
 
 			try {
+				
 				tagManager.delete(user, tagId, user.getTags().lastKey());
 
 			} catch (DataAccessException e) {

@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -39,7 +40,7 @@ public class AccountManager implements IAccountDAO {
 
 	@Override
 	@Transactional
-	public void delete(User user, Integer accountId, Integer defaultaccountId) throws Exception {
+	public void delete(User user, Integer accountId, Integer defaultaccountId) throws DataAccessException {
 
 	
 			TransactionManager tranManager = (TransactionManager) SpringWebConfig.context.getBean("TransactionManager");
