@@ -193,8 +193,13 @@ public class TagController {
 		}
 
 		System.out.println("Will delete " + tagId);
-
+		if(!user.getTags().containsKey(tagId)){
+			model.addAttribute("error", "This is not your tag!!!");
+			model.addAttribute("model", "viewtag.jsp");
+			return "logged";
+		}
 		if (action.equals("delete")) {
+			
 
 			try {
 				

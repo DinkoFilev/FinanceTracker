@@ -205,6 +205,10 @@ public class UserController {
 			model.addAttribute("model", "login.jsp");
 			return "index";
 		}
+		UserManager manager = (UserManager) SpringWebConfig.context.getBean("UserManager");
+		manager.removeFromLoggedUsers(user.getEmail());
+		
+		
 		System.out.println(session.getId());
 		session.invalidate();
 		model.addAttribute("email",user.getEmail());

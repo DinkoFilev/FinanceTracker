@@ -188,7 +188,11 @@ public class AccountController {
 			model.addAttribute("model", "login.jsp");
 			return "redirect:/index";
 		} // End
-
+		if(!user.getAccounts().containsKey(accountId)){
+			model.addAttribute("error", "This is not your Account!!!");
+			model.addAttribute("model", "viewaccount.jsp");
+			return "logged";
+		}
 		if (accountId == user.getAccounts().lastKey()) {
 			model.addAttribute("error", "You can not delete default account!!!");
 			model.addAttribute("model", "viewaccount.jsp");

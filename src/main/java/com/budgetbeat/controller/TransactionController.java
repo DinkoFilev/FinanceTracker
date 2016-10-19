@@ -176,7 +176,7 @@ public class TransactionController {
 	}
 
 	@RequestMapping(value = "/viewtransaction", method = RequestMethod.GET)
-	public String transGet(Locale locale, Model model, HttpServletRequest request, HttpSession session,
+	public String transGet(Locale locale, Model model,HttpServletRequest request, HttpSession session,
 			HttpServletResponse response) {
 		User user = ((User) session.getAttribute("user"));
 		Integer tagId = 0;
@@ -188,9 +188,8 @@ public class TransactionController {
 		} // End
 
 		StringBuilder searchBy = new StringBuilder();
-
-		System.out.println("ACCOUNT: " + accountId);
-		System.out.println("TAG: " + tagId);
+		
+		System.out.println("ERROR"+request.getAttribute("error"));
 
 		System.err.println(request.getParameter("tadId"));
 		System.err.println(request.getParameter("accountId"));
@@ -341,7 +340,9 @@ public class TransactionController {
 			model.addAttribute("model", "login.jsp");
 			return "index";
 		}
-		
+		if(transaction.getAmount() == null){
+			transaction.setAmount(0.0);
+		}
 		
 		if (transaction.getDescription().length() < 2 || transaction.getDescription().length() > 44) {
 			model.addAttribute("model", "transactionform.jsp");
@@ -421,7 +422,11 @@ public class TransactionController {
 			model.addAttribute("model", "login.jsp");
 			return new ModelAndView("redirect:/index");
 		}
-
+		if(!user.getTransactions().containsKey(transactionID)){
+			model.addAttribute("error", "This is not your Transaction!!!");
+			
+			return new ModelAndView("redirect:/viewtransaction");
+		}
 		TransactionManager transactionManager = (TransactionManager) SpringWebConfig.context
 				.getBean("TransactionManager");
 		if (action.equals("delete")) {

@@ -96,9 +96,11 @@
 								<label>Account</label>
 								<form:select path="ft_account_id" class="form-control required">
 									<c:forEach var="acc" items="${user.getAccounts()}">
-										<form:option value="${acc.key}">
-											<c:out value="${acc.value.getName()}" />
-										</form:option>
+										<c:if test="${acc.value.getStatus()}">
+											<form:option value="${acc.key}">
+												<c:out value="${acc.value.getName()}" />
+											</form:option>
+										</c:if>
 									</c:forEach>
 								</form:select>
 

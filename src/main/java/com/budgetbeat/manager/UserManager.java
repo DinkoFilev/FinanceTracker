@@ -44,7 +44,6 @@ public class UserManager implements IUserDAO {
 
 	public void updateRegisterredUsers() { // bean init method
 		if (registerredUsers.size() == 0) {
-			System.out.println("EGO Q");
 			String sql = "SELECT email,password from users";
 			registerredUsers = (ConcurrentHashMap<String, String>) jdbcTemplateObject.query(sql, mapExtractor);
 
@@ -140,7 +139,7 @@ public class UserManager implements IUserDAO {
 	}
 
 	public String registerValidation(User user ,String firstName, String lastName, String email, String password) {
-
+			  
 		if (!firstName.matches("^[a-zA-Z]{3,45}$")) {
 			System.out.println("NE MATCHVA firstName");
 			return "First name Allowed symbols only letters length 3 to 45";
@@ -152,9 +151,14 @@ public class UserManager implements IUserDAO {
 		}
 		if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
 			System.out.println("NE MATCHVA emaila");
-			return "Email doesn't match the requirements";
+			return " Email doesn't match the requirements";
 		}
-
+		if(password != null){
+		if (password.length() < 3 || password.length() > 45) {
+			System.out.println("password is empty");
+			return "Invalid password length (3 to 45 allowed)";
+		}
+		}
 		if(user == null){
 			user = new User();
 			user.setEmail("");
@@ -250,6 +254,11 @@ public class UserManager implements IUserDAO {
 		TagManager tagManager = (TagManager) SpringWebConfig.context.getBean("TagManager");
 		accountManager.setInitialAccount(userID);
 		tagManager.setInitialTags(userID);
+		
+	}
+	
+	public void removeFromLoggedUsers(String email){
+		loggedUsers.remove(email);	
 		
 	}
 	
